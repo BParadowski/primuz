@@ -33,7 +33,7 @@ export interface Database {
           first_name: string | null
           instrument: Database["public"]["Enums"]["instrument"] | null
           is_admin: boolean
-          second_name: string | null
+          last_name: string | null
           user_id: string
         }
         Insert: {
@@ -41,7 +41,7 @@ export interface Database {
           first_name?: string | null
           instrument?: Database["public"]["Enums"]["instrument"] | null
           is_admin?: boolean
-          second_name?: string | null
+          last_name?: string | null
           user_id: string
         }
         Update: {
@@ -49,7 +49,7 @@ export interface Database {
           first_name?: string | null
           instrument?: Database["public"]["Enums"]["instrument"] | null
           is_admin?: boolean
-          second_name?: string | null
+          last_name?: string | null
           user_id?: string
         }
         Relationships: [
