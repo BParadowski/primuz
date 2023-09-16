@@ -23,7 +23,12 @@ export default async function Profile() {
     <main className="grid place-content-center">
       <h1>Congratulations this is the profile</h1>
       <form className="flex flex-col gap-3" method="post" action="/api/users">
-        <input defaultValue={user?.id} name="userId" className="hidden"></input>
+        <input
+          defaultValue={user?.id}
+          name="userId"
+          className="hidden"
+          readOnly
+        />
         <input
           name="firstName"
           type="text"

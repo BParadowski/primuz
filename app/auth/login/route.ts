@@ -13,12 +13,23 @@ export async function POST(request: Request) {
   const password = String(formData.get("password"));
   const supabase = createRouteHandlerClient<Database>({ cookies });
 
-  await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  try {
+    const res = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-  return NextResponse.redirect(`${requestUrl.origin}/profile`, {
-    status: 301,
-  });
+    if (res.error) {
+      return NextResponse.redirect(`${requestUrl.origin}?error=true`, {
+        status: 301,
+      });
+    }
+    return NextResponse.redirect(`${requestUrl.origin}/profil`, {
+      status: 301,
+    });
+  } catch {
+    return NextResponse.redirect(`${requestUrl.origin}?error=true`, {
+      status: 301,
+    });
+  }
 }
