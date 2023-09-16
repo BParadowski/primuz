@@ -1,5 +1,8 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import Image from "next/image";
+import Link from "next/link";
+import sygnet from "@lib/primuz-sygnet.svg";
 
 export default async function InnerLayout({
   children,
@@ -20,17 +23,31 @@ export default async function InnerLayout({
   const lastName = data?.last_name;
 
   return (
-    <>
-      <header>
-        <p className="bg-slate-400 rounded-lg">
-          Cześć, {`${firstName} ${lastName}`}
-        </p>
-        <form method="post">
-          <button formAction="/auth/logout">Log out</button>
-        </form>
+    <div className="grid min-h-screen grid-rows-[auto_1fr_auto]">
+      <header className="bg-slate-100">
+        <div className="container flex items-center gap-4 py-4">
+          <Link href="/">
+            <Image
+              alt="Sygnet orkiestry Primuz"
+              src={sygnet}
+              className="w-20"
+            />
+          </Link>
+          <p className="text-sm italic">{`${firstName} ${lastName}`}</p>
+
+          <form method="post" action="/auth/logout">
+            <button className="rounded-lg border-2 border-solid border-slate-700 bg-slate-400">
+              Wyloguj
+            </button>
+          </form>
+          <Link href="/admin/projekty">Panel sterowania</Link>
+          <Link href="/profil">Ustawienia</Link>
+        </div>
       </header>
       {children}
-      <footer>Nothing to see here</footer>
-    </>
+      <footer className="bg-slate-100">
+        <div className="container py-4">Tak, ta stron używa cookies.</div>
+      </footer>
+    </div>
   );
 }

@@ -16,7 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={jost.className}>{children}</body>
+      <body className={`${jost.className} tracking-wide text-slate-600`}>
+        {children}
+      </body>
     </html>
   );
 }
