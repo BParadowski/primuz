@@ -2,7 +2,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
-import sygnet from "@lib/primuz-sygnet.svg";
+import sygnet from "@/lib/images/primuz-sygnet.svg";
 
 export default async function InnerLayout({
   children,

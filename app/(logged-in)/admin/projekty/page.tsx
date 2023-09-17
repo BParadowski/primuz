@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import addProject from "@lib/add-project.svg";
+import addProject from "@/lib/images/add-project.svg";
 
 export default function Profile() {
   return (

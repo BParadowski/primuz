@@ -1,5 +1,5 @@
 import Image from "next/image";
-import logo from "/public/primuz-logo-home.png";
+import logo from "@/lib/images/primuz-logo-home.png";
 
 export default function Home({
   searchParams,
