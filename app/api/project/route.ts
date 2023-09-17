@@ -17,6 +17,7 @@ export async function POST(request: Request) {
     end: {
       date: String(formData.get("start")),
     },
+    colorId: "5",
   };
 
   try {

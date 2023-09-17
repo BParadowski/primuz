@@ -1,6 +1,10 @@
 "use client";
 
+import { useState } from "react";
+
 export default function Profile() {
+  const [date, setDate] = useState("");
+
   return (
     <main className="grid place-content-center">
       <h1>this is only for admins</h1>
@@ -11,7 +15,12 @@ export default function Profile() {
         <textarea name="calendarDescription"></textarea>
         <label>Gdzie</label>
         <input type="text" name="location" />
-        <input type="date" name="start" min="2023-09-17" />
+        <input
+          type="date"
+          name="start"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        />
         <button>spróbuj dodać event do kalendarza</button>
       </form>
     </main>
