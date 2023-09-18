@@ -2,7 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Jost } from "next/font/google";
 
-const jost = Jost({ subsets: ["latin"] });
+const jost = Jost({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
 export const metadata: Metadata = {
   title: "Primuz app",

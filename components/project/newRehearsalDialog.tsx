@@ -3,7 +3,6 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -12,37 +11,73 @@ import {
 import { cn } from "@/lib/utils";
 import { v4 as uuid } from "uuid";
 import { Button } from "../ui/button";
-import { NewProjectFormData } from "@/app/(logged-in)/admin/nowy-projekt/page";
-import { ControllerRenderProps } from "react-hook-form";
 import { Input } from "../ui/input";
 import { pl } from "date-fns/locale";
 import { Calendar } from "../ui/calendar";
 import { useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { format } from "date-fns";
+import { formatRFC3339 } from "date-fns";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { RehearsalData } from "@/app/(logged-in)/admin/nowy-projekt/page";
+
+interface InitialValues {
+  id: string;
+  date: Date;
+  startTime: string;
+  endTime: string;
+  location: string;
+  description: string;
+}
+
+interface DialogProps {
+  onConfirm: (data: RehearsalData) => void;
+  initialValues?: InitialValues;
+  dialogTitle: string;
+  confirmText: string;
+  triggerText: string;
+  clearAfterConfirmation?: boolean;
+}
 
 export default function NewRehearsalDialog({
-  field,
-}: {
-  field: ControllerRenderProps<NewProjectFormData, "rehearsals">;
-}) {
-  const [date, setDate] = useState<Date | undefined>();
-  const [startTime, setStartTime] = useState<string>("00:00");
-  const [endTime, setEndTime] = useState<string>("00:00");
+  onConfirm,
+  initialValues,
+  dialogTitle,
+  confirmText,
+  triggerText,
+  clearAfterConfirmation,
+}: DialogProps) {
+  const [date, setDate] = useState<Date | undefined>(initialValues?.date);
+  const [startTime, setStartTime] = useState<string>(
+    initialValues?.startTime ?? "00:00",
+  );
+  const [endTime, setEndTime] = useState<string>(
+    initialValues?.endTime ?? "00:00",
+  );
+  const [location, setLocation] = useState<string>(
+    initialValues?.location ?? "",
+  );
+  const [description, setDescription] = useState<string>(
+    initialValues?.description ?? "",
+  );
+
+  const isDataCorrect = Boolean(date && startTime < endTime);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="secondary">Dodaj próbę</Button>
+        <Button variant="secondary" className="ml-auto">
+          {triggerText}
+        </Button>
       </DialogTrigger>
       <DialogContent className="grid place-items-center">
         <DialogHeader>
-          <DialogTitle className="text-center">Nowa próba</DialogTitle>
+          <DialogTitle className="text-center">{dialogTitle}</DialogTitle>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -57,6 +92,7 @@ export default function NewRehearsalDialog({
                 ) : (
                   <span>Wybierz datę</span>
                 )}
+                <CalendarIcon className="ml-auto" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="center">
@@ -83,23 +119,57 @@ export default function NewRehearsalDialog({
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
           ></Input>
+          <p className="text-start">Miejsce</p>
+          <Input
+            type="text"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          ></Input>
           <p className="text-start">Szczegóły</p>
-          <Textarea />
+          <Textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </DialogHeader>
         <DialogFooter>
           <DialogTrigger asChild>
             <Button
-              // onClick={() =>
-              //   field.value.push({
-              //     id: uuid(),
-              //     start: "2024-01-01T00:00:00Z",
-              //     end: "2024-01-01T00:00:00Z",
-              //     location: "hakunamatata",
-              //   })
-              // }
-              onClick={() => console.log(date, startTime)}
+              disabled={!isDataCorrect}
+              onClick={() => {
+                const [startHour, startMinute] = startTime.split(":");
+                const [endHour, endMinute] = endTime.split(":");
+
+                onConfirm({
+                  id: initialValues?.id ?? uuid(),
+                  start: formatRFC3339(
+                    new Date(
+                      date!.getFullYear(),
+                      date!.getMonth(),
+                      date!.getDate(),
+                      parseInt(startHour),
+                      parseInt(startMinute),
+                    ),
+                  ),
+                  end: formatRFC3339(
+                    new Date(
+                      date!.getFullYear(),
+                      date!.getMonth(),
+                      date!.getDate(),
+                      parseInt(endHour),
+                      parseInt(endMinute),
+                    ),
+                  ),
+                  location: location,
+                  description: description,
+                });
+
+                if (clearAfterConfirmation) {
+                  setDescription("");
+                  setLocation("");
+                }
+              }}
             >
-              Dodaj próbę
+              {confirmText}
             </Button>
           </DialogTrigger>
         </DialogFooter>
