@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
+import NewRehearsalDialog from "@/components/project/newRehearsalDialog";
 
 const formSchema = z.object({
   name: z.string().nonempty({ message: "Projekt musi mieć nazwę" }),
@@ -24,9 +25,17 @@ const formSchema = z.object({
   pay: z.string(),
   calendarDescription: z.string().optional(),
   description: z.string(),
+  rehearsals: z.array(
+    z.object({
+      id: z.string().uuid(),
+      start: z.string().datetime(),
+      end: z.string().datetime(),
+      location: z.string(),
+    }),
+  ),
 });
 
-type NewProjectFormData = z.infer<typeof formSchema>;
+export type NewProjectFormData = z.infer<typeof formSchema>;
 
 export default function Profile() {
   const form = useForm<NewProjectFormData>({
@@ -38,16 +47,22 @@ export default function Profile() {
       pay: "",
       calendarDescription: undefined,
       description: "",
+      rehearsals: [],
     },
   });
 
   return (
-    <main className="grid place-content-center">
+    <main className="container grid place-content-center overflow-hidden">
       <h1 className="text-center text-2xl">Nowy projekt</h1>
-      <div className="rounded-2xl border-2 border-solid border-muted p-4">
+      <div>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit((data) => console.log(data))}>
-            <div className="grid">
+          <form
+            onSubmit={form.handleSubmit(
+              (data) => console.log(data),
+              (data) => console.log(data),
+            )}
+          >
+            <div className="grid gap-y-8">
               <FormField
                 control={form.control}
                 name="name"
@@ -137,6 +152,17 @@ export default function Profile() {
                       <Textarea {...field} className="h-40" />
                     </FormControl>
                     <FormMessage />
+                  </FormItem>
+                )}
+              ></FormField>
+
+              <FormField
+                control={form.control}
+                name="rehearsals"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Próby</FormLabel>
+                    <NewRehearsalDialog field={field} />
                   </FormItem>
                 )}
               ></FormField>

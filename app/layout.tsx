@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${jost.className} tracking-wide text-foreground`}>
+      <body className={`${jost.className}tracking-wide text-foreground`}>
         {children}
       </body>
     </html>

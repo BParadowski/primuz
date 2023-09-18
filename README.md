@@ -25,3 +25,7 @@ CREATE TYPE my_enum AS ENUM ('val1', 'val2', 'val3');
    // or: const { a, b, c} = { ...D }
    // undefined, undefined, undefined.
    ```
+
+## Shadcn ui
+
+1. Calendar component (at least base, not New Yrok) has some strange padding that makes it overflow on small (360px) phones. To fix that you can change it `p-3` -> `py-3` and throw a `-mx-1` on the element.

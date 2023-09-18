@@ -40,8 +40,8 @@ export default async function InnerLayout({
               Wyloguj
             </button>
           </form>
-          <nav className="ml-auto">
-            <ul className="flex gap-4">
+          <nav className="ml-auto hidden sm:flex">
+            <ul className="flex flex-wrap gap-4">
               <li>
                 <Link href="/admin/projekty">Panel sterowania</Link>
               </li>
