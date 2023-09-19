@@ -63,8 +63,10 @@ export default async function InnerLayout({
         </div>
       </header>
       {children}
-      <footer className="bg-slate-100">
-        <div className="container py-4">Tak, ta stron używa cookies.</div>
+      <footer className="bg-primary">
+        <div className="container py-4 text-primary-foreground">
+          Tak, ta stron używa cookies.
+        </div>
       </footer>
     </div>
   );

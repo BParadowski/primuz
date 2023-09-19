@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     const res = await calendar.events.insert(params);
 
     if (res.status == 200 && res.statusText === "OK") {
-      return NextResponse.json({ success: true, eventId: res.data.id });
+      return NextResponse.json({ success: true });
     } else {
       return NextResponse.json({ success: false });
     }
