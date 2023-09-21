@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { format } from "date-fns";
+import { newCalendarEvent } from "./clendar";
 // npm i encoding
 
 import { NewProjectFormData } from "@/app/(logged-in)/admin/nowy-projekt/page";
@@ -38,36 +39,24 @@ export async function POST(request: Request) {
     google_calendar_id: formData.calendarId,
   });
 
-  const calendarInsertion = fetch(new URL("/api/calendar", request.url), {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    // mode: "cors",
-    body: JSON.stringify(calendarEvent),
-  }).then((res) => res.json());
+  const calendarInsertion = newCalendarEvent(calendarEvent);
 
-  const rehearsalCalendarInsertions = formData.rehearsals.map((rehearsal) => {
-    return fetch(new URL("/api/calendar", request.url), {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
+  const dbRehearsalInsertions = supabase.from("rehearsal");
+
+  const rehearsalCalendarInsertions = formData.rehearsals.map((rehearsal) =>
+    newCalendarEvent({
+      summary: `Próba do: "${formData.name}"`,
+      description: rehearsal.description,
+      location: rehearsal.location,
+      start: {
+        dateTime: rehearsal.start,
       },
-      // mode: "cors",
-      body: JSON.stringify({
-        summary: `Próba do: "${formData.name}"`,
-        description: rehearsal.description,
-        location: rehearsal.location,
-        start: {
-          dateTime: rehearsal.start,
-        },
-        end: {
-          dateTime: rehearsal.end,
-        },
-        colorId: "1",
-      }),
-    }).then((res) => res.json());
-  });
+      end: {
+        dateTime: rehearsal.end,
+      },
+      colorId: "1",
+    }),
+  );
 
   try {
     const result = await Promise.allSettled([

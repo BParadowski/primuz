@@ -27,6 +27,7 @@ import { format } from "date-fns/esm";
 import { pl } from "date-fns/locale";
 import { XIcon } from "lucide-react";
 import { v4 as uuid } from "uuid";
+import { Loader2Icon } from "lucide-react";
 
 const formSchema = z.object({
   id: z.string().uuid(),
@@ -92,10 +93,10 @@ export default function Profile() {
   }
 
   async function submitProject(formData: NewProjectFormData) {
-    await fetch("/api/project", {
+    return fetch("/api/project", {
       method: "post",
       body: JSON.stringify(formData),
-    }).then((res) => alert(res.json()));
+    }).then((res) => res.json());
   }
 
   return (
@@ -105,10 +106,9 @@ export default function Profile() {
           <h1 className="my-10 text-center text-2xl font-bold">Nowy projekt</h1>
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(
-                (data) => submitProject(data),
-                (data) => console.log(data),
-              )}
+              onSubmit={form.handleSubmit(async (data) => {
+                const response = await submitProject(data);
+              })}
             >
               <div className="grid gap-y-8 rounded-lg bg-background p-6">
                 <div className="grid gap-y-8 sm:grid-cols-2 sm:gap-x-8">
@@ -278,9 +278,15 @@ export default function Profile() {
                 </div>
               </div>
 
-              <Button type="submit" variant="default" size="lg">
-                Opublikuj projekt
-              </Button>
+              {form.formState.isSubmitting ? (
+                <Button type="button" size="lg">
+                  <Loader2Icon className="animate-spin" />
+                </Button>
+              ) : (
+                <Button type="submit" variant="default" size="lg">
+                  Opublikuj projekt
+                </Button>
+              )}
             </form>
           </Form>
         </div>

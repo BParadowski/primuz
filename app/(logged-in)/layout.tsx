@@ -27,7 +27,7 @@ export default async function InnerLayout({
     <div className="grid min-h-screen grid-rows-[auto_1fr_auto]">
       <header className="relative bg-primary">
         <div className="container flex items-center gap-4 py-4 text-primary-foreground">
-          <Link href="/">
+          <Link href="/projekty">
             <Image
               alt="Sygnet orkiestry Primuz"
               src={sygnet}

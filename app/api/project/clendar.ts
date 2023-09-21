@@ -1,12 +1,11 @@
-import { google } from "googleapis";
+import { google, calendar_v3 } from "googleapis";
 import { JWT } from "google-auth-library";
-import { NextResponse, NextRequest } from "next/server";
 
 const credentials = JSON.parse(process.env.CALENDAR_CREDENTIALS ?? "");
 const calendarId = process.env.CALENDAR_ID;
 const calendar = google.calendar({ version: "v3" });
 
-export async function POST(request: NextRequest) {
+export async function newCalendarEvent(event: calendar_v3.Schema$Event) {
   const auth = new JWT({
     email: credentials.client_email,
     key: credentials.private_key,
@@ -15,8 +14,6 @@ export async function POST(request: NextRequest) {
       "https://www.googleapis.com/auth/calendar.events",
     ],
   });
-
-  const event = await request.json();
 
   const params = {
     auth: auth,
@@ -28,12 +25,12 @@ export async function POST(request: NextRequest) {
     const res = await calendar.events.insert(params);
 
     if (res.status == 200 && res.statusText === "OK") {
-      return NextResponse.json({ success: true });
+      return { success: true };
     } else {
-      return NextResponse.json({ success: false });
+      return { success: false };
     }
   } catch (error) {
     console.log(`Error at insertEvent --> ${error}`);
-    return NextResponse.json({ success: false });
+    return { success: false, error };
   }
 }

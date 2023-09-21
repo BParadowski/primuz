@@ -1,5 +1,4 @@
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { error } from "console";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
