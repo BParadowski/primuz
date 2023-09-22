@@ -103,7 +103,7 @@ export default function Profile() {
   return (
     <main className="bg-primary">
       <div className="container">
-        <div className="grid w-full place-content-center overflow-hidden rounded-2xl bg-muted pb-10">
+        <div className="grid w-full place-content-center overflow-hidden rounded-lg bg-muted pb-10">
           <h1 className="my-10 text-center text-2xl font-bold">Nowy projekt</h1>
           <Form {...form}>
             <form

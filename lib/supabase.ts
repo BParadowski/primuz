@@ -36,6 +36,12 @@ export interface Database {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "availability_project_id_fkey";
+            columns: ["project_id"];
+            referencedRelation: "projects_summary";
+            referencedColumns: ["id"];
+          },
+          {
             foreignKeyName: "availability_user_id_fkey";
             columns: ["user_id"];
             referencedRelation: "users";
@@ -144,10 +150,11 @@ export interface Database {
     Views: {
       projects_summary: {
         Row: {
-          date: string | null;
+          date: string;
+          id: string;
           location: string | null;
           message: string | null;
-          name: string | null;
+          name: string;
           status: Database["public"]["Enums"]["availability_status"];
         };
         Relationships: [];
