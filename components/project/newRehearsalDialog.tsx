@@ -26,13 +26,10 @@ import {
 import { CalendarIcon } from "lucide-react";
 import { RehearsalData } from "@/app/(logged-in)/admin/nowy-projekt/page";
 
-interface InitialValues {
-  id: string;
+interface InitialValues extends Omit<RehearsalData, "start" | "end" > {
   date: Date;
   startTime: string;
   endTime: string;
-  location: string;
-  description: string;
 }
 
 interface DialogProps {
@@ -141,6 +138,7 @@ export default function NewRehearsalDialog({
 
                 onConfirm({
                   id: initialValues?.id ?? uuid(),
+                  calendarId: initialValues?.calendarId ?? uuid(),
                   start: formatRFC3339(
                     new Date(
                       date!.getFullYear(),

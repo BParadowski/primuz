@@ -45,6 +45,7 @@ const formSchema = z.object({
       end: z.string().datetime({ offset: true }),
       location: z.string(),
       description: z.string(),
+      calendarId: z.string().uuid(),
     }),
   ),
 });
@@ -70,7 +71,7 @@ export default function Profile() {
 
   let rehearsals = form.watch("rehearsals");
 
-  function newRehearsal(data: NewProjectFormData["rehearsals"][0]) {
+  function newRehearsal(data: RehearsalData) {
     form.setValue(
       "rehearsals",
       [...form.getValues("rehearsals"), data].sort((a, b) => {
@@ -80,7 +81,7 @@ export default function Profile() {
     );
   }
 
-  function editRehearsal(data: NewProjectFormData["rehearsals"][0]) {
+  function editRehearsal(data: RehearsalData) {
     deleteRehearsal(data.id);
     newRehearsal(data);
   }
@@ -255,6 +256,7 @@ export default function Profile() {
                               dialogTitle="Edytuj Próbę"
                               initialValues={{
                                 id: rehearsal.id,
+                                calendarId: rehearsal.calendarId,
                                 location: rehearsal.location,
                                 description: rehearsal.description,
                                 date: startDate,

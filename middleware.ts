@@ -12,7 +12,7 @@ export async function middleware(req: NextRequest) {
     .then(({ data: { session } }) => session?.user);
 
   if (user && req.nextUrl.pathname === "/") {
-    return NextResponse.redirect(new URL("/profil", req.url));
+    return NextResponse.redirect(new URL("/projekty", req.url));
   }
 
   if (!user && req.nextUrl.pathname !== "/") {
@@ -23,5 +23,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/profil", "/admin/:path*"],
+  matcher: ["/", "/profil", "/admin/:path*", "/projekty"],
 };

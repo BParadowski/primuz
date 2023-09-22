@@ -3,48 +3,62 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { format } from "date-fns";
 import { newCalendarEvent } from "./clendar";
+import { Database } from "@/lib/supabase";
 // npm i encoding
 
 import { NewProjectFormData } from "@/app/(logged-in)/admin/nowy-projekt/page";
 
 export async function POST(request: Request) {
-  const supabase = createRouteHandlerClient({ cookies });
+  const supabase = createRouteHandlerClient<Database>({ cookies });
   const formData: NewProjectFormData = await request.json();
 
   // formData.date is not of type Date but string since JSON does not have a date type
+  formData.date = new Date(formData.date);
+
+  // google for some reason does not accept '-' characters in ids so they are removed
 
   const calendarEvent = {
+    id: formData.calendarId.replaceAll("-", ""),
     summary: formData.name,
     description: formData.calendarDescription,
     location: formData.location,
     start: {
-      date: format(new Date(formData.date), "yyyy-MM-dd"),
+      date: format(formData.date, "yyyy-MM-dd"),
     },
     end: {
-      date: format(new Date(formData.date), "yyyy-MM-dd"),
+      date: format(formData.date, "yyyy-MM-dd"),
     },
     colorId: "9",
   };
 
-  console.log(formData);
+  console.log(formData.calendarId);
 
   const dbInsertion = supabase.from("projects").insert({
     id: formData.id,
     name: formData.name,
     location: formData.location,
     pay: formData.pay,
-    date: new Date(formData.date).toISOString(),
+    date: formData.date.toISOString(),
     description: formData.description,
     google_calendar_description: formData.calendarDescription,
-    google_calendar_id: formData.calendarId,
+    google_calendar_id: formData.calendarId.replaceAll("-", ""),
   });
 
   const calendarInsertion = newCalendarEvent(calendarEvent);
 
-  const dbRehearsalInsertions = supabase.from("rehearsal");
+  const dbRehearsalInsertions = formData.rehearsals.map((rehearsal) =>
+    supabase.from("rehearsals").insert({
+      id: rehearsal.id,
+      google_calendar_id: rehearsal.calendarId.replaceAll("-", ""),
+      description: rehearsal.description,
+      end_datetime: rehearsal.end,
+      start_datetime: rehearsal.start,
+    }),
+  );
 
   const rehearsalCalendarInsertions = formData.rehearsals.map((rehearsal) =>
     newCalendarEvent({
+      id: rehearsal.calendarId.replaceAll("-", ""),
       summary: `Próba do: "${formData.name}"`,
       description: rehearsal.description,
       location: rehearsal.location,
@@ -62,15 +76,14 @@ export async function POST(request: Request) {
     const result = await Promise.allSettled([
       dbInsertion,
       calendarInsertion,
+      ...dbRehearsalInsertions,
       ...rehearsalCalendarInsertions,
     ]);
     console.table(result);
 
-    NextResponse.json({ success: true });
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.log(error);
     return NextResponse.json({ success: false });
   }
-
-  return NextResponse.json({ success: false });
 }
