@@ -11,7 +11,6 @@ import { cn } from "@/lib/utils";
 interface IconProps {
   status: Database["public"]["Enums"]["availability_status"];
   selected?: boolean;
-  onClick?: () => void;
 }
 
 type StatusIcons = {
@@ -25,11 +24,7 @@ const statusIcons: StatusIcons = {
   maybe: AsteriskIcon,
 };
 
-export default function AvailabilityIcon({
-  status,
-  selected,
-  onClick,
-}: IconProps) {
+export default function AvailabilityIcon({ status, selected }: IconProps) {
   const Icon = statusIcons[status];
   let bgStyling;
   switch (status) {
@@ -49,7 +44,7 @@ export default function AvailabilityIcon({
   return (
     <Icon
       className={cn(
-        "rounded-sm border border-solid border-muted-foreground",
+        "cursor-pointer rounded-sm border border-solid border-muted-foreground",
         selected && bgStyling,
       )}
       height={28}

@@ -5,6 +5,7 @@ import { format } from "date-fns/esm";
 import { pl } from "date-fns/locale";
 import Link from "next/link";
 import AvailabilityIcon from "@/components/project/availabilityIcon";
+import AvailabilityStatusDescription from "@/components/project/availabilityStatusDescription";
 
 export default async function Projects() {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -13,7 +14,7 @@ export default async function Projects() {
   return (
     <main className="grid bg-primary">
       <div className="container mt-4 grid">
-        <div className="rounded-lg bg-muted px-6 py-4">
+        <div className="flex flex-col gap-6 rounded-lg bg-muted px-6 py-4">
           <h1 className="py-4 text-center text-2xl font-bold">Projekty</h1>
           {data?.map((projectData) => {
             let statusDescription;
@@ -43,7 +44,14 @@ export default async function Projects() {
                   <p>{projectData.location}</p>
                   <div className="align-center mt-4 flex gap-4">
                     <AvailabilityIcon status={projectData.status} selected />
-                    <p>{statusDescription}</p>
+                    <AvailabilityStatusDescription
+                      status={projectData.status}
+                    />
+                    {projectData.message ? (
+                      <p className="italic text-muted-foreground">
+                        ({projectData.message})
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               </Link>

@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         status: 301,
       });
     }
-    return NextResponse.redirect(`${requestUrl.origin}/profil`, {
+    return NextResponse.redirect(`${requestUrl.origin}/projekty`, {
       status: 301,
     });
   } catch {

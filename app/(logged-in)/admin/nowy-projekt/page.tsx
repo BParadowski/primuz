@@ -28,6 +28,7 @@ import { pl } from "date-fns/locale";
 import { XIcon } from "lucide-react";
 import { v4 as uuid } from "uuid";
 import { Loader2Icon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   id: z.string().uuid(),
@@ -70,6 +71,7 @@ export default function Profile() {
   });
 
   let rehearsals = form.watch("rehearsals");
+  const router = useRouter();
 
   function newRehearsal(data: RehearsalData) {
     form.setValue(
@@ -109,6 +111,7 @@ export default function Profile() {
             <form
               onSubmit={form.handleSubmit(async (data) => {
                 const response = await submitProject(data);
+                router.push(`/projekty/${data.id}`);
               })}
             >
               <div className="grid gap-y-8 rounded-lg bg-background p-6">

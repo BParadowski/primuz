@@ -31,9 +31,8 @@ export async function POST(request: Request) {
     colorId: "9",
   };
 
-  console.log(formData.calendarId);
-
-  const dbInsertion = supabase.from("projects").insert({
+  // First await project insertion so that db doesn't throw foreign key error on rehearsal insertions.
+  const dbInsertion = await supabase.from("projects").insert({
     id: formData.id,
     name: formData.name,
     location: formData.location,
@@ -49,10 +48,12 @@ export async function POST(request: Request) {
   const dbRehearsalInsertions = formData.rehearsals.map((rehearsal) =>
     supabase.from("rehearsals").insert({
       id: rehearsal.id,
+      project_id: formData.id,
       google_calendar_id: rehearsal.calendarId.replaceAll("-", ""),
       description: rehearsal.description,
       end_datetime: rehearsal.end,
       start_datetime: rehearsal.start,
+      location: rehearsal.location,
     }),
   );
 
@@ -74,12 +75,10 @@ export async function POST(request: Request) {
 
   try {
     const result = await Promise.allSettled([
-      dbInsertion,
       calendarInsertion,
       ...dbRehearsalInsertions,
       ...rehearsalCalendarInsertions,
     ]);
-    console.table(result);
 
     return NextResponse.json({ success: true });
   } catch (error) {
