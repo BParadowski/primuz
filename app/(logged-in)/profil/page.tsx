@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 
 import { Database } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 export default async function Profile() {
   const supabase = createServerComponentClient<Database>({ cookies });
 
