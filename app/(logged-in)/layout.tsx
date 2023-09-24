@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import runOneSignal from "@/lib/onesignal";
 import { useEffect } from "react";
 import OneSignal from "react-onesignal";
+import { useRouter } from "next/navigation";
 
 export default function InnerLayout({
   children,
@@ -15,13 +16,18 @@ export default function InnerLayout({
   children: React.ReactNode;
 }) {
   const supabase = createClientComponentClient();
+  const router = useRouter();
 
   useEffect(() => {
     async function pushNotifications() {
       const userId = (await supabase.auth.getSession()).data.session?.user.id;
       await runOneSignal();
       // user must be logged in otherwise middleware would have redirected them
-      await OneSignal.login(userId!);
+      try {
+        await OneSignal.login(userId!);
+      } catch (err) {
+        console.error(err);
+      }
     }
     pushNotifications();
   }, []);
@@ -42,6 +48,7 @@ export default function InnerLayout({
 
           <nav className="ml-auto hidden sm:flex">
             <ul className="flex flex-wrap gap-4">
+              <li></li>
               <li>
                 <Button variant="whiteLink" asChild>
                   <Link href="/admin/projekty">Panel sterowania</Link>
@@ -54,9 +61,19 @@ export default function InnerLayout({
                 </Button>
               </li>
               <li>
-                <form method="post" action="/auth/logout">
-                  <Button variant="whiteLink">Wyloguj</Button>
-                </form>
+                <Button
+                  variant="whiteLink"
+                  onClick={async () => {
+                    try {
+                      await OneSignal.logout();
+                    } finally {
+                      await fetch("/auth/logout", { method: "post" });
+                      router.refresh();
+                    }
+                  }}
+                >
+                  Wyloguj
+                </Button>
               </li>
             </ul>
           </nav>
