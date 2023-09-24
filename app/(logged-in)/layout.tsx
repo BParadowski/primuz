@@ -1,27 +1,30 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+"use client";
+
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import sygnet from "@/lib/images/primuz-sygnet.svg";
 import { Button } from "@/components/ui/button";
+import runOneSignal from "@/lib/onesignal";
+import { useEffect } from "react";
+import OneSignal from "react-onesignal";
 
-export default async function InnerLayout({
+export default function InnerLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createServerComponentClient({ cookies });
-  const userId = (await supabase.auth.getSession()).data.session?.user.id;
+  const supabase = createClientComponentClient();
 
-  const data = (
-    await supabase
-      .from("users")
-      .select("first_name, last_name")
-      .eq("user_id", userId ?? "")
-      .single()
-  ).data;
-  const firstName = data?.first_name;
-  const lastName = data?.last_name;
+  useEffect(() => {
+    async function pushNotifications() {
+      const userId = (await supabase.auth.getSession()).data.session?.user.id;
+      await runOneSignal();
+      // user must be logged in otherwise middleware would have redirected them
+      await OneSignal.login(userId!);
+    }
+    pushNotifications();
+  }, []);
 
   return (
     <div className="grid min-h-screen grid-rows-[auto_1fr_auto]">
@@ -35,7 +38,7 @@ export default async function InnerLayout({
               priority
             />
           </Link>
-          <p className="text-sm italic">{`${firstName} ${lastName}`}</p>
+          <p className="text-sm italic">Primuz</p>
 
           <nav className="ml-auto hidden sm:flex">
             <ul className="flex flex-wrap gap-4">
