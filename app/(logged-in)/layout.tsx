@@ -54,11 +54,9 @@ export default function InnerLayout({
                 </Button>
               </li>
               <li>
-                <Button variant="whiteLink">
-                  <form method="post" action="/auth/logout">
-                    Wyloguj
-                  </form>
-                </Button>
+                <form method="post" action="/auth/logout">
+                  <Button variant="whiteLink">Wyloguj</Button>
+                </form>
               </li>
             </ul>
           </nav>
