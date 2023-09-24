@@ -23,5 +23,5 @@ export default function AvailabilityStatusDescription({
       break;
   }
 
-  return <p>{statusDescription}</p>;
+  return <p className="text-sm">{statusDescription}</p>;
 }

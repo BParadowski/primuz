@@ -53,7 +53,8 @@ export default async function ProjectPage({
         <div className="flex flex-col justify-items-center gap-3 rounded-lg bg-background px-6 py-4">
           <h1 className="text-center text-2xl font-bold">{data.name}</h1>
           <div className="flex items-center gap-6">
-            <MapPinIcon height={36} /> <p>{data.location}</p>{" "}
+            <MapPinIcon height={36} />
+            <p>{data.location}</p>
             <Button variant="outline" asChild>
               <a
                 href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(

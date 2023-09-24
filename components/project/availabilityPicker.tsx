@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import AvailabilityStatusDescription from "./availabilityStatusDescription";
 import { Loader2Icon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type Status = Database["public"]["Enums"]["availability_status"];
 
@@ -27,6 +28,7 @@ export default function AvailabilityPicker({
   const [status, setStatus] = useState<Status>(initialStatus);
   const [message, setMessage] = useState<string>(initialMessage);
   const [isUpdating, setIsUpdating] = useState(false);
+  const router = useRouter();
 
   async function handleSubmit() {
     setIsUpdating(true);
@@ -35,11 +37,12 @@ export default function AvailabilityPicker({
       body: JSON.stringify({ status, message, userId, projectId }),
     });
     setIsUpdating(false);
+    router.refresh();
   }
 
   return (
     <div>
-      <ul className="flex gap-3 py-3">
+      <ul className="flex items-center gap-3 py-3">
         <li onClick={() => setStatus("available")}>
           <AvailabilityIcon
             status="available"
@@ -65,7 +68,7 @@ export default function AvailabilityPicker({
       </ul>
       <Label htmlFor="availability-message">Komentarz do dostępności:</Label>
       <Input
-        className="my-2"
+        className="my-2 max-w-full"
         id="availability-message"
         type="text"
         value={message}
