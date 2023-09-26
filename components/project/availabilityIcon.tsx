@@ -44,7 +44,7 @@ export default function AvailabilityIcon({ status, selected }: IconProps) {
   return (
     <Icon
       className={cn(
-        "cursor-pointer rounded-sm border border-solid border-muted-foreground",
+        "rounded-sm border border-solid border-muted-foreground",
         selected && bgStyling,
       )}
       height={28}

@@ -43,22 +43,22 @@ export default function AvailabilityPicker({
   return (
     <div>
       <ul className="flex items-center gap-3 py-3">
-        <li onClick={() => setStatus("available")}>
+        <li onClick={() => setStatus("available")} className="cursor-pointer">
           <AvailabilityIcon
             status="available"
             selected={status === "available"}
           />
         </li>
-        <li onClick={() => setStatus("maybe")}>
+        <li onClick={() => setStatus("maybe")} className="cursor-pointer">
           <AvailabilityIcon status="maybe" selected={status === "maybe"} />
         </li>
-        <li onClick={() => setStatus("unavailable")}>
+        <li onClick={() => setStatus("unavailable")} className="cursor-pointer">
           <AvailabilityIcon
             status="unavailable"
             selected={status === "unavailable"}
           />
         </li>
-        <li onClick={() => setStatus("undeclared")}>
+        <li onClick={() => setStatus("undeclared")} className="cursor-pointer">
           <AvailabilityIcon
             status="undeclared"
             selected={status === "undeclared"}

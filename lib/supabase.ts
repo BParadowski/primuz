@@ -46,6 +46,12 @@ export interface Database {
             columns: ["user_id"]
             referencedRelation: "users"
             referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "availability_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "sorted_musicians_availability"
+            referencedColumns: ["user_id"]
           }
         ]
       }
@@ -94,7 +100,7 @@ export interface Database {
           id: string
           location: string | null
           project_id: string
-          start_datetime: string
+          start_datetime: string 
         }
         Insert: {
           created_at?: string
@@ -135,7 +141,7 @@ export interface Database {
         Row: {
           created_at: string
           first_name: string | null
-          instrument: Database["public"]["Enums"]["instrument"] | null
+          instrument: Database["public"]["Enums"]["instrument"]
           is_admin: boolean
           last_name: string | null
           user_id: string
@@ -143,7 +149,7 @@ export interface Database {
         Insert: {
           created_at?: string
           first_name?: string | null
-          instrument?: Database["public"]["Enums"]["instrument"] | null
+          instrument?: Database["public"]["Enums"]["instrument"]
           is_admin?: boolean
           last_name?: string | null
           user_id: string
@@ -151,7 +157,7 @@ export interface Database {
         Update: {
           created_at?: string
           first_name?: string | null
-          instrument?: Database["public"]["Enums"]["instrument"] | null
+          instrument?: Database["public"]["Enums"]["instrument"]
           is_admin?: boolean
           last_name?: string | null
           user_id?: string
@@ -169,14 +175,32 @@ export interface Database {
     Views: {
       projects_summary: {
         Row: {
-          date: string 
+          date: string
           id: string 
           location: string | null
           message: string | null
-          name: string 
-          status: Database["public"]["Enums"]["availability_status"]
+          name: string
+          status: Database["public"]["Enums"]["availability_status"] 
         }
         Relationships: []
+      }
+      sorted_musicians_availability: {
+        Row: {
+          first_name: string | null
+          instrument: Database["public"]["Enums"]["instrument"] 
+          last_name: string | null
+          message: string | null
+          status: Database["public"]["Enums"]["availability_status"] 
+          user_id: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Functions: {
