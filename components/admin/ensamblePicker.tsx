@@ -17,11 +17,16 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SortableMusician } from "./sortableMusician";
 import { Separator } from "../ui/separator";
+import { Database } from "@/lib/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-export default function EnsamblePicker() {
+type Instruments = Database["public"]["Enums"]["instrument"];
+
+export default function EnsamblePicker(props: { projectId: string }) {
+  const supabase = createClientComponentClient<Database>();
   const [ensamble, setEnsamble] = useState<{
     [K in string]: string[];
   }>({
@@ -31,6 +36,32 @@ export default function EnsamblePicker() {
     wiolonczela: [],
     kontrabas: [],
   });
+
+  // Availability display
+  const [availabilityData, setAvailabilityData] = useState<
+    | Database["public"]["Views"]["sorted_musicians_availability"]["Row"]
+    | null
+    | undefined
+  >();
+  const [instruments, setInstruments] = useState<Instruments[] | null>();
+
+  useEffect(() => {
+    async function getAvailability() {
+      const { data } = await supabase
+        .from("sorted_musicians_availability")
+        .select()
+        .eq("project_id", props.projectId)
+        .single();
+      setAvailabilityData(data);
+    }
+    async function getInstruments() {
+      //@ts-expect-error
+      const instruments: Instruments[] = await supabase.rpc("get_instruments");
+      setInstruments(instruments);
+    }
+    getAvailability();
+    getInstruments();
+  }, []);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -83,6 +114,7 @@ export default function EnsamblePicker() {
 
   return (
     <div>
+      <h2 className="text-center text-lg font-bold"> Skład</h2>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}

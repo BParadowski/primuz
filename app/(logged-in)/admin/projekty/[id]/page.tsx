@@ -60,7 +60,7 @@ export default async function Project({ params }: { params: { id: string } }) {
               );
           })}
         </div>
-        <EnsamblePicker />
+        <EnsamblePicker projectId={params.id} />
       </div>
     </main>
   );
