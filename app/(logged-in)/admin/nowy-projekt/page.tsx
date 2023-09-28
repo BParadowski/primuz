@@ -22,7 +22,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
-import NewRehearsalDialog from "@/components/project/newRehearsalDialog";
+import NewRehearsalDialog from "@/components/admin/newRehearsalDialog";
 import { format } from "date-fns/esm";
 import { pl } from "date-fns/locale";
 import { XIcon } from "lucide-react";
