@@ -29,37 +29,7 @@ export default async function Project({ params }: { params: { id: string } }) {
     <main className="relative p-10">
       <div className="container">
         <h1 className="text-center text-xl">{data.name}</h1>
-        <div>
-          {" "}
-          {instruments.map((instrument) => {
-            if (
-              !availabilityData.find((data) => data.instrument === instrument)
-            )
-              return null;
-            else
-              return (
-                <div key={instrument}>
-                  <h3 className="font-bold capitalize">{instrument}</h3>
-                  <div className="flex flex-col gap-2">
-                    {availabilityData
-                      .filter((data) => data.instrument === instrument)
-                      .map((avData) => {
-                        return (
-                          <AvailabilityRow
-                            key={avData.user_id}
-                            userId={avData.user_id}
-                            availabilityStatus={avData.status}
-                            availabilityMessage={avData.message}
-                            firstName={avData.first_name}
-                            lastName={avData.last_name}
-                          />
-                        );
-                      })}
-                  </div>
-                </div>
-              );
-          })}
-        </div>
+
         <EnsamblePicker projectId={params.id} />
       </div>
     </main>

@@ -17,29 +17,22 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SortableMusician } from "./sortableMusician";
 import { Separator } from "../ui/separator";
 import { Database } from "@/lib/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import AvailabilityRow from "./availabilityRow";
 
 type Instruments = Database["public"]["Enums"]["instrument"];
 
 export default function EnsamblePicker(props: { projectId: string }) {
   const supabase = createClientComponentClient<Database>();
-  const [ensamble, setEnsamble] = useState<{
-    [K in string]: string[];
-  }>({
-    "skrzypce I": ["Julia Iskrzycka", "Dominika Janczewska", "werona"],
-    "skrzypce II": [],
-    altówka: ["zanzibar", "makarena"],
-    wiolonczela: [],
-    kontrabas: [],
-  });
+  const projectMusicians = useRef<string[]>([]);
 
   // Availability display
   const [availabilityData, setAvailabilityData] = useState<
-    | Database["public"]["Views"]["sorted_musicians_availability"]["Row"]
+    | Database["public"]["Views"]["sorted_musicians_availability"]["Row"][]
     | null
     | undefined
   >();
@@ -50,18 +43,70 @@ export default function EnsamblePicker(props: { projectId: string }) {
       const { data } = await supabase
         .from("sorted_musicians_availability")
         .select()
-        .eq("project_id", props.projectId)
-        .single();
+        .eq("project_id", props.projectId);
       setAvailabilityData(data);
     }
     async function getInstruments() {
       //@ts-expect-error
-      const instruments: Instruments[] = await supabase.rpc("get_instruments");
-      setInstruments(instruments);
+      const { data }: Instruments[] = await supabase.rpc("get_instruments");
+      setInstruments(data);
     }
     getAvailability();
     getInstruments();
   }, []);
+
+  function addMusician(instrument: Instruments, fullName: string, id: string) {
+    const section = instrument === "skrzypce" ? "skrzypce I" : instrument;
+
+    setEnsamble((state) => {
+      if (state[section])
+        return { ...state, [section]: [...state[section], fullName] };
+      else return { ...state, [section]: [fullName] };
+    });
+
+    projectMusicians.current = [...projectMusicians.current, id];
+  }
+
+  function deleteMusician(
+    instrument: Instruments,
+    fullName: string,
+    id: string,
+  ) {
+    if (instrument === "skrzypce") {
+      setEnsamble((state) => {
+        return {
+          ...state,
+          "skrzypce I": state["skrzypce I"].filter((name) => name !== fullName),
+          "skrzypce II": state["skrzypce II"].filter(
+            (name) => name !== fullName,
+          ),
+        };
+      });
+    } else {
+      setEnsamble((state) => {
+        return {
+          ...state,
+          [instrument]: state[instrument].filter((name) => name !== fullName),
+        };
+      });
+    }
+
+    projectMusicians.current = projectMusicians.current.filter(
+      (musicianId) => musicianId !== id,
+    );
+  }
+
+  // Ensamble + dnd
+
+  const [ensamble, setEnsamble] = useState<{
+    [K in string]: string[];
+  }>({
+    "skrzypce I": ["Julia Iskrzycka", "Dominika Janczewska", "werona"],
+    "skrzypce II": [],
+    altówka: ["zanzibar", "makarena"],
+    wiolonczela: [],
+    kontrabas: [],
+  });
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -114,35 +159,72 @@ export default function EnsamblePicker(props: { projectId: string }) {
 
   return (
     <div>
-      <h2 className="text-center text-lg font-bold"> Skład</h2>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        {Object.keys(ensamble).map((sectionName) => {
-          return (
-            <div className=" p-1" key={sectionName}>
-              <h3 className="font-bold capitalize">{sectionName}</h3>
-              <Separator className="my-2" />
-              <SortableContext
-                items={ensamble[sectionName]}
-                strategy={verticalListSortingStrategy}
-              >
-                {ensamble[sectionName].map((name) => (
-                  <SortableMusician
-                    id={name}
-                    section={sectionName}
-                    key={name}
-                    onArrowClick={handleViolinTransfer}
-                  />
-                ))}
-              </SortableContext>
-            </div>
-          );
+      <h2 className="text-center text-lg font-bold"> Dostępność</h2>
+
+      {instruments &&
+        availabilityData &&
+        instruments.map((instrument) => {
+          if (!availabilityData.find((data) => data.instrument === instrument))
+            return null;
+          else
+            return (
+              <div key={instrument}>
+                <h3 className="font-bold capitalize">{instrument}</h3>
+                <div className="flex flex-col gap-2">
+                  {availabilityData
+                    .filter((data) => data.instrument === instrument)
+                    .map((avData) => {
+                      return (
+                        <AvailabilityRow
+                          instrument={instrument}
+                          key={avData.user_id}
+                          userId={avData.user_id}
+                          availabilityStatus={avData.status}
+                          availabilityMessage={avData.message}
+                          firstName={avData.first_name}
+                          lastName={avData.last_name}
+                          onPlusClick={addMusician}
+                          onMinusClick={deleteMusician}
+                        />
+                      );
+                    })}
+                </div>
+              </div>
+            );
         })}
-      </DndContext>
-      <button onClick={() => console.log(ensamble)}>Bunga</button>
+      <div>
+        <h2 className="text-center text-lg font-bold"> Skład</h2>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          {Object.keys(ensamble).map((sectionName) => {
+            return (
+              <div className=" p-1" key={sectionName}>
+                <h3 className="font-bold capitalize">{sectionName}</h3>
+                <Separator className="my-2" />
+                <SortableContext
+                  items={ensamble[sectionName]}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {ensamble[sectionName].map((name) => (
+                    <SortableMusician
+                      id={name}
+                      section={sectionName}
+                      key={name}
+                      onArrowClick={handleViolinTransfer}
+                    />
+                  ))}
+                </SortableContext>
+              </div>
+            );
+          })}
+        </DndContext>
+        <button onClick={() => console.log(ensamble, projectMusicians.current)}>
+          Bunga
+        </button>
+      </div>
     </div>
   );
 }

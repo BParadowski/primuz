@@ -6,19 +6,23 @@ import AvailabilityIcon from "../project/availabilityIcon";
 import { cn } from "@/lib/utils";
 import { MinusIcon, PlusIcon } from "lucide-react";
 
+type Instruments = Database["public"]["Enums"]["instrument"];
+
 interface RowProps {
   userId: string;
+  instrument: Instruments;
   firstName: string | null;
   lastName: string | null;
   availabilityStatus: Database["public"]["Enums"]["availability_status"];
   availabilityMessage: string | null;
-  onPlusClick?: (id: string) => void;
-  onMinusClick?: (id: string) => void;
+  onPlusClick: (instrument: Instruments, fullName: string, id: string) => void;
+  onMinusClick: (instrument: Instruments, fullName: string, id: string) => void;
 }
 
 export default function AvailabilityRow({
   userId,
   firstName,
+  instrument,
   lastName,
   availabilityStatus,
   availabilityMessage,
@@ -42,7 +46,10 @@ export default function AvailabilityRow({
         {selected ? (
           <button
             className="rounded-sm border-2 border-solid border-pink-400 bg-white"
-            onClick={() => setSelected(false)}
+            onClick={() => {
+              setSelected(false);
+              onMinusClick(instrument, `${firstName} ${lastName}`, userId);
+            }}
           >
             <MinusIcon height={20} width={20} />
           </button>
@@ -51,7 +58,7 @@ export default function AvailabilityRow({
             className="rounded-sm border-2 border-solid border-pink-400 bg-white"
             onClick={() => {
               setSelected(true);
-            //   onPlusClick(userId);
+              onPlusClick(instrument, `${firstName} ${lastName}`, userId);
             }}
           >
             <PlusIcon height={20} width={20} />
