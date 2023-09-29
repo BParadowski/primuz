@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import { Database } from "@/lib/supabase";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function Projects() {
   const supabase = createServerComponentClient<Database>({ cookies });
   const { data } = await supabase.from("projects_summary").select();
