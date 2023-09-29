@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { format } from "date-fns";
-import { newCalendarEvent } from "./clendar";
+import { newCalendarEvent } from "./calendar";
 import { Database } from "@/lib/supabase";
 // npm i encoding
 
@@ -85,4 +85,23 @@ export async function POST(request: Request) {
     console.log(error);
     return NextResponse.json({ success: false });
   }
+}
+
+export async function PATCH(request: Request) {
+  const supabase = createRouteHandlerClient<Database>({ cookies });
+  const {
+    projectId,
+    payload,
+  }: { projectId: string; payload: Record<string, object> } =
+    await request.json();
+
+  console.log(payload, projectId);
+
+  try {
+    await supabase.from("projects").update(payload).eq("id", projectId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  return NextResponse.json({ success: true });
 }

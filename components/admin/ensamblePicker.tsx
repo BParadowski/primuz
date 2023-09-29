@@ -221,7 +221,20 @@ export default function EnsamblePicker(props: { projectId: string }) {
             );
           })}
         </DndContext>
-        <button onClick={() => console.log(ensamble, projectMusicians.current)}>
+        <button
+          onClick={async () =>
+            await fetch("/api/project", {
+              method: "PATCH",
+              body: JSON.stringify({
+                projectId: props.projectId,
+                payload: {
+                  musicians: projectMusicians.current,
+                  musicians_structure: ensamble,
+                },
+              }),
+            })
+          }
+        >
           Bunga
         </button>
       </div>

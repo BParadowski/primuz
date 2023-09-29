@@ -11,6 +11,22 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, status: 401 });
   }
 
+  const {
+    targets,
+    message,
+    internalName,
+    projectId,
+  }: {
+    targets: "everyone" | string[];
+    message: string;
+    internalName: string;
+    projectId: string;
+  } = await request.json();
+
+  const allUserIds = (await supabase.from("users").select("user_id")).data?.map(
+    (userIdObject) => userIdObject.user_id,
+  );
+
   const options = {
     method: "POST",
     headers: {
@@ -20,15 +36,13 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       app_id: process.env.ONE_SIGNAL_APP_ID,
-      include_aliases: {
-        external_id: ["2abe583a-055a-4c07-af34-9fe2be479900"],
-      },
+      include_external_user_ids: targets === "everyone" ? allUserIds : targets,
       target_channel: "push",
       contents: {
-        en: "English or Any Language Message",
+        en: message,
       },
-      name: "INTERNAL_CAMPAIGN_NAME",
-      url: "https://primuz.vercel.app/admin/projekty",
+      name: internalName,
+      url: `https://primuz.vercel.app/projekty/${projectId}`,
     }),
   };
 

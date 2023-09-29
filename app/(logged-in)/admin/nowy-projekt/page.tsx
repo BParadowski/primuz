@@ -96,10 +96,22 @@ export default function Profile() {
   }
 
   async function submitProject(formData: NewProjectFormData) {
-    return fetch("/api/project", {
+    const res = await fetch("/api/project", {
       method: "post",
       body: JSON.stringify(formData),
     }).then((res) => res.json());
+    if (res.success === true) {
+      fetch("/api/notifications", {
+        method: "POST",
+        body: JSON.stringify({
+          targets: "everyone",
+          message: "Został dodany nowy projekt - zaznacz swoją dostępność.",
+          internalName: `${formData.name} creation message`,
+          projectId: formData.id,
+        }),
+      });
+    }
+    return;
   }
 
   return (
