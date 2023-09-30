@@ -17,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ import { XIcon } from "lucide-react";
 import { v4 as uuid } from "uuid";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { PiecePicker } from "@/components/admin/piecePicker";
 
 const formSchema = z.object({
   id: z.string().uuid(),
@@ -49,6 +51,7 @@ const formSchema = z.object({
       calendarId: z.string().uuid(),
     }),
   ),
+  pieces: z.array(z.string().uuid()),
 });
 
 export type NewProjectFormData = z.infer<typeof formSchema>;
@@ -67,10 +70,13 @@ export default function Profile() {
       calendarDescription: undefined,
       description: "",
       rehearsals: [],
+      pieces: [],
     },
   });
 
   let rehearsals = form.watch("rehearsals");
+  let pieces = form.watch("pieces");
+
   const router = useRouter();
 
   function newRehearsal(data: RehearsalData) {
@@ -93,6 +99,10 @@ export default function Profile() {
       "rehearsals",
       form.getValues("rehearsals").filter((rehearsal) => rehearsal.id !== id),
     );
+  }
+
+  function addPiece(pieceId: string) {
+    form.setValue("pieces", [...form.getValues("pieces"), pieceId]);
   }
 
   async function submitProject(formData: NewProjectFormData) {
@@ -292,6 +302,13 @@ export default function Profile() {
                       </Card>
                     );
                   })}
+                </div>
+              </div>
+
+              <div className="mt-8 grid gap-y-8 rounded-lg bg-background p-6">
+                <div className="flex flex-col">
+                  <h2>Repertuar</h2>
+                  <PiecePicker onPieceAdd={addPiece} />
                 </div>
               </div>
 

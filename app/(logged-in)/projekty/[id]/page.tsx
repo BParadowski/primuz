@@ -14,6 +14,7 @@ import Image from "next/image";
 import map from "@/lib/google-maps.png";
 import AvailabilityPicker from "@/components/project/availabilityPicker";
 import AvailabilityIcon from "@/components/project/availabilityIcon";
+import { ListOfPieces } from "@/components/project/listOfPieces";
 
 // object used to sort orchestral sections
 type Instruments = Database["public"]["Enums"]["instrument"];
@@ -47,11 +48,11 @@ export default async function ProjectPage({
     .eq("project_id", params.id);
 
   // mainly for type narrowing, should never happen
-  if (!data || !availabilityData)
+  if (!data || !availabilityData || !user)
     return <div>Nie udało się załadować strony projektu</div>;
 
   const myAvailability = availabilityData.find(
-    (availability) => availability.user_id === user?.id,
+    (availability) => availability.user_id === user.id,
   );
 
   //Need new db types to get rid of this error
@@ -184,6 +185,12 @@ export default async function ProjectPage({
                   );
               })}
             </div>
+          </section>
+          <section>
+            <ListOfPieces
+              projectId={params.id}
+              instrument={myAvailability?.instrument ?? "skrzypce"}
+            />
           </section>
         </div>
       </div>

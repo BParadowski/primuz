@@ -42,10 +42,7 @@ export default function AdminLayout({
             </li>
             <li>
               <Button asChild variant="ghost" className="group font-bold">
-                <Link
-                  href="/admin/nowy-projekt"
-                  className="flex items-center gap-2"
-                >
+                <Link href="/admin/nuty" className="flex items-center gap-2">
                   <Music4Icon
                     size={36}
                     className="stroke-primary-foreground transition-colors group-hover:stroke-primary"

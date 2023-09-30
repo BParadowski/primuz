@@ -73,9 +73,16 @@ export async function POST(request: Request) {
     }),
   );
 
+  const repertoireInsertion = formData.pieces.map((pieceId) =>
+    supabase
+      .from("projects_pieces")
+      .insert({ project_id: formData.id, piece_id: pieceId }),
+  );
+
   try {
     const result = await Promise.allSettled([
       calendarInsertion,
+      ...repertoireInsertion,
       ...dbRehearsalInsertions,
       ...rehearsalCalendarInsertions,
     ]);
