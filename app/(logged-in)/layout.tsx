@@ -9,6 +9,7 @@ import runOneSignal from "@/lib/onesignal";
 import { useEffect } from "react";
 import OneSignal from "react-onesignal";
 import { useRouter } from "next/navigation";
+import { RefreshCwIcon } from "lucide-react";
 
 export default function InnerLayout({
   children,
@@ -47,8 +48,10 @@ export default function InnerLayout({
           <p className="text-sm italic">Primuz</p>
 
           <nav className="ml-auto hidden sm:flex">
-            <ul className="flex flex-wrap gap-4">
-              <li></li>
+            <ul className="flex flex-wrap items-center gap-4">
+              <li onClick={() => router.refresh()} className="cursor-pointer">
+                <RefreshCwIcon className="stroke-white" />
+              </li>
               <li>
                 <Button variant="whiteLink" asChild>
                   <Link href="/admin/projekty">Panel sterowania</Link>

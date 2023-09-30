@@ -34,3 +34,15 @@ export const replacePolishLetters = (text: string) => {
   }
   return result;
 };
+
+const instrumentChierarchy: { [K in string]: number } = {
+  "skrzypce I": 0,
+  "skrzypce II": 1,
+  altówka: 2,
+  wiolonczela: 3,
+  kontrabas: 4,
+};
+
+export const sortByInstrument = (arr: string[]) => {
+  return arr.sort((a, b) => instrumentChierarchy[a] - instrumentChierarchy[b]);
+};

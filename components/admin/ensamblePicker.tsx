@@ -16,6 +16,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { Button } from "../ui/button";
 
 import { useEffect, useRef, useState } from "react";
 import { SortableMusician } from "./sortableMusician";
@@ -101,9 +102,9 @@ export default function EnsamblePicker(props: { projectId: string }) {
   const [ensamble, setEnsamble] = useState<{
     [K in string]: string[];
   }>({
-    "skrzypce I": ["Julia Iskrzycka", "Dominika Janczewska", "werona"],
+    "skrzypce I": [],
     "skrzypce II": [],
-    altówka: ["zanzibar", "makarena"],
+    altówka: [],
     wiolonczela: [],
     kontrabas: [],
   });
@@ -221,7 +222,7 @@ export default function EnsamblePicker(props: { projectId: string }) {
             );
           })}
         </DndContext>
-        <button
+        <Button
           onClick={async () =>
             await fetch("/api/project", {
               method: "PATCH",
@@ -235,8 +236,8 @@ export default function EnsamblePicker(props: { projectId: string }) {
             })
           }
         >
-          Bunga
-        </button>
+          Zapisz skład
+        </Button>
       </div>
     </div>
   );

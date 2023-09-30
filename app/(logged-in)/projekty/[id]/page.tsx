@@ -15,6 +15,8 @@ import map from "@/lib/google-maps.png";
 import AvailabilityPicker from "@/components/project/availabilityPicker";
 import AvailabilityIcon from "@/components/project/availabilityIcon";
 import { ListOfPieces } from "@/components/project/listOfPieces";
+import { Separator } from "@/components/ui/separator";
+import { sortByInstrument } from "@/lib/utils";
 
 // object used to sort orchestral sections
 type Instruments = Database["public"]["Enums"]["instrument"];
@@ -27,7 +29,7 @@ export default async function ProjectPage({
   const supabase = createServerComponentClient<Database>({ cookies });
   const { data } = await supabase
     .from("projects")
-    .select("name, location, description, pay, date")
+    .select("name, location, description, pay, date, musicians_structure")
     .eq("id", params.id)
     .single();
   const rehearsalQuery = await supabase
@@ -146,7 +148,7 @@ export default async function ProjectPage({
             />
           </section>
           <section>
-            <h2 className="py-6 text-center font-bold">Dostępność i skład</h2>
+            <h2 className="py-6 text-center font-bold">Dostępność</h2>
             <div className="flex max-w-sm flex-col gap-2">
               {instruments.map((instrument) => {
                 if (
@@ -185,8 +187,34 @@ export default async function ProjectPage({
                   );
               })}
             </div>
+            <div>
+              <h2 className="py-6 text-center font-bold">Skład</h2>
+
+              {data.musicians_structure &&
+                sortByInstrument(
+                  Object.keys(data.musicians_structure as Object),
+                ).map((section) => {
+                  return (
+                    <div className=" p-1" key={section}>
+                      <h3 className="font-bold capitalize">{section}</h3>
+                      <Separator className="my-2" />
+                      <div>
+                        {(
+                          data.musicians_structure as {
+                            [K in string]: string[];
+                          }
+                        )[section].map((musicianName) => {
+                          return <p key={musicianName}>{musicianName}</p>;
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
           </section>
           <section>
+            <h2 className="py-6 text-center font-bold">Repertuar</h2>
+
             <ListOfPieces
               projectId={params.id}
               instrument={myAvailability?.instrument ?? "skrzypce"}

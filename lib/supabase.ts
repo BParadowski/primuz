@@ -273,9 +273,9 @@ export interface Database {
           instrument: Database["public"]["Enums"]["instrument"];
           last_name: string | null;
           message: string | null;
-          project_id: string | null;
+          project_id: string;
           status: Database["public"]["Enums"]["availability_status"];
-          user_id: string | null;
+          user_id: string;
         };
         Relationships: [
           {
