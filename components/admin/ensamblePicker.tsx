@@ -24,12 +24,14 @@ import { Separator } from "../ui/separator";
 import { Database } from "@/lib/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import AvailabilityRow from "./availabilityRow";
+import { useToast } from "../ui/use-toast";
 
 type Instruments = Database["public"]["Enums"]["instrument"];
 
 export default function EnsamblePicker(props: { projectId: string }) {
   const supabase = createClientComponentClient<Database>();
   const projectMusicians = useRef<string[]>([]);
+  const { toast } = useToast();
 
   // Availability display
   const [availabilityData, setAvailabilityData] = useState<
@@ -227,7 +229,7 @@ export default function EnsamblePicker(props: { projectId: string }) {
           })}
         </DndContext>
         <Button
-          onClick={async () =>
+          onClick={async () => {
             await fetch("/api/project", {
               method: "PATCH",
               body: JSON.stringify({
@@ -237,8 +239,11 @@ export default function EnsamblePicker(props: { projectId: string }) {
                   musicians_structure: ensamble,
                 },
               }),
-            })
-          }
+            });
+            toast({
+              title: "Skład został zapisany",
+            });
+          }}
         >
           Zapisz skład
         </Button>

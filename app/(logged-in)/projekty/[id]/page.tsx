@@ -161,9 +161,10 @@ export default async function ProjectPage({
               projectId={params.id}
             />
           </section>
-          <section>
-            <h2 className="py-6 text-center font-bold">Dostępność</h2>
-            <div className="flex max-w-sm flex-col gap-2">
+          <section className="grid lg:grid-cols-2 lg:gap-x-10">
+            <div className="flex flex-col gap-2">
+              <h2 className="py-6 text-center font-bold">Dostępność</h2>
+
               {instruments.map((instrument) => {
                 if (
                   !availabilityData.find(

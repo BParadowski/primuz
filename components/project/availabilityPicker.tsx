@@ -9,6 +9,7 @@ import { Label } from "../ui/label";
 import AvailabilityStatusDescription from "./availabilityStatusDescription";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useToast } from "../ui/use-toast";
 
 type Status = Database["public"]["Enums"]["availability_status"];
 
@@ -29,6 +30,7 @@ export default function AvailabilityPicker({
   const [message, setMessage] = useState<string>(initialMessage);
   const [isUpdating, setIsUpdating] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   async function handleSubmit() {
     setIsUpdating(true);
@@ -37,6 +39,9 @@ export default function AvailabilityPicker({
       body: JSON.stringify({ status, message, userId, projectId }),
     });
     setIsUpdating(false);
+    toast({
+      description: "Twoja dostępność została zapisana.",
+    });
     router.refresh();
   }
 
