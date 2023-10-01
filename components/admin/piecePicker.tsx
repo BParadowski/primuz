@@ -62,7 +62,7 @@ export function PiecePicker(props: PickerProps) {
       ) : (
         <p>Ładuję</p>
       )}
-      <ol className="mt-6">
+      <ol className="mt-6l">
         {chosenPieces &&
           chosenPieces.map((pieceName) => (
             <li key={pieceName} className="p-2">

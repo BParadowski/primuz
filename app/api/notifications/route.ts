@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     }),
   };
 
-  fetch("https://onesignal.com/api/v1/notifications", options)
+  await fetch("https://onesignal.com/api/v1/notifications", options)
     .then((response) => response.json())
     .then((response) => console.dir(response, null))
     .catch((err) => console.error(err));
