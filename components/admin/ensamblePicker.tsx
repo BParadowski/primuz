@@ -159,40 +159,44 @@ export default function EnsamblePicker(props: { projectId: string }) {
   }
 
   return (
-    <div>
-      <h2 className="text-center text-lg font-bold"> Dostępność</h2>
+    <div className="grid gap-x-5 xl:grid-cols-2">
+      <div>
+        <h2 className="text-center text-lg font-bold"> Dostępność</h2>
 
-      {instruments &&
-        availabilityData &&
-        instruments.map((instrument) => {
-          if (!availabilityData.find((data) => data.instrument === instrument))
-            return null;
-          else
-            return (
-              <div key={instrument}>
-                <h3 className="font-bold capitalize">{instrument}</h3>
-                <div className="flex flex-col gap-2">
-                  {availabilityData
-                    .filter((data) => data.instrument === instrument)
-                    .map((avData) => {
-                      return (
-                        <AvailabilityRow
-                          instrument={instrument}
-                          key={avData.user_id}
-                          userId={avData.user_id}
-                          availabilityStatus={avData.status}
-                          availabilityMessage={avData.message}
-                          firstName={avData.first_name}
-                          lastName={avData.last_name}
-                          onPlusClick={addMusician}
-                          onMinusClick={deleteMusician}
-                        />
-                      );
-                    })}
+        {instruments &&
+          availabilityData &&
+          instruments.map((instrument) => {
+            if (
+              !availabilityData.find((data) => data.instrument === instrument)
+            )
+              return null;
+            else
+              return (
+                <div key={instrument}>
+                  <h3 className="font-bold capitalize">{instrument}</h3>
+                  <div className="flex flex-col gap-2">
+                    {availabilityData
+                      .filter((data) => data.instrument === instrument)
+                      .map((avData) => {
+                        return (
+                          <AvailabilityRow
+                            instrument={instrument}
+                            key={avData.user_id}
+                            userId={avData.user_id}
+                            availabilityStatus={avData.status}
+                            availabilityMessage={avData.message}
+                            firstName={avData.first_name}
+                            lastName={avData.last_name}
+                            onPlusClick={addMusician}
+                            onMinusClick={deleteMusician}
+                          />
+                        );
+                      })}
+                  </div>
                 </div>
-              </div>
-            );
-        })}
+              );
+          })}
+      </div>
       <div>
         <h2 className="text-center text-lg font-bold"> Skład</h2>
         <DndContext

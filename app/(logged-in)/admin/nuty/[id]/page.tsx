@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 
 const instruments = ["skrzypce", "altówka", "wiolonczela", "kontrabas"];
 
+export const dynamic = "force-dynamic";
+
 export default async function EditMusic({
   params,
 }: {

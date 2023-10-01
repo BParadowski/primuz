@@ -27,27 +27,46 @@ export default async function ProjectPage({
   params: { id: string };
 }) {
   const supabase = createServerComponentClient<Database>({ cookies });
-  const { data } = await supabase
+  const dataQuery = supabase
     .from("projects")
     .select("name, location, description, pay, date, musicians_structure")
     .eq("id", params.id)
-    .single();
-  const rehearsalQuery = await supabase
+    .single()
+    .then(({ data }) => data);
+
+  const rehearsalQuery = supabase
     .from("rehearsals")
     .select()
-    .eq("project_id", params.id);
-  const rehearsalsData = rehearsalQuery.data?.sort((a, b) =>
-    a.start_datetime > b.start_datetime ? 1 : -1,
-  );
+    .eq("project_id", params.id)
+    .then(
+      ({ data }) =>
+        data?.sort((a, b) => (a.start_datetime > b.start_datetime ? 1 : -1)),
+    );
 
-  const user = await supabase.auth
+  const userQuery = supabase.auth
     .getSession()
     .then(({ data: { session } }) => session?.user);
 
-  const { data: availabilityData } = await supabase
+  const availabilityQuery = supabase
     .from("sorted_musicians_availability")
     .select()
-    .eq("project_id", params.id);
+    .eq("project_id", params.id)
+    .then(({ data }) => data);
+
+  //Need new db types to get rid of this error
+  // @ts-expect-error
+  const instrumentsQuery: Promise<Instruments[]> = supabase
+    .rpc("get_instruments")
+    .then(({ data }) => data);
+
+  const [user, availabilityData, instruments, rehearsalsData, data] =
+    await Promise.all([
+      userQuery,
+      availabilityQuery,
+      instrumentsQuery,
+      rehearsalQuery,
+      dataQuery,
+    ]);
 
   // mainly for type narrowing, should never happen
   if (!data || !availabilityData || !user)
@@ -56,11 +75,6 @@ export default async function ProjectPage({
   const myAvailability = availabilityData.find(
     (availability) => availability.user_id === user.id,
   );
-
-  //Need new db types to get rid of this error
-  //@ts-expect-error
-  const instruments: Instruments[] = (await supabase.rpc("get_instruments"))
-    .data;
 
   return (
     <main className="grid bg-primary">
@@ -99,7 +113,7 @@ export default async function ProjectPage({
           </div>
           <section>
             <h2 className="py-6 text-center font-bold">Próby</h2>
-            <div className="grid gap-y-4 md:grid-cols-2 md:gap-x-4 lg:grid-cols-3">
+            <div className="grid gap-y-4 md:grid-cols-2 md:gap-x-4 xl:grid-cols-3">
               {rehearsalsData && rehearsalsData.length > 0
                 ? rehearsalsData.map((rehearsal) => {
                     return (

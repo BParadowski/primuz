@@ -36,10 +36,12 @@ export function PiecePicker(props: PickerProps) {
         <div>
           <Command className="rounded-lg border shadow-md">
             <CommandInput placeholder="Wyszukaj utwór..." />
-            <CommandEmpty>Brak rezultatów</CommandEmpty>
+
             <CommandList>
+              <CommandEmpty>Brak rezultatów</CommandEmpty>
+
               {list.map((piece) => {
-                if (!chosenPieces.find((name) => (name = piece.name)))
+                if (!chosenPieces.find((name) => name === piece.name))
                   return (
                     <CommandItem key={piece.name}>
                       <span
@@ -47,12 +49,12 @@ export function PiecePicker(props: PickerProps) {
                           props.onPieceAdd(piece.id);
                           setChosenPieces([...chosenPieces, piece.name]);
                         }}
+                        className="cursor-pointer"
                       >
                         {piece.name}
                       </span>
                     </CommandItem>
                   );
-                else return null;
               })}
             </CommandList>
           </Command>
@@ -60,10 +62,14 @@ export function PiecePicker(props: PickerProps) {
       ) : (
         <p>Ładuję</p>
       )}
-      <div className="mt-6">
+      <ol className="mt-6">
         {chosenPieces &&
-          chosenPieces.map((pieceName) => <p key={pieceName}>{pieceName}</p>)}
-      </div>
+          chosenPieces.map((pieceName) => (
+            <li key={pieceName} className="p-2">
+              {pieceName}
+            </li>
+          ))}
+      </ol>
     </div>
   );
 }

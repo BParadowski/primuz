@@ -133,7 +133,7 @@ export default function Profile() {
             <form
               onSubmit={form.handleSubmit(async (data) => {
                 const response = await submitProject(data);
-                router.push(`/projekty/${data.id}`);
+                router.push(`/admin/projekty/${data.id}`);
               })}
             >
               <div className="grid gap-y-8 rounded-lg bg-background p-6">
