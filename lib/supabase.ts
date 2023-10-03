@@ -304,6 +304,10 @@ export interface Database {
         Args: Record<PropertyKey, never>;
         Returns: unknown;
       };
+      is_admin: {
+        Args: Record<PropertyKey, never>;
+        Returns: boolean;
+      };
     };
     Enums: {
       availability_status: "available" | "unavailable" | "maybe" | "undeclared";

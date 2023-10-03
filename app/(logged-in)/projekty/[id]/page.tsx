@@ -130,6 +130,7 @@ export default async function ProjectPage({
                             },
                           )}
                         </h2>
+                        <h3>{rehearsal.start_datetime}</h3>
                         <div>
                           {format(new Date(rehearsal.start_datetime), "p", {
                             locale: pl,

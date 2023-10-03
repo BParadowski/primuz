@@ -1,5 +1,7 @@
 import Image from "next/image";
 import logo from "@/lib/images/primuz-logo-home.png";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function Home({
   searchParams,
@@ -16,15 +18,15 @@ export default function Home({
         className="max-w-xs"
       />
       <form action="/auth/login" method="post" className="flex flex-col gap-4">
-        <label className="flex flex-col">
+        <Label className="flex flex-col" htmlFor="email">
           Email
-          <input name="email" />
-        </label>
-        <label htmlFor="password">
-          Hasło <input type="password" name="password" />
-        </label>
+        </Label>
+        <Input name="email" id="email" />
 
-        <button>Sign In</button>
+        <Label htmlFor="password">Hasło</Label>
+        <Input type="password" name="password" id="password" />
+
+        <button>Zaloguj</button>
       </form>
       {Boolean(searchParams?.error) && (
         <p className="text-red-400">Niewłaściwy email lub hasło</p>

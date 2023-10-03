@@ -6,7 +6,7 @@ import Link from "next/link";
 import sygnet from "@/lib/images/primuz-sygnet.svg";
 import { Button } from "@/components/ui/button";
 import runOneSignal from "@/lib/onesignal";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import OneSignal from "react-onesignal";
 import { useRouter } from "next/navigation";
 import { RefreshCwIcon } from "lucide-react";
@@ -18,6 +18,7 @@ export default function InnerLayout({
 }) {
   const supabase = createClientComponentClient();
   const router = useRouter();
+  const [adminMenu, setAdminMenu] = useState(false);
 
   useEffect(() => {
     async function pushNotifications() {
@@ -31,6 +32,13 @@ export default function InnerLayout({
       }
     }
     pushNotifications();
+
+    async function enableAdminMenu() {
+      const isUserAdmin = (await supabase.rpc("is_admin")).data;
+      if (isUserAdmin) setAdminMenu(true);
+    }
+
+    enableAdminMenu();
   }, []);
 
   return (
@@ -49,14 +57,16 @@ export default function InnerLayout({
 
           <nav className="ml-auto hidden sm:flex">
             <ul className="flex flex-wrap items-center gap-4">
-              <li onClick={() => router.refresh()} className="cursor-pointer">
+              <li onClick={() => location.reload()} className="cursor-pointer">
                 <RefreshCwIcon className="stroke-white" />
               </li>
-              <li>
-                <Button variant="whiteLink" asChild>
-                  <Link href="/admin/projekty">Panel sterowania</Link>
-                </Button>
-              </li>
+              {adminMenu && (
+                <li>
+                  <Button variant="whiteLink" asChild>
+                    <Link href="/admin/projekty">Administracja</Link>
+                  </Button>
+                </li>
+              )}
               <li>
                 {" "}
                 <Button variant="whiteLink" asChild>

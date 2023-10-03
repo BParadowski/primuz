@@ -26,7 +26,7 @@ import {
 import { CalendarIcon } from "lucide-react";
 import { RehearsalData } from "@/app/(logged-in)/admin/nowy-projekt/page";
 
-interface InitialValues extends Omit<RehearsalData, "start" | "end" > {
+interface InitialValues extends Omit<RehearsalData, "start" | "end"> {
   date: Date;
   startTime: string;
   endTime: string;
@@ -160,6 +160,18 @@ export default function NewRehearsalDialog({
                   location: location,
                   description: description,
                 });
+
+                alert(
+                  formatRFC3339(
+                    new Date(
+                      date!.getFullYear(),
+                      date!.getMonth(),
+                      date!.getDate(),
+                      parseInt(endHour),
+                      parseInt(endMinute),
+                    ),
+                  ),
+                );
 
                 if (clearAfterConfirmation) {
                   setDescription("");
