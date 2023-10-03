@@ -161,18 +161,6 @@ export default function NewRehearsalDialog({
                   description: description,
                 });
 
-                alert(
-                  formatRFC3339(
-                    new Date(
-                      date!.getFullYear(),
-                      date!.getMonth(),
-                      date!.getDate(),
-                      parseInt(endHour),
-                      parseInt(endMinute),
-                    ),
-                  ),
-                );
-
                 if (clearAfterConfirmation) {
                   setDescription("");
                   setLocation("");

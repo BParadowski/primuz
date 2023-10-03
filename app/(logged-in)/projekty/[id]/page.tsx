@@ -17,6 +17,7 @@ import AvailabilityIcon from "@/components/project/availabilityIcon";
 import { ListOfPieces } from "@/components/project/listOfPieces";
 import { Separator } from "@/components/ui/separator";
 import { sortByInstrument } from "@/lib/utils";
+import { formatInTimeZone } from "date-fns-tz";
 
 // object used to sort orchestral sections
 type Instruments = Database["public"]["Enums"]["instrument"];
@@ -122,23 +123,33 @@ export default async function ProjectPage({
                         className="rounded-xl border border-solid border-foreground bg-muted px-4 py-4"
                       >
                         <h2 className="text-lg font-bold">
-                          {format(
+                          {formatInTimeZone(
                             new Date(rehearsal.start_datetime),
+                            "Europe/Warsaw",
                             "d MMMM (EEEE)",
                             {
                               locale: pl,
                             },
                           )}
                         </h2>
-                        <h3>{rehearsal.start_datetime}</h3>
                         <div>
-                          {format(new Date(rehearsal.start_datetime), "p", {
-                            locale: pl,
-                          }) +
-                            "-" +
-                            format(new Date(rehearsal.end_datetime), "p", {
+                          {formatInTimeZone(
+                            new Date(rehearsal.start_datetime),
+                            "Europe/Warsaw",
+                            "p",
+                            {
                               locale: pl,
-                            })}
+                            },
+                          ) +
+                            "-" +
+                            formatInTimeZone(
+                              new Date(rehearsal.end_datetime),
+                              "Europe/Warsaw",
+                              "p",
+                              {
+                                locale: pl,
+                              },
+                            )}
 
                           <p className="mt-2 italic">
                             {rehearsal.location ?? " "}

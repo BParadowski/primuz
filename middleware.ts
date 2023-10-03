@@ -19,11 +19,8 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  console.log(req.nextUrl.pathname);
-
   if (user && req.nextUrl.pathname.startsWith("/admin")) {
     const isUserAdmin = (await supabase.rpc("is_admin")).data;
-    console.log("user admin? :", isUserAdmin);
     if (!isUserAdmin)
       return NextResponse.redirect(new URL("/projekty", req.url));
   }
