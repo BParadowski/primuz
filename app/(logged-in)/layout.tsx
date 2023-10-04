@@ -9,7 +9,8 @@ import runOneSignal from "@/lib/onesignal";
 import { useEffect, useState } from "react";
 import OneSignal from "react-onesignal";
 import { useRouter } from "next/navigation";
-import { RefreshCwIcon } from "lucide-react";
+import { RotateCwIcon } from "lucide-react";
+import MobileNav from "@/components/mobileNav";
 
 export default function InnerLayout({
   children,
@@ -53,13 +54,20 @@ export default function InnerLayout({
               priority
             />
           </Link>
-          <p className="text-sm italic">Primuz</p>
 
           <nav className="ml-auto hidden sm:flex">
+            <button
+              onClick={() => location.reload()}
+              className="ml-auto mr-4 flex cursor-pointer items-center rounded-sm border border-solid border-primary-foreground p-2 hover:bg-white hover:bg-opacity-25"
+            >
+              odświerz
+              <RotateCwIcon
+                className="ml-2 stroke-primary-foreground"
+                height={20}
+                width={20}
+              />
+            </button>
             <ul className="flex flex-wrap items-center gap-4">
-              <li onClick={() => location.reload()} className="cursor-pointer">
-                <RefreshCwIcon className="stroke-white" />
-              </li>
               {adminMenu && (
                 <li>
                   <Button variant="whiteLink" asChild>
@@ -90,6 +98,28 @@ export default function InnerLayout({
               </li>
             </ul>
           </nav>
+          <button
+            onClick={() => location.reload()}
+            className="ml-auto flex cursor-pointer items-center rounded-sm border border-solid border-primary-foreground p-2 sm:hidden"
+          >
+            odświerz
+            <RotateCwIcon
+              className="ml-2 stroke-primary-foreground"
+              height={20}
+              width={20}
+            />
+          </button>
+          <MobileNav
+            adminMenu={adminMenu}
+            onLogOut={async () => {
+              try {
+                await OneSignal.logout();
+              } finally {
+                await fetch("/auth/logout", { method: "post" });
+                router.refresh();
+              }
+            }}
+          />
           <div className="absolute bottom-0 left-0 h-px w-full bg-muted-foreground" />
         </div>
       </header>
