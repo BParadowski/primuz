@@ -15,6 +15,7 @@ interface RowProps {
   lastName: string | null;
   availabilityStatus: Database["public"]["Enums"]["availability_status"];
   availabilityMessage: string | null;
+  initiallySelected: boolean;
   onPlusClick: (instrument: Instruments, fullName: string, id: string) => void;
   onMinusClick: (instrument: Instruments, fullName: string, id: string) => void;
 }
@@ -26,10 +27,11 @@ export default function AvailabilityRow({
   lastName,
   availabilityStatus,
   availabilityMessage,
+  initiallySelected,
   onPlusClick,
   onMinusClick,
 }: RowProps) {
-  const [selected, setSelected] = useState(false);
+  const [selected, setSelected] = useState(initiallySelected);
 
   return (
     <div>

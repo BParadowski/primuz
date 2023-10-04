@@ -87,7 +87,7 @@ export interface Database {
           location: string | null;
           musicians: string[] | null;
           musicians_structure: Json | null;
-          name: string | null;
+          name: string ;
           pay: string | null;
         };
         Insert: {

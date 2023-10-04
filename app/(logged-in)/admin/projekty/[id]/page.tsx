@@ -22,7 +22,7 @@ export default async function Project({ params }: { params: { id: string } }) {
       <div className="container">
         <h1 className="pb-8 text-center text-2xl font-bold">{data.name}</h1>
 
-        <EnsamblePicker projectId={params.id} />
+        <EnsamblePicker projectId={params.id} projectName={data.name} />
       </div>
     </main>
   );

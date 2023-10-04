@@ -25,10 +25,16 @@ import { Database } from "@/lib/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import AvailabilityRow from "./availabilityRow";
 import { useToast } from "../ui/use-toast";
+import { Skeleton } from "../ui/skeleton";
+import { sortByInstrument } from "@/lib/utils";
+import { Loader2Icon } from "lucide-react";
 
 type Instruments = Database["public"]["Enums"]["instrument"];
 
-export default function EnsamblePicker(props: { projectId: string }) {
+export default function EnsamblePicker(props: {
+  projectId: string;
+  projectName: string;
+}) {
   const supabase = createClientComponentClient<Database>();
   const projectMusicians = useRef<string[]>([]);
   const { toast } = useToast();
@@ -40,6 +46,17 @@ export default function EnsamblePicker(props: { projectId: string }) {
     | undefined
   >();
   const [instruments, setInstruments] = useState<Instruments[] | null>();
+  const [ensamble, setEnsamble] = useState<{
+    [K in string]: string[];
+  }>({
+    "skrzypce I": [],
+    "skrzypce II": [],
+    altówka: [],
+    wiolonczela: [],
+    kontrabas: [],
+  });
+  const [ensambleDled, setEnsambleDled] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     async function getAvailability() {
@@ -54,6 +71,25 @@ export default function EnsamblePicker(props: { projectId: string }) {
       const { data }: Instruments[] = await supabase.rpc("get_instruments");
       setInstruments(data);
     }
+    async function getEnsamble() {
+      const { data } = await supabase
+        .from("projects")
+        .select("musicians, musicians_structure")
+        .eq("id", props.projectId)
+        .single();
+
+      if (data?.musicians_structure && data?.musicians) {
+        setEnsamble(
+          data.musicians_structure as {
+            [K in string]: string[];
+          },
+        );
+
+        projectMusicians.current = data.musicians;
+      }
+      setEnsambleDled(true);
+    }
+    getEnsamble();
     getAvailability();
     getInstruments();
   }, []);
@@ -100,16 +136,6 @@ export default function EnsamblePicker(props: { projectId: string }) {
   }
 
   // Ensamble + dnd
-
-  const [ensamble, setEnsamble] = useState<{
-    [K in string]: string[];
-  }>({
-    "skrzypce I": [],
-    "skrzypce II": [],
-    altówka: [],
-    wiolonczela: [],
-    kontrabas: [],
-  });
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -165,8 +191,7 @@ export default function EnsamblePicker(props: { projectId: string }) {
       <div>
         <h2 className="text-center text-lg font-bold"> Dostępność</h2>
 
-        {instruments &&
-          availabilityData &&
+        {instruments && availabilityData && ensambleDled ? (
           instruments.map((instrument) => {
             if (
               !availabilityData.find((data) => data.instrument === instrument)
@@ -191,13 +216,39 @@ export default function EnsamblePicker(props: { projectId: string }) {
                             lastName={avData.last_name}
                             onPlusClick={addMusician}
                             onMinusClick={deleteMusician}
+                            initiallySelected={
+                              (ensamble[instrument] &&
+                                ensamble[instrument].includes(
+                                  `${avData.first_name} ${avData.last_name}`,
+                                )) ||
+                              (ensamble["skrzypce I"] &&
+                                ensamble["skrzypce I"].includes(
+                                  `${avData.first_name} ${avData.last_name}`,
+                                )) ||
+                              (ensamble["skrzypce II"] &&
+                                ensamble["skrzypce II"].includes(
+                                  `${avData.first_name} ${avData.last_name}`,
+                                ))
+                            }
                           />
                         );
                       })}
                   </div>
                 </div>
               );
-          })}
+          })
+        ) : (
+          <div className="flex flex-col gap-4">
+            <Skeleton className="h-6 w-20 rounded-full" />
+            <Skeleton className="h-6 w-full rounded-full" />
+            <Skeleton className="h-6 w-20 rounded-full" />
+            <Skeleton className="h-6 w-full rounded-full" />
+            <Skeleton className="h-6 w-20 rounded-full" />
+            <Skeleton className="h-6 w-full rounded-full" />
+            <Skeleton className="h-6 w-20 rounded-full" />
+            <Skeleton className="h-6 w-full rounded-full" />
+          </div>
+        )}
       </div>
       <div>
         <h2 className="text-center text-lg font-bold"> Skład</h2>
@@ -206,7 +257,7 @@ export default function EnsamblePicker(props: { projectId: string }) {
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
-          {Object.keys(ensamble).map((sectionName) => {
+          {sortByInstrument(Object.keys(ensamble)).map((sectionName) => {
             return (
               <div className=" p-1" key={sectionName}>
                 <h3 className="font-bold capitalize">{sectionName}</h3>
@@ -228,25 +279,43 @@ export default function EnsamblePicker(props: { projectId: string }) {
             );
           })}
         </DndContext>
-        <Button
-          onClick={async () => {
-            await fetch("/api/project", {
-              method: "PATCH",
-              body: JSON.stringify({
-                projectId: props.projectId,
-                payload: {
-                  musicians: projectMusicians.current,
-                  musicians_structure: ensamble,
-                },
-              }),
-            });
-            toast({
-              title: "Skład został zapisany",
-            });
-          }}
-        >
-          Zapisz skład
-        </Button>
+        {isSubmitting ? (
+          <Button type="button" size="lg">
+            <Loader2Icon className="animate-spin" />
+          </Button>
+        ) : (
+          <Button
+            onClick={async () => {
+              setIsSubmitting(true);
+              await fetch("/api/project", {
+                method: "PATCH",
+                body: JSON.stringify({
+                  projectId: props.projectId,
+                  payload: {
+                    musicians: projectMusicians.current,
+                    musicians_structure: ensamble,
+                  },
+                }),
+              });
+              toast({
+                title: "Skład został zapisany",
+              });
+
+              await fetch("/api/notifications", {
+                method: "POST",
+                body: JSON.stringify({
+                  targets: "everyone",
+                  message: `Skład do projektu ${props.projectName} został opublikowany.`,
+                  internalName: `${props.projectName} chosen musicians message`,
+                  projectId: props.projectId,
+                }),
+              });
+              setIsSubmitting(false);
+            }}
+          >
+            Zapisz skład
+          </Button>
+        )}
       </div>
     </div>
   );

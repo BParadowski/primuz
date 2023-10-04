@@ -24,7 +24,6 @@ export async function ListOfPieces(props: {
 
   return (
     <Table>
-      <TableCaption>Lista utworów</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead>Utwór</TableHead>
