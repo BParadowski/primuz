@@ -2,6 +2,7 @@ import { Database } from "@/lib/supabase";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import EnsamblePicker from "@/components/admin/ensamblePicker";
+import RepertoireUpdater from "@/components/admin/repertoireUpdater";
 
 export default async function Project({ params }: { params: { id: string } }) {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -10,6 +11,17 @@ export default async function Project({ params }: { params: { id: string } }) {
     .select()
     .eq("id", params.id)
     .single();
+
+  const { data: repertoireData } = await supabase
+    .from("projects_pieces")
+    .select("pieces(*)")
+    .eq("project_id", params.id);
+
+  const piecesArray = [];
+  if (repertoireData)
+    for (let data of repertoireData) {
+      if (data.pieces) piecesArray.push(data.pieces);
+    }
 
   if (!data) return <div>Nie udało się znaleźć strony projektu</div>;
 
@@ -23,6 +35,10 @@ export default async function Project({ params }: { params: { id: string } }) {
         <h1 className="pb-8 text-center text-2xl font-bold">{data.name}</h1>
 
         <EnsamblePicker projectId={params.id} projectName={data.name} />
+        <RepertoireUpdater
+          initialRepertoire={piecesArray}
+          projectId={params.id}
+        />
       </div>
     </main>
   );

@@ -105,6 +105,13 @@ export default function Profile() {
     form.setValue("pieces", [...form.getValues("pieces"), pieceId]);
   }
 
+  function removePiece(pieceId: string) {
+    form.setValue(
+      "pieces",
+      form.getValues("pieces").filter((id) => id !== pieceId),
+    );
+  }
+
   async function submitProject(formData: NewProjectFormData) {
     const res = await fetch("/api/project", {
       method: "post",
@@ -308,7 +315,10 @@ export default function Profile() {
               <div className="mt-8 grid gap-y-8 rounded-lg bg-background p-6">
                 <div className="flex flex-col">
                   <h2>Repertuar</h2>
-                  <PiecePicker onPieceAdd={addPiece} />
+                  <PiecePicker
+                    onPieceAdd={addPiece}
+                    onPieceRemove={removePiece}
+                  />
                 </div>
               </div>
 

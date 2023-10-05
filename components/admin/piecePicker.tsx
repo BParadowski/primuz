@@ -10,17 +10,22 @@ import {
 import { Database } from "@/lib/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
+import { XIcon } from "lucide-react";
 
 interface PickerProps {
   onPieceAdd: (pieceId: string) => void;
+  onPieceRemove: (pieceId: string) => void;
+  initialChosenPieces?: PieceData[] | null;
 }
+
+export type PieceData = Database["public"]["Tables"]["pieces"]["Row"];
 
 export function PiecePicker(props: PickerProps) {
   const supabase = createClientComponentClient<Database>();
-  const [list, setList] = useState<
-    null | Database["public"]["Tables"]["pieces"]["Row"][]
-  >(null);
-  const [chosenPieces, setChosenPieces] = useState<string[]>([]);
+  const [list, setList] = useState<null | PieceData[]>(null);
+  const [chosenPieces, setChosenPieces] = useState<PieceData[]>(
+    props.initialChosenPieces ?? [],
+  );
 
   useEffect(() => {
     async function getPieces() {
@@ -41,13 +46,17 @@ export function PiecePicker(props: PickerProps) {
               <CommandEmpty>Brak rezultatów</CommandEmpty>
 
               {list.map((piece) => {
-                if (!chosenPieces.find((name) => name === piece.name))
+                if (
+                  !chosenPieces.find(
+                    (chosenPiece) => chosenPiece.name === piece.name,
+                  )
+                )
                   return (
                     <CommandItem key={piece.name}>
                       <span
                         onClick={() => {
                           props.onPieceAdd(piece.id);
-                          setChosenPieces([...chosenPieces, piece.name]);
+                          setChosenPieces([...chosenPieces, piece]);
                         }}
                         className="cursor-pointer"
                       >
@@ -62,11 +71,28 @@ export function PiecePicker(props: PickerProps) {
       ) : (
         <p>Ładuję</p>
       )}
-      <ol className="mt-6l">
+      <ol className="mt-6 flex flex-col gap-2">
         {chosenPieces &&
-          chosenPieces.map((pieceName) => (
-            <li key={pieceName} className="p-2">
-              {pieceName}
+          chosenPieces.map((piece) => (
+            <li
+              key={piece.name}
+              className="flex items-center rounded-sm border border-solid border-muted p-2"
+            >
+              {piece.name}
+              <button
+                onClick={() => {
+                  props.onPieceRemove(piece.id);
+                  setChosenPieces(
+                    chosenPieces.filter(
+                      (chosenPiece) => chosenPiece.id !== piece.id,
+                    ),
+                  );
+                }}
+                type="button"
+                className="ml-auto"
+              >
+                <XIcon className="stroke-destructive"></XIcon>
+              </button>
             </li>
           ))}
       </ol>

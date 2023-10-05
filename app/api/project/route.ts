@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { format } from "date-fns";
-import { newCalendarEvent } from "./calendar";
+import { newCalendarEvent } from "@/lib/calendar";
 import { Database } from "@/lib/supabase";
 // npm i encoding
 
