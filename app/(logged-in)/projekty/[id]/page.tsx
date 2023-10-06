@@ -19,6 +19,7 @@ import { ListOfPieces } from "@/components/project/listOfPieces";
 import { Separator } from "@/components/ui/separator";
 import { sortByInstrument } from "@/lib/utils";
 import { formatInTimeZone } from "date-fns-tz";
+import ClientDate from "@/components/project/clientDatePara";
 
 // object used to sort orchestral sections
 type Instruments = Database["public"]["Enums"]["instrument"];
@@ -135,21 +136,7 @@ export default async function ProjectPage({
                 >
                   <AlertTriangleIcon />
                   <p className="ml-2">{announcement.description}</p>
-                  <p className="ml-auto text-sm italic opacity-60">
-                    {formatInTimeZone(
-                      new Date(announcement.created_at),
-                      "Europe/Warsaw",
-                      "dd.MM.yy HH:mm",
-                      { locale: pl },
-                    )}
-                  </p>
-                  <p className="ml-auto text-sm italic opacity-60">
-                    {formatRelative(
-                      new Date(announcement.created_at),
-                      new Date(),
-                      { locale: pl },
-                    )}
-                  </p>
+                  <ClientDate date={new Date(announcement.created_at)} />
                 </div>
               ))}
             </section>
