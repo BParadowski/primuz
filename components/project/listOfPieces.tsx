@@ -44,6 +44,9 @@ export async function ListOfPieces(props: {
                       {pieceData.parts &&
                         (pieceData.parts as { [K in string]: string[] })[
                           props.instrument
+                        ] &&
+                        (pieceData.parts as { [K in string]: string[] })[
+                          props.instrument
                         ].map((fileName, index) => {
                           return (
                             <DownloadButton
