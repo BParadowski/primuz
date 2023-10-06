@@ -142,6 +142,7 @@ export default function Profile() {
                 const response = await submitProject(data);
                 router.push(`/admin/projekty/${data.id}`);
               })}
+              className="grid"
             >
               <div className="grid gap-y-8 rounded-lg bg-background p-6">
                 <div className="grid gap-y-8 sm:grid-cols-2 sm:gap-x-8">
@@ -323,11 +324,20 @@ export default function Profile() {
               </div>
 
               {form.formState.isSubmitting ? (
-                <Button type="button" size="lg">
+                <Button
+                  type="button"
+                  size="lg"
+                  className="my-6 place-self-center"
+                >
                   <Loader2Icon className="animate-spin" />
                 </Button>
               ) : (
-                <Button type="submit" variant="default" size="lg">
+                <Button
+                  type="submit"
+                  variant="default"
+                  size="lg"
+                  className="my-6 place-self-center"
+                >
                   Opublikuj projekt
                 </Button>
               )}

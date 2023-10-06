@@ -6,6 +6,7 @@ import { PieceData } from "./piecePicker";
 import { Button } from "../ui/button";
 import { Loader2Icon } from "lucide-react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useToast } from "../ui/use-toast";
 
 export default function RepertoireUpdater(props: {
   initialRepertoire: PieceData[] | null;
@@ -15,6 +16,7 @@ export default function RepertoireUpdater(props: {
   const removedPieces = useRef<string[]>([]);
   const [updating, setUpdating] = useState(false);
   const supabase = createClientComponentClient();
+  const { toast } = useToast();
 
   function addPiece(pieceId: string) {
     if (
@@ -35,7 +37,7 @@ export default function RepertoireUpdater(props: {
   }
 
   return (
-    <div>
+    <div className="grid">
       <PiecePicker
         onPieceAdd={(pieceId) => {
           addPiece(pieceId);
@@ -52,11 +54,12 @@ export default function RepertoireUpdater(props: {
         initialChosenPieces={props.initialRepertoire}
       />
       {updating ? (
-        <Button type="button" size="lg">
+        <Button type="button" size="lg" className="my-4 place-self-center">
           <Loader2Icon className="animate-spin" />
         </Button>
       ) : (
         <Button
+          className="my-4 place-self-center"
           onClick={async () => {
             setUpdating(true);
 
@@ -71,6 +74,7 @@ export default function RepertoireUpdater(props: {
                 return { project_id: props.projectId, piece_id: pieceId };
               }),
             );
+            toast({ description: "Repertuar został zaktualizowany." });
 
             setUpdating(false);
           }}

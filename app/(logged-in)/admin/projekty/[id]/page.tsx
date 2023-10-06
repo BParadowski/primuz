@@ -35,6 +35,7 @@ export default async function Project({ params }: { params: { id: string } }) {
         <h1 className="pb-8 text-center text-2xl font-bold">{data.name}</h1>
 
         <EnsamblePicker projectId={params.id} projectName={data.name} />
+        <h2 className="mt-6 py-4 text-center text-lg font-bold">Repertuar</h2>
         <RepertoireUpdater
           initialRepertoire={piecesArray}
           projectId={params.id}

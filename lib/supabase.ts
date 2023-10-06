@@ -9,6 +9,40 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      announcements: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          id: string;
+          project_id: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          project_id?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          project_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "announcements_project_id_fkey";
+            columns: ["project_id"];
+            referencedRelation: "projects";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "announcements_project_id_fkey";
+            columns: ["project_id"];
+            referencedRelation: "projects_summary";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       availability: {
         Row: {
           message: string | null;
@@ -87,7 +121,7 @@ export interface Database {
           location: string | null;
           musicians: string[] | null;
           musicians_structure: Json | null;
-          name: string ;
+          name: string;
           pay: string | null;
         };
         Insert: {

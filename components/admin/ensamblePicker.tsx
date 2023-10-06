@@ -28,6 +28,7 @@ import { useToast } from "../ui/use-toast";
 import { Skeleton } from "../ui/skeleton";
 import { sortByInstrument } from "@/lib/utils";
 import { Loader2Icon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type Instruments = Database["public"]["Enums"]["instrument"];
 
@@ -57,6 +58,7 @@ export default function EnsamblePicker(props: {
   });
   const [ensambleDled, setEnsambleDled] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     async function getAvailability() {
@@ -285,6 +287,8 @@ export default function EnsamblePicker(props: {
           </Button>
         ) : (
           <Button
+            type="button"
+            size="lg"
             onClick={async () => {
               setIsSubmitting(true);
               await fetch("/api/project", {
@@ -300,6 +304,7 @@ export default function EnsamblePicker(props: {
               toast({
                 title: "Skład został zapisany",
               });
+              router.refresh();
 
               await fetch("/api/notifications", {
                 method: "POST",

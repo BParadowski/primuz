@@ -38,7 +38,7 @@ export default function AvailabilityRow({
       <div
         className={cn(
           "flex items-center gap-4 p-1",
-          selected && "bg-amber-500",
+          selected && "bg-primuz-light",
         )}
       >
         <p>{`${firstName} ${lastName}`}</p>

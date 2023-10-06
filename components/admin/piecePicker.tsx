@@ -53,15 +53,15 @@ export function PiecePicker(props: PickerProps) {
                 )
                   return (
                     <CommandItem key={piece.name}>
-                      <span
+                      <p
                         onClick={() => {
                           props.onPieceAdd(piece.id);
                           setChosenPieces([...chosenPieces, piece]);
                         }}
-                        className="cursor-pointer"
+                        className="w-full cursor-pointer"
                       >
                         {piece.name}
-                      </span>
+                      </p>
                     </CommandItem>
                   );
               })}
