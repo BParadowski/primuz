@@ -48,7 +48,6 @@ export default async function Profile() {
           className="bg-slate-500"
           name="instrument"
         >
-          <option value="">Proszę wybrać instrument</option>
           <option value="skrzypce">skrzypce</option>
           <option value="altówka">altówka</option>
           <option value="wiolonczela">wiolonczela</option>

@@ -1,13 +1,14 @@
 import { Database } from "@/lib/supabase";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { format } from "date-fns/esm";
+import { format, formatRelative } from "date-fns/esm";
 import { pl } from "date-fns/locale";
 import {
   MapPinIcon,
   CalendarIcon,
   CircleDollarSignIcon,
   ScrollTextIcon,
+  AlertTriangleIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -54,20 +55,33 @@ export default async function ProjectPage({
     .eq("project_id", params.id)
     .then(({ data }) => data);
 
+  const announcementsQuery = supabase
+    .from("announcements")
+    .select()
+    .eq("project_id", params.id)
+    .then(({ data }) => data);
+
   //Need new db types to get rid of this error
   // @ts-expect-error
   const instrumentsQuery: Promise<Instruments[]> = supabase
     .rpc("get_instruments")
     .then(({ data }) => data);
 
-  const [user, availabilityData, instruments, rehearsalsData, data] =
-    await Promise.all([
-      userQuery,
-      availabilityQuery,
-      instrumentsQuery,
-      rehearsalQuery,
-      dataQuery,
-    ]);
+  const [
+    user,
+    availabilityData,
+    instruments,
+    rehearsalsData,
+    data,
+    announcements,
+  ] = await Promise.all([
+    userQuery,
+    availabilityQuery,
+    instrumentsQuery,
+    rehearsalQuery,
+    dataQuery,
+    announcementsQuery,
+  ]);
 
   // mainly for type narrowing, should never happen
   if (!data || !availabilityData || !user)
@@ -112,6 +126,34 @@ export default async function ProjectPage({
             <ScrollTextIcon height={36} />
             <p>{data.description}</p>
           </div>
+          {announcements && (
+            <section className="flex flex-col gap-2">
+              {announcements.map((announcement) => (
+                <div
+                  className="flex border border-solid border-accent bg-stone-50 px-3 py-2 shadow-sm"
+                  key={announcement.id}
+                >
+                  <AlertTriangleIcon />
+                  <p className="ml-2">{announcement.description}</p>
+                  <p className="ml-auto text-sm italic opacity-60">
+                    {formatInTimeZone(
+                      new Date(announcement.created_at),
+                      "Europe/Warsaw",
+                      "dd.MM.yy HH:mm",
+                      { locale: pl },
+                    )}
+                  </p>
+                  <p className="ml-auto text-sm italic opacity-60">
+                    {formatRelative(
+                      new Date(announcement.created_at),
+                      new Date(),
+                      { locale: pl },
+                    )}
+                  </p>
+                </div>
+              ))}
+            </section>
+          )}
           <section>
             <h2 className="py-6 text-center font-bold">Próby</h2>
             <div className="grid gap-y-4 md:grid-cols-2 md:gap-x-4 xl:grid-cols-3">

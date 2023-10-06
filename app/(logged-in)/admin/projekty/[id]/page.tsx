@@ -3,6 +3,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import EnsamblePicker from "@/components/admin/ensamblePicker";
 import RepertoireUpdater from "@/components/admin/repertoireUpdater";
+import Announcer from "@/components/admin/announcer";
 
 export default async function Project({ params }: { params: { id: string } }) {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -35,6 +36,9 @@ export default async function Project({ params }: { params: { id: string } }) {
         <h1 className="pb-8 text-center text-2xl font-bold">{data.name}</h1>
 
         <EnsamblePicker projectId={params.id} projectName={data.name} />
+        <h2 className="mt-6 py-4 text-center text-lg font-bold">Ogłoszenia</h2>
+        <Announcer projectId={params.id} projectMusicians={data.musicians} />
+
         <h2 className="mt-6 py-4 text-center text-lg font-bold">Repertuar</h2>
         <RepertoireUpdater
           initialRepertoire={piecesArray}
