@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import EnsamblePicker from "@/components/admin/ensamblePicker";
 import RepertoireUpdater from "@/components/admin/repertoireUpdater";
 import Announcer from "@/components/admin/announcer";
+import InfoUpdater from "@/components/admin/projectInfoUpdater";
 
 export default async function Project({ params }: { params: { id: string } }) {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -43,6 +44,19 @@ export default async function Project({ params }: { params: { id: string } }) {
         <RepertoireUpdater
           initialRepertoire={piecesArray}
           projectId={params.id}
+        />
+        <h2 className="mt-6 py-4 text-center text-lg font-bold">
+          Edytuj informacje
+        </h2>
+        <InfoUpdater
+          id={data.id}
+          name={data.name}
+          location={data.location ?? undefined}
+          calendarId={data.google_calendar_id}
+          date={data.date}
+          calendarDescription={data.google_calendar_description ?? undefined}
+          pay={data.pay ?? undefined}
+          description={data.description ?? undefined}
         />
       </div>
     </main>

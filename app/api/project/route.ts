@@ -99,10 +99,13 @@ export async function PATCH(request: Request) {
   const {
     projectId,
     payload,
-  }: { projectId: string; payload: Record<string, object> } =
+  }: { projectId: string; payload: Record<string, object | string> } =
     await request.json();
 
   console.log(payload, projectId);
+
+  if (payload.date)
+    payload.date = new Date(payload.date as string).toISOString();
 
   try {
     await supabase.from("projects").update(payload).eq("id", projectId);

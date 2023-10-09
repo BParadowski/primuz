@@ -217,7 +217,7 @@ export default function Profile() {
                   name="calendarDescription"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Opis wydarzenia w kalendarzu</FormLabel>
+                      <FormLabel>Opis wydarzenia w kalendarzu google</FormLabel>
                       <FormControl>
                         <Textarea {...field} />
                       </FormControl>

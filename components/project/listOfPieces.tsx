@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -30,6 +29,7 @@ export async function ListOfPieces(props: {
           <TableHead className="text-right">Pobierz nuty</TableHead>
         </TableRow>
       </TableHeader>
+
       <TableBody>
         {pieces &&
           pieces.map((pieceData) => {

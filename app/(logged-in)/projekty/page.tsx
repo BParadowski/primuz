@@ -1,11 +1,11 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { Database } from "@/lib/supabase";
-import { format } from "date-fns/esm";
 import { pl } from "date-fns/locale";
 import Link from "next/link";
 import AvailabilityIcon from "@/components/project/availabilityIcon";
 import AvailabilityStatusDescription from "@/components/project/availabilityStatusDescription";
+import formatInTimeZone from "date-fns-tz/formatInTimeZone";
 
 export const dynamic = "force-dynamic";
 
@@ -28,9 +28,14 @@ export default async function Projects() {
                     {projectData.name}
                   </h2>
                   <p>
-                    {format(new Date(projectData.date), "PPP (EEEE)", {
-                      locale: pl,
-                    })}
+                    {formatInTimeZone(
+                      new Date(projectData.date),
+                      "Europe/Warsaw",
+                      "PPP (EEEE)",
+                      {
+                        locale: pl,
+                      },
+                    )}
                   </p>
                   <p>{projectData.location}</p>
                   <div className="align-center mt-4 flex flex-col gap-4 sm:flex-row">

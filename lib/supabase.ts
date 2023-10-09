@@ -116,7 +116,7 @@ export interface Database {
           date: string;
           description: string | null;
           google_calendar_description: string | null;
-          google_calendar_id: string | null;
+          google_calendar_id: string;
           id: string;
           location: string | null;
           musicians: string[] | null;

@@ -11,6 +11,7 @@ const APP_TITLE_TEMPLATE = "%s - Primuz";
 const APP_DESCRIPTION = "Aplikacja wewnętrzna orkiestry kameralnej Primuz";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://primuz.vercel.app"),
   applicationName: APP_NAME,
   title: {
     default: APP_DEFAULT_TITLE,

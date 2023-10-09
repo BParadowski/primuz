@@ -1,5 +1,13 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 import { Database } from "@/lib/supabase";
 
@@ -23,38 +31,27 @@ export default async function Profile() {
 
   return (
     <main className="grid place-content-center">
-      <h1>Congratulations this is the profile</h1>
+      <h1>Twoje dane</h1>
       <form className="flex flex-col gap-3" method="post" action="/api/users">
-        <input
+        <Input
           defaultValue={user?.id}
           name="userId"
           className="hidden"
           readOnly
         />
-        <input
-          name="firstName"
-          type="text"
-          defaultValue={first_name ?? ""}
-          className="bg-slate-500"
-        />
-        <input
-          name="lastName"
-          type="text"
-          defaultValue={last_name ?? ""}
-          className="bg-slate-500"
-        />
-        <select
-          defaultValue={instrument ?? ""}
-          className="bg-slate-500"
-          name="instrument"
-        >
-          <option value="skrzypce">skrzypce</option>
-          <option value="altówka">altówka</option>
-          <option value="wiolonczela">wiolonczela</option>
-          <option value="kontrabas">kontrabas</option>
-        </select>
+        <Input name="firstName" type="text" defaultValue={first_name ?? ""} />
+        <Input name="lastName" type="text" defaultValue={last_name ?? ""} />
+        <Select defaultValue={instrument ?? ""} name="instrument">
+          <SelectTrigger>Instrument</SelectTrigger>
+          <SelectContent>
+            <SelectItem value="skrzypce">skrzypce</SelectItem>
+            <SelectItem value="altówka">altówka</SelectItem>
+            <SelectItem value="wiolonczela">wiolonczela</SelectItem>
+            <SelectItem value="kontrabas">kontrabas</SelectItem>
+          </SelectContent>
+        </Select>
 
-        <button>Zapisz dane</button>
+        <Button>Zapisz</Button>
       </form>
     </main>
   );

@@ -1,7 +1,6 @@
 import { Database } from "@/lib/supabase";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { format, formatRelative } from "date-fns/esm";
 import { pl } from "date-fns/locale";
 import {
   MapPinIcon,
@@ -114,7 +113,12 @@ export default async function ProjectPage({
           </div>
           <div className="flex items-center gap-6">
             <CalendarIcon height={36} />
-            {format(new Date(data.date), "PPP (EEEE)", { locale: pl })}
+            {formatInTimeZone(
+              new Date(data.date),
+              "Europe/Warsaw",
+              "PPP (EEEE)",
+              { locale: pl },
+            )}
           </div>
           <div className="flex items-center gap-6">
             <CircleDollarSignIcon height={36} />

@@ -97,6 +97,7 @@ export default function NewRehearsalDialog({
                 mode="single"
                 selected={date}
                 onSelect={setDate}
+                defaultMonth={date}
                 initialFocus
                 disabled={(date) => date < new Date()}
               />
