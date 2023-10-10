@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { format } from "date-fns";
-import { newCalendarEvent } from "@/lib/calendar";
+import { newCalendarEvent, updateCalendarEvent } from "@/lib/calendar";
 import { Database } from "@/lib/supabase";
 // npm i encoding
 
@@ -99,19 +99,34 @@ export async function PATCH(request: Request) {
   const {
     projectId,
     payload,
-  }: { projectId: string; payload: Record<string, object | string> } =
+  }: { projectId: string; payload: Record<string, string> } =
     await request.json();
 
-  console.log(payload, projectId);
+  // the type is imperfect "musicians" is an array, musicians_structure is a JSON object # to update later
 
   if (payload.date)
     payload.date = new Date(payload.date as string).toISOString();
 
   try {
     await supabase.from("projects").update(payload).eq("id", projectId);
+
+    if (payload.google_calendar_id)
+      await updateCalendarEvent(payload.google_calendar_id, {
+        summary: payload.name ?? undefined,
+        description: payload.google_calendar_description ?? undefined,
+        location: payload.location ?? undefined,
+        start: {
+          date: format(new Date(payload.date), "yyyy-MM-dd"),
+        },
+        end: {
+          date: format(new Date(payload.date), "yyyy-MM-dd"),
+        },
+        colorId: "9",
+      });
+
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.log(error);
+    return NextResponse.json({ success: false });
   }
-
-  return NextResponse.json({ success: true });
 }

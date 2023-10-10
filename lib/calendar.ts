@@ -35,7 +35,10 @@ export async function newCalendarEvent(event: calendar_v3.Schema$Event) {
   }
 }
 
-export async function updateCalendarEvent(event: calendar_v3.Schema$Event) {
+export async function updateCalendarEvent(
+  eventId: string,
+  event: calendar_v3.Schema$Event,
+) {
   const auth = new JWT({
     email: credentials.client_email,
     key: credentials.private_key,
@@ -47,6 +50,7 @@ export async function updateCalendarEvent(event: calendar_v3.Schema$Event) {
 
   const params = {
     auth: auth,
+    eventId: eventId,
     calendarId: calendarId,
     requestBody: event,
   };
@@ -54,13 +58,15 @@ export async function updateCalendarEvent(event: calendar_v3.Schema$Event) {
   try {
     const res = await calendar.events.update(params);
 
+    console.log(res);
+
     if (res.status == 200 && res.statusText === "OK") {
       return { success: true };
     } else {
       return { success: false };
     }
   } catch (error) {
-    console.log(`Error at insertEvent --> ${error}`);
+    console.log(`Error at updateEvent --> ${error}`);
     return { success: false, error };
   }
 }

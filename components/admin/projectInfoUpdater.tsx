@@ -66,7 +66,6 @@ export default function InfoUpdater(props: UpdaterProps) {
           className="grid"
           onSubmit={form.handleSubmit(
             async (data) => {
-              console.log(data);
               const response = await fetch("/api/project", {
                 method: "PATCH",
                 body: JSON.stringify({
