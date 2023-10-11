@@ -8,6 +8,7 @@ import InfoUpdater from "@/components/admin/projectInfoUpdater";
 import AddRehearsalDialog from "@/components/admin/addRehearsalDialog";
 import formatInTimeZone from "date-fns-tz/formatInTimeZone";
 import pl from "date-fns/locale/pl";
+import DeleteRehearsalPopup from "@/components/admin/deleteRehearsalPopup";
 
 export default async function Project({ params }: { params: { id: string } }) {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -97,6 +98,28 @@ export default async function Project({ params }: { params: { id: string } }) {
                       <pre className="mt-2 opacity-70">
                         {rehearsal.description ?? " "}
                       </pre>
+                    </div>
+                    <div className="flex items-center">
+                      {/* <NewRehearsalDialog
+                        onConfirm={editRehearsal}
+                        triggerText="Edytuj"
+                        dialogTitle="Edytuj Próbę"
+                        initialValues={{
+                          id: rehearsal.id,
+                          calendarId: rehearsal.calendarId,
+                          location: rehearsal.location,
+                          description: rehearsal.description,
+                          date: startDate,
+                          startTime: format(startDate, "HH:mm"),
+                          endTime: format(endDate, "HH:mm"),
+                        }}
+                        confirmText="Zapisz Zmiany"
+                      /> */}
+                      <DeleteRehearsalPopup
+                        projectId={params.id}
+                        id={rehearsal.id}
+                        calendarId={rehearsal.google_calendar_id}
+                      />
                     </div>
                   </div>
                 );

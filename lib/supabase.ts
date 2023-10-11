@@ -191,7 +191,7 @@ export interface Database {
           created_at: string;
           description: string | null;
           end_datetime: string;
-          google_calendar_id: string | null;
+          google_calendar_id: string;
           id: string;
           location: string | null;
           project_id: string;

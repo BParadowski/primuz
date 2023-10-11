@@ -34,7 +34,7 @@ import { PiecePicker } from "@/components/admin/piecePicker";
 
 const formSchema = z.object({
   id: z.string().uuid(),
-  name: z.string().nonempty({ message: "Projekt musi mieć nazwę" }),
+  name: z.string().min(1, { message: "Projekt musi mieć nazwę" }),
   date: z.date({ required_error: "Wybierz datę" }),
   location: z.string(),
   pay: z.string(),

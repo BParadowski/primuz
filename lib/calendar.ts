@@ -68,3 +68,33 @@ export async function updateCalendarEvent(
     return { success: false, error };
   }
 }
+
+export async function deleteCalendarEvent(eventId: string) {
+  const auth = new JWT({
+    email: credentials.client_email,
+    key: credentials.private_key,
+    scopes: [
+      "https://www.googleapis.com/auth/calendar",
+      "https://www.googleapis.com/auth/calendar.events",
+    ],
+  });
+
+  const params = {
+    auth: auth,
+    eventId: eventId,
+    calendarId: calendarId,
+  };
+
+  try {
+    const res = await calendar.events.delete(params);
+
+    if (res.status == 200 && res.statusText === "OK") {
+      return { success: true };
+    } else {
+      return { success: false };
+    }
+  } catch (error) {
+    console.log(`Error at deleteEvent --> ${error}`);
+    return { success: false, error };
+  }
+}
