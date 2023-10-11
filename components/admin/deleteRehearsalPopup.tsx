@@ -26,15 +26,22 @@ export default function DeleteRehearsalPopup(props: {
 
   async function deleteRehearsal() {
     setDeleting(true);
-    await fetch("/api/rehearsals", {
+    const res = await fetch("/api/rehearsals", {
       method: "DELETE",
       body: JSON.stringify({
         projectId: props.projectId,
         id: props.id,
         calendarId: props.calendarId,
       }),
-    });
-    toast({ description: "Próba została usunięta." });
+    }).then((res) => res.json());
+
+    if (res.success) toast({ description: "Próba została usunięta." });
+    else
+      toast({
+        description: "W trakcie usuwania wystąpił błąd...",
+        variant: "destructive",
+      });
+
     router.refresh();
   }
   return (

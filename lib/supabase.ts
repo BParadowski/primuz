@@ -91,7 +91,7 @@ export interface Database {
       };
       pieces: {
         Row: {
-          composer: string | null;
+          composer: string;
           id: string;
           name: string;
           parts: Json | null;

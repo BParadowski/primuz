@@ -3,6 +3,7 @@
 import {
   Command,
   CommandEmpty,
+  CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
@@ -35,36 +36,55 @@ export function PiecePicker(props: PickerProps) {
     getPieces();
   }, []);
 
+  let composersPiecesList: { [K in string]: PieceData[] } = {};
+
+  if (list) {
+    for (let piece of list) {
+      if (composersPiecesList[piece.composer]) {
+        composersPiecesList[piece.composer].push(piece);
+      } else {
+        composersPiecesList[piece.composer] = [piece];
+      }
+    }
+  }
+
   return (
     <div className="mt-4">
       {list ? (
         <div>
           <Command className="rounded-lg border shadow-md">
-            <CommandInput placeholder="Wyszukaj utwór..." />
+            <CommandInput placeholder="Szukaj..." />
 
             <CommandList>
               <CommandEmpty>Brak rezultatów</CommandEmpty>
 
-              {list.map((piece) => {
-                if (
-                  !chosenPieces.find(
-                    (chosenPiece) => chosenPiece.name === piece.name,
-                  )
-                )
+              {Object.keys(composersPiecesList) &&
+                Object.keys(composersPiecesList).map((composerName) => {
                   return (
-                    <CommandItem key={piece.name}>
-                      <p
-                        onClick={() => {
-                          props.onPieceAdd(piece.id);
-                          setChosenPieces([...chosenPieces, piece]);
-                        }}
-                        className="w-full cursor-pointer"
-                      >
-                        {piece.name}
-                      </p>
-                    </CommandItem>
+                    <CommandGroup heading={composerName} key={composerName}>
+                      {composersPiecesList[composerName].map((piece) => {
+                        if (
+                          !chosenPieces.find(
+                            (chosenPiece) => chosenPiece.name === piece.name,
+                          )
+                        )
+                          return (
+                            <CommandItem key={piece.name}>
+                              <p
+                                onClick={() => {
+                                  props.onPieceAdd(piece.id);
+                                  setChosenPieces([...chosenPieces, piece]);
+                                }}
+                                className="w-full cursor-pointer"
+                              >
+                                {piece.name}
+                              </p>
+                            </CommandItem>
+                          );
+                      })}
+                    </CommandGroup>
                   );
-              })}
+                })}
             </CommandList>
           </Command>
         </div>
