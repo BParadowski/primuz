@@ -121,7 +121,6 @@ export async function PATCH(request: Request) {
         end: {
           date: format(new Date(payload.date), "yyyy-MM-dd"),
         },
-        colorId: "9",
       });
 
     return NextResponse.json({ success: true });

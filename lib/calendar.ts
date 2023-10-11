@@ -58,8 +58,6 @@ export async function updateCalendarEvent(
   try {
     const res = await calendar.events.update(params);
 
-    console.log(res);
-
     if (res.status == 200 && res.statusText === "OK") {
       return { success: true };
     } else {

@@ -126,6 +126,7 @@ export default function NewRehearsalDialog({
           <p className="text-start">Szczegóły</p>
           <Textarea
             value={description}
+            lang="pl"
             onChange={(e) => setDescription(e.target.value)}
           />
         </DialogHeader>

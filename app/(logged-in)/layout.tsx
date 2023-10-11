@@ -44,7 +44,7 @@ export default function InnerLayout({
 
   return (
     <div className="grid min-h-screen grid-rows-[auto_1fr_auto]">
-      <header className="relative bg-primary">
+      <header className="fixed left-0 right-0 z-50 bg-primary md:relative">
         <div className="container flex items-center gap-4 py-4 text-primary-foreground">
           <Link href="/projekty">
             <Image
@@ -55,10 +55,11 @@ export default function InnerLayout({
             />
           </Link>
 
-          <nav className="ml-auto hidden sm:flex">
+          <nav className="ml-auto hidden md:flex">
             <button
               onClick={() => location.reload()}
-              className="ml-auto mr-4 flex cursor-pointer items-center rounded-sm border border-solid border-primary-foreground p-2 hover:bg-white hover:bg-opacity-25"
+              className="ml-auto mr-4 flex cursor-pointer items-center rounded-sm border 
+              border-solid border-primary-foreground p-2 hover:bg-white hover:bg-opacity-25"
             >
               odświerz
               <RotateCwIcon
@@ -100,7 +101,8 @@ export default function InnerLayout({
           </nav>
           <button
             onClick={() => location.reload()}
-            className="ml-auto flex cursor-pointer items-center rounded-sm border border-solid border-primary-foreground p-2 sm:hidden"
+            className="ml-auto flex cursor-pointer items-center rounded-sm border
+             border-solid border-primary-foreground p-2 md:hidden"
           >
             odświerz
             <RotateCwIcon
