@@ -246,7 +246,15 @@ export default function Profile() {
                   <p>Próby</p>
                   <NewRehearsalDialog
                     onConfirm={newRehearsal}
-                    triggerText="Dodaj Próbę"
+                    trigger={
+                      <Button
+                        variant="default"
+                        type="button"
+                        className="ml-auto"
+                      >
+                        Dodaj próbę
+                      </Button>
+                    }
                     dialogTitle="Nowa Próba"
                     confirmText="Dodaj Próbę"
                     clearAfterConfirmation
@@ -285,7 +293,9 @@ export default function Profile() {
                           <div className="flex items-center">
                             <NewRehearsalDialog
                               onConfirm={editRehearsal}
-                              triggerText="Edytuj"
+                              trigger={
+                                <Button variant="outline">Edytuj</Button>
+                              }
                               dialogTitle="Edytuj Próbę"
                               initialValues={{
                                 id: rehearsal.id,

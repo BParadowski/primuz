@@ -36,7 +36,7 @@ export default function AddRehearsalDialog(props: { projectId: string }) {
     setAdding(false);
   }
   return (
-    <div className="">
+    <div>
       <NewRehearsalDialog
         onConfirm={newRehearsal}
         triggerText="Dodaj Próbę"

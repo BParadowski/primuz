@@ -37,7 +37,7 @@ interface DialogProps {
   initialValues?: InitialValues;
   dialogTitle: string;
   confirmText: string;
-  triggerText: string;
+  trigger: JSX.Element;
   clearAfterConfirmation?: boolean;
 }
 
@@ -46,7 +46,7 @@ export default function NewRehearsalDialog({
   initialValues,
   dialogTitle,
   confirmText,
-  triggerText,
+  trigger,
   clearAfterConfirmation,
 }: DialogProps) {
   const [date, setDate] = useState<Date | undefined>(initialValues?.date);
@@ -67,11 +67,7 @@ export default function NewRehearsalDialog({
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="secondary" className="ml-auto">
-          {triggerText}
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="grid place-items-center">
         <DialogHeader>
           <DialogTitle className="text-center">{dialogTitle}</DialogTitle>
