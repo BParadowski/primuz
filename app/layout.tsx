@@ -55,7 +55,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${jost.className}tracking-wide text-foreground`}>
+      <body
+        className={`${jost.className}tracking-wide overscroll-none text-foreground`}
+      >
         {children}
         <Toaster />
       </body>

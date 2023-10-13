@@ -43,7 +43,7 @@ export default function InnerLayout({
   }, []);
 
   return (
-    <div className="grid min-h-screen grid-rows-[auto_1fr_auto]">
+    <div className="grid min-h-screen grid-rows-[1fr_auto] md:grid-rows-[auto_1fr_auto]">
       <header className="fixed left-0 right-0 z-50 bg-primary md:relative">
         <div className="container flex items-center gap-4 py-4 text-primary-foreground">
           <Link href="/projekty">
@@ -128,7 +128,7 @@ export default function InnerLayout({
       {children}
       <footer className="bg-primary">
         <div className="container py-4 text-primary-foreground">
-          Tak, ta stron używa cookies.
+          Bartosz Paradowski 2023.
         </div>
       </footer>
     </div>
