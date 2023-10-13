@@ -17,7 +17,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Loader2Icon } from "lucide-react";
-import revalidateSheetMusicList from "@/lib/serverAction";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -49,7 +48,6 @@ export default function NewPieceForm() {
               })
               .select("id")
               .single();
-            revalidateSheetMusicList();
             router.push(`nuty/${data?.id}`);
           })}
           className="space-y-8"
