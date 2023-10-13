@@ -92,7 +92,7 @@ export default async function ProjectPage({
   );
 
   return (
-    <main className="grid bg-primary">
+    <main className="grid">
       <div className="container mt-4 grid">
         <div className="flex flex-col justify-items-center gap-3 rounded-lg bg-background px-6 py-4">
           <h1 className="text-center text-2xl font-bold">{data.name}</h1>
@@ -147,13 +147,13 @@ export default async function ProjectPage({
           )}
           <section>
             <h2 className="py-6 text-center font-bold">Próby</h2>
-            <div className="grid gap-y-4 lg:grid-cols-2 lg:gap-x-4 ">
+            <div className="grid gap-y-4">
               {rehearsalsData && rehearsalsData.length > 0
                 ? rehearsalsData.map((rehearsal) => {
                     return (
                       <div
                         key={rehearsal.id}
-                        className="rounded-sm border border-solid border-foreground bg-muted px-4 py-4"
+                        className="rounded-sm border border-solid border-border px-4 py-4"
                       >
                         <h2 className="text-lg font-bold">
                           {formatInTimeZone(

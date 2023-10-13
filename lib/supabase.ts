@@ -94,7 +94,7 @@ export interface Database {
           composer: string;
           id: string;
           name: string;
-          parts: Json | null;
+          parts: Json;
         };
         Insert: {
           composer?: string | null;

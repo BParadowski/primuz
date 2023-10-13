@@ -36,6 +36,7 @@ export const replacePolishLetters = (text: string) => {
 };
 
 const instrumentChierarchy: { [K in string]: number } = {
+  skrzypce: 0,
   "skrzypce I": 0,
   "skrzypce II": 1,
   altówka: 2,

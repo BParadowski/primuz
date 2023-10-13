@@ -14,16 +14,16 @@ export default async function Projects() {
   const { data } = await supabase.from("projects_summary").select();
 
   return (
-    <main className="grid bg-primary">
+    <main className="grid">
       <div className="container mt-4 grid">
-        <div className="flex flex-col gap-6 rounded-lg bg-muted px-4 py-4">
+        <div className="flex flex-col gap-6 rounded-lg px-4 py-4">
           <h1 className="py-2 text-center text-2xl font-bold sm:py-4">
             Projekty
           </h1>
           {data?.map((projectData) => {
             return (
               <Link href={`/projekty/${projectData.id}`} key={projectData.id}>
-                <div className="border-accent-forground rounded-lg border border-solid px-6 py-4 hover:bg-stone-200">
+                <div className="rounded-md border border-solid border-border px-6 py-4 hover:bg-stone-50">
                   <h2 className="text-md font-bold sm:text-xl">
                     {projectData.name}
                   </h2>
