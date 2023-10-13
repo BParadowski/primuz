@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Jost } from "next/font/google";
+import { cn } from "@/lib/utils";
 
 const jost = Jost({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
@@ -55,9 +56,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${jost.className}tracking-wide overscroll-none text-foreground`}
-      >
+      <body className={cn(jost.className, "tracking-wide text-foreground")}>
         {children}
         <Toaster />
       </body>

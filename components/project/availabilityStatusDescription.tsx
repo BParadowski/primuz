@@ -19,7 +19,7 @@ export default function AvailabilityStatusDescription({
       statusDescription = "Może";
       break;
     case "undeclared":
-      statusDescription = "Dostępność niezadeklarowana";
+      statusDescription = "Brak informacji";
       break;
   }
 

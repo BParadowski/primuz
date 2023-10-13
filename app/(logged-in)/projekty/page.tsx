@@ -16,7 +16,7 @@ export default async function Projects() {
   return (
     <main className="mt-[--header-height] grid md:mt-0">
       <div className="container mt-4 grid">
-        <div className="flex flex-col gap-6 rounded-lg px-4 py-4">
+        <div className="flex flex-col gap-6 rounded-lg py-4">
           <h1 className="py-2 text-center text-2xl font-bold sm:py-4">
             Projekty
           </h1>
@@ -38,7 +38,7 @@ export default async function Projects() {
                     )}
                   </p>
                   <p>{projectData.location}</p>
-                  <div className="align-center mt-4 flex flex-col gap-4 sm:flex-row">
+                  <div className="mt-4 flex flex-col items-center gap-4 sm:flex-row">
                     <AvailabilityIcon status={projectData.status} selected />
                     <AvailabilityStatusDescription
                       status={projectData.status}
