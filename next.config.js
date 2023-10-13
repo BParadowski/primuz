@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 // @ts-check
-const nextConfig = {};
+const nextConfig = {
+  experimental: {
+    serverActions: true,
+  },
+};
 
 const withPWA = require("@ducanh2912/next-pwa").default({
   dest: "public",
