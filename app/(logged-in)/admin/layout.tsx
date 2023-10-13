@@ -8,7 +8,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className="grid grid-rows-[auto_1fr]">
       <div className="relative bg-primary text-primary-foreground">
         <div className="container">
           <ul className="flex flex-wrap items-center justify-center gap-6 py-3">

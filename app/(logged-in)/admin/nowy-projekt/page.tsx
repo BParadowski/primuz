@@ -132,9 +132,9 @@ export default function Profile() {
   }
 
   return (
-    <main className="bg-primary">
+    <main className="bg-background">
       <div className="container">
-        <div className="grid w-full place-content-center overflow-hidden rounded-lg bg-muted pb-10">
+        <div className="grid overflow-hidden rounded-lg pb-10">
           <h1 className="my-10 text-center text-2xl font-bold">Nowy projekt</h1>
           <Form {...form}>
             <form
@@ -193,7 +193,7 @@ export default function Profile() {
                     control={form.control}
                     name="date"
                     render={({ field }) => (
-                      <FormItem className="sm:col-start-2 sm:row-span-3 sm:row-start-1">
+                      <FormItem className="grid place-items-center sm:col-start-2 sm:row-span-3 sm:row-start-1">
                         <FormLabel className="sr-only">Data</FormLabel>
                         <FormControl>
                           <Calendar
@@ -241,7 +241,7 @@ export default function Profile() {
                 ></FormField>
               </div>
 
-              <div className="mt-8 grid gap-y-8 rounded-lg bg-background p-6">
+              <div className="mt-8 grid gap-y-8 rounded-md border border-border bg-background p-6 shadow-md">
                 <div className="flex items-center">
                   <p>Próby</p>
                   <NewRehearsalDialog
@@ -268,7 +268,7 @@ export default function Profile() {
 
                     return (
                       <Card key={rehearsal.id}>
-                        <CardHeader className="bg-muted py-4">
+                        <CardHeader className="py-4">
                           <CardTitle className="text-lg">
                             {format(
                               new Date(rehearsal.start),

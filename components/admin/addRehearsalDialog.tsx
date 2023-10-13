@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
+import { Button } from "../ui/button";
 
 export default function AddRehearsalDialog(props: { projectId: string }) {
   const router = useRouter();
@@ -39,7 +40,7 @@ export default function AddRehearsalDialog(props: { projectId: string }) {
     <div>
       <NewRehearsalDialog
         onConfirm={newRehearsal}
-        triggerText="Dodaj Próbę"
+        trigger={<Button>Dodaj Próbę</Button>}
         dialogTitle="Nowa Próba"
         confirmText="Dodaj Próbę"
         clearAfterConfirmation

@@ -61,9 +61,13 @@ export default function EditRehearsalDialog({
       <NewRehearsalDialog
         onConfirm={editRehearsal}
         trigger={
-          <Button type="button" variant="outline">
-            Edytuj
-          </Button>
+          editing ? (
+            <Loader2Icon className="pointer-events-none ml-10 inline-block animate-spin" />
+          ) : (
+            <Button type="button" variant="outline">
+              Edytuj
+            </Button>
+          )
         }
         dialogTitle="Edytuj Próbę"
         confirmText="Zapisz zmiany"
@@ -76,10 +80,7 @@ export default function EditRehearsalDialog({
           startTime: formatInTimeZone(startDate, "Europe/Warsaw", "HH:mm"),
           endTime: formatInTimeZone(endDate, "Europe/Warsaw", "HH:mm"),
         }}
-        clearAfterConfirmation
       />
-
-      {editing && <Loader2Icon className="ml-10 inline-block animate-spin" />}
     </div>
   );
 }

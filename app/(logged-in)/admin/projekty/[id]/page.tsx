@@ -58,63 +58,65 @@ export default async function Project({ params }: { params: { id: string } }) {
         />
         <h2 className="mt-6 py-4 text-center text-lg font-bold">Próby</h2>
         <AddRehearsalDialog projectId={params.id} />
-        <div className="mt-6 grid gap-y-4 lg:grid-cols-2 lg:gap-x-4">
-          {rehearsalsData && rehearsalsData.length > 0
-            ? rehearsalsData.map((rehearsal) => {
-                return (
-                  <div
-                    key={rehearsal.id}
-                    className="rounded-sm border border-solid border-border bg-background px-4 py-4 shadow-sm"
-                  >
-                    <h2 className="text-lg font-bold">
-                      {formatInTimeZone(
-                        new Date(rehearsal.start_datetime),
-                        "Europe/Warsaw",
-                        "d MMMM (EEEE)",
-                        {
-                          locale: pl,
-                        },
-                      )}
-                    </h2>
-                    <div>
-                      {formatInTimeZone(
-                        new Date(rehearsal.start_datetime),
+        <div className="mt-6 grid gap-y-4">
+          {rehearsalsData && rehearsalsData.length > 0 ? (
+            rehearsalsData.map((rehearsal) => {
+              return (
+                <div
+                  key={rehearsal.id}
+                  className="rounded-sm border border-solid border-border bg-background px-4 py-4 shadow-sm"
+                >
+                  <h2 className="text-lg font-bold">
+                    {formatInTimeZone(
+                      new Date(rehearsal.start_datetime),
+                      "Europe/Warsaw",
+                      "d MMMM (EEEE)",
+                      {
+                        locale: pl,
+                      },
+                    )}
+                  </h2>
+                  <div>
+                    {formatInTimeZone(
+                      new Date(rehearsal.start_datetime),
+                      "Europe/Warsaw",
+                      "p",
+                      {
+                        locale: pl,
+                      },
+                    ) +
+                      "-" +
+                      formatInTimeZone(
+                        new Date(rehearsal.end_datetime),
                         "Europe/Warsaw",
                         "p",
                         {
                           locale: pl,
                         },
-                      ) +
-                        "-" +
-                        formatInTimeZone(
-                          new Date(rehearsal.end_datetime),
-                          "Europe/Warsaw",
-                          "p",
-                          {
-                            locale: pl,
-                          },
-                        )}
+                      )}
 
-                      <p className="mt-2 italic">{rehearsal.location ?? " "}</p>
-                      <pre className="mt-2 opacity-70">
-                        {rehearsal.description ?? " "}
-                      </pre>
-                    </div>
-                    <div className="mt-4 flex items-center gap-4">
-                      <EditRehearsalDialog
-                        rehearsal={rehearsal}
-                        projectId={params.id}
-                      />
-                      <DeleteRehearsalPopup
-                        projectId={params.id}
-                        id={rehearsal.id}
-                        calendarId={rehearsal.google_calendar_id}
-                      />
-                    </div>
+                    <p className="mt-2 italic">{rehearsal.location ?? " "}</p>
+                    <pre className="mt-2 opacity-70">
+                      {rehearsal.description ?? " "}
+                    </pre>
                   </div>
-                );
-              })
-            : "--brak prób--"}
+                  <div className="mt-4 flex items-center gap-4">
+                    <EditRehearsalDialog
+                      rehearsal={rehearsal}
+                      projectId={params.id}
+                    />
+                    <DeleteRehearsalPopup
+                      projectId={params.id}
+                      id={rehearsal.id}
+                      calendarId={rehearsal.google_calendar_id}
+                    />
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <p className="text-center">--brak prób--</p>
+          )}
         </div>
         <h2 className="mt-6 py-4 text-center text-lg font-bold">
           Edytuj informacje
