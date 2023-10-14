@@ -18,20 +18,27 @@ export const dynamic = "force-dynamic";
 
 export default function EditMusic({ params }: { params: { id: string } }) {
   const supabase = createClientComponentClient<Database>();
+
   const [pieceData, setPieceData] = useState<
     null | Database["public"]["Tables"]["pieces"]["Row"]
   >(null);
-  const [chosenInstrument, setChosenInstrument] = useState<string>("skrzypce");
+  const [parts, setParts] = useState<
+    null | Database["public"]["Tables"]["parts"]["Row"][]
+  >(null);
+  const [chosenInstrument, setChosenInstrument] =
+    useState<Database["public"]["Enums"]["instrument"]>("skrzypce");
+  const [isSaving, setIsSaving] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
-  const [isSaving, setIsSaving] = useState(false);
 
   const pieceName = pieceData?.name;
   const partName = `${chosenInstrument}${
-    // @ts-expect-error
-    pieceData?.parts[chosenInstrument]
-      ? // @ts-expect-error
-        ` ${pieceData.parts[chosenInstrument].length + 1}`
+    parts &&
+    parts.filter((part) => part.instrument === chosenInstrument).length > 0
+      ? ` ${
+          parts.filter((part) => part.instrument === chosenInstrument).length +
+          1
+        }`
       : ""
   }`;
 
@@ -57,30 +64,22 @@ export default function EditMusic({ params }: { params: { id: string } }) {
           fileRef.current.files[0],
         );
 
-      // add to database list of piece parts
+      // if storage didn't throw an error, put part info into the database
 
       if (!error) {
-        //@ts-expect-error
-        const structure: { [K in string]: string[] } = pieceData.parts;
-        if (chosenInstrument in structure) {
-          structure[chosenInstrument] = [
-            ...structure[chosenInstrument],
-            newPieceFileName,
-          ];
-        } else {
-          structure[chosenInstrument] = [newPieceFileName];
-        }
-        await supabase
-          .from("pieces")
-          .update({ parts: structure })
-          .eq("name", pieceName);
+        await supabase.from("parts").insert({
+          piece_id: pieceData.id,
+          instrument: chosenInstrument,
+          name: partName,
+          file_name: newPieceFileName,
+        });
       }
       setIsSaving(false);
     }
   }
 
   useEffect(() => {
-    async function getParts() {
+    async function getPieceData() {
       const data = await supabase
         .from("pieces")
         .select()
@@ -89,6 +88,19 @@ export default function EditMusic({ params }: { params: { id: string } }) {
         .then(({ data }) => data);
 
       setPieceData(data);
+    }
+    getPieceData();
+  }, []);
+
+  useEffect(() => {
+    async function getParts() {
+      const data = await supabase
+        .from("parts")
+        .select()
+        .eq("piece_id", params.id)
+        .then(({ data }) => data);
+
+      setParts(data);
     }
     if (isSaving === false) getParts();
   }, [isSaving]);
@@ -100,7 +112,9 @@ export default function EditMusic({ params }: { params: { id: string } }) {
       </h1>
       <Select
         value={chosenInstrument}
-        onValueChange={(e) => setChosenInstrument(e)}
+        onValueChange={(e) =>
+          setChosenInstrument(e as Database["public"]["Enums"]["instrument"])
+        }
       >
         <SelectTrigger>Instrument</SelectTrigger>
         <SelectContent>
@@ -131,18 +145,12 @@ export default function EditMusic({ params }: { params: { id: string } }) {
         )}
       </div>
       <div className="mt-12">
-        {pieceData &&
-          pieceData.parts &&
-          sortByInstrument(Object.keys(pieceData.parts)).map((instrument) => {
-            // @ts-expect-error
-
-            if (!pieceData.parts[instrument]) return null;
-            // @ts-expect-error
-
-            return pieceData.parts[instrument].map((partName) => (
-              <p key={partName}>{partName}</p>
-            ));
-          })}
+        {parts &&
+          parts.map((part) => (
+            <p key={part.id}>
+              {part.name} {part.file_name} {part.instrument}
+            </p>
+          ))}
       </div>
     </main>
   );

@@ -89,24 +89,52 @@ export interface Database {
           },
         ];
       };
+      parts: {
+        Row: {
+          file_name: string;
+          id: string;
+          instrument: Database["public"]["Enums"]["instrument"];
+          name: string;
+          piece_id: string;
+        };
+        Insert: {
+          file_name: string;
+          id?: string;
+          instrument: Database["public"]["Enums"]["instrument"];
+          name: string;
+          piece_id: string;
+        };
+        Update: {
+          file_name?: string;
+          id?: string;
+          instrument?: Database["public"]["Enums"]["instrument"];
+          name?: string;
+          piece_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "parts_piece_id_fkey";
+            columns: ["piece_id"];
+            referencedRelation: "pieces";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       pieces: {
         Row: {
           composer: string;
           id: string;
           name: string;
-          parts: Json;
         };
         Insert: {
-          composer?: string | null;
+          composer: string;
           id?: string;
           name: string;
-          parts?: Json | null;
         };
         Update: {
-          composer?: string | null;
+          composer?: string;
           id?: string;
           name?: string;
-          parts?: Json | null;
         };
         Relationships: [];
       };
@@ -116,12 +144,12 @@ export interface Database {
           date: string;
           description: string | null;
           google_calendar_description: string | null;
-          google_calendar_id: string;
+          google_calendar_id: string | null;
           id: string;
           location: string | null;
           musicians: string[] | null;
           musicians_structure: Json | null;
-          name: string;
+          name: string | null;
           pay: string | null;
         };
         Insert: {
@@ -270,10 +298,11 @@ export interface Database {
     Views: {
       project_repertoire: {
         Row: {
-          composer: string | null;
-          name: string;
-          parts: Json;
-          project_id: string | null;
+          file_name: string;
+          instrument: Database["public"]["Enums"]["instrument"];
+          part_name: string;
+          piece_name: string;
+          project_id: string;
         };
         Relationships: [
           {
@@ -293,10 +322,10 @@ export interface Database {
       projects_summary: {
         Row: {
           date: string;
-          id: string;
+          id: string | null;
           location: string | null;
           message: string | null;
-          name: string | null;
+          name: string;
           status: Database["public"]["Enums"]["availability_status"];
         };
         Relationships: [];

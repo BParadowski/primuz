@@ -38,7 +38,7 @@ export function DownloadButton(props: DownloadProps) {
 
   return (
     <Button asChild>
-      <a href={data.publicUrl} className="ml-2 capitalize">
+      <a href={data.publicUrl} className="capitalize">
         {props.linkName}
       </a>
     </Button>

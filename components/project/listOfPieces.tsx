@@ -21,6 +21,36 @@ export async function ListOfPieces(props: {
     .select()
     .eq("project_id", props.projectId);
 
+  type PieceObject = {
+    [K in string]: {
+      part: string;
+      file: string;
+    }[];
+  };
+
+  const piecesObject = pieces?.reduce((acc, c) => {
+    // If there are no parts for this piece, for chosen instrument,  create an empty array or skip
+    if (
+      c.part_name === null ||
+      c.file_name === null ||
+      c.instrument !== props.instrument
+    ) {
+      if (!acc[c.piece_name]) acc[c.piece_name] = [];
+      return acc;
+    }
+
+    if (!acc[c.piece_name]) {
+      acc[c.piece_name] = [{ part: c.part_name, file: c.file_name }];
+    } else if (acc[c.piece_name]) {
+      acc[c.piece_name] = [
+        ...acc[c.piece_name],
+        { part: c.part_name, file: c.file_name },
+      ];
+    }
+
+    return acc;
+  }, {} as PieceObject);
+
   return (
     <Table>
       <TableHeader>
@@ -31,42 +61,25 @@ export async function ListOfPieces(props: {
       </TableHeader>
 
       <TableBody>
-        {pieces &&
-          pieces.map((pieceData) => {
-            if (pieceData && pieceData.name)
-              return (
-                <TableRow key={pieceData.name}>
-                  <TableCell className="font-medium">
-                    {pieceData.name}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="">
-                      {pieceData.parts &&
-                        (pieceData.parts as { [K in string]: string[] })[
-                          props.instrument
-                        ] &&
-                        (pieceData.parts as { [K in string]: string[] })[
-                          props.instrument
-                        ].map((fileName, index) => {
-                          return (
-                            <DownloadButton
-                              linkName={`${props.instrument} ${
-                                (
-                                  pieceData.parts as { [K in string]: string[] }
-                                )[props.instrument].length > 1
-                                  ? index + 1
-                                  : ""
-                              }`}
-                              key={fileName}
-                              fileName={fileName}
-                              pieceName={pieceData.name}
-                            />
-                          );
-                        })}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
+        {piecesObject &&
+          Object.keys(piecesObject).map((title) => {
+            return (
+              <TableRow key={title}>
+                <TableCell className="font-medium">{title}</TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap justify-end gap-x-2 gap-y-2">
+                    {piecesObject[title].map((partData) => (
+                      <DownloadButton
+                        key={partData.file}
+                        fileName={partData.file}
+                        pieceName={title}
+                        linkName={partData.part}
+                      />
+                    ))}
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
           })}
       </TableBody>
     </Table>
