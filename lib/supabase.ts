@@ -144,12 +144,12 @@ export interface Database {
           date: string;
           description: string | null;
           google_calendar_description: string | null;
-          google_calendar_id: string | null;
+          google_calendar_id: string ;
           id: string;
           location: string | null;
           musicians: string[] | null;
           musicians_structure: Json | null;
-          name: string | null;
+          name: string ;
           pay: string | null;
         };
         Insert: {
