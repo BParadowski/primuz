@@ -78,3 +78,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* class for styling links in project description */
+
+.links-styled a {
+  color: #3b82f6;
+  text-decoration: underline;
+}

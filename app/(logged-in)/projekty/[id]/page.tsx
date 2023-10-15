@@ -132,6 +132,7 @@ export default async function ProjectPage({
             <div className="grid grid-cols-[auto_1fr] gap-6">
               <ScrollTextIcon height={36} />
               <div
+                className="links-styled"
                 dangerouslySetInnerHTML={{ __html: data.description ?? "" }}
               ></div>
             </div>
