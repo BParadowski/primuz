@@ -116,7 +116,7 @@ export default function EditMusic({ params }: { params: { id: string } }) {
           setChosenInstrument(e as Database["public"]["Enums"]["instrument"])
         }
       >
-        <SelectTrigger>Instrument</SelectTrigger>
+        <SelectTrigger>{chosenInstrument}</SelectTrigger>
         <SelectContent>
           <SelectItem value="skrzypce">skrzypce</SelectItem>
           <SelectItem value="altówka">altówka</SelectItem>

@@ -38,7 +38,7 @@ export default async function Projects() {
                     )}
                   </p>
                   <p>{projectData.location}</p>
-                  <div className="mt-4 flex flex-col items-center gap-4 sm:flex-row">
+                  <div className="mt-4 flex flex-wrap items-center gap-4">
                     <AvailabilityIcon status={projectData.status} selected />
                     <AvailabilityStatusDescription
                       status={projectData.status}

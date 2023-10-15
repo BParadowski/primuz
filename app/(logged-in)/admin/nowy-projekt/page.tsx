@@ -31,6 +31,10 @@ import { v4 as uuid } from "uuid";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { PiecePicker } from "@/components/admin/piecePicker";
+import "react-quill/dist/quill.snow.css";
+import dynamic from "next/dynamic";
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const formSchema = z.object({
   id: z.string().uuid(),
@@ -75,7 +79,6 @@ export default function Profile() {
   });
 
   let rehearsals = form.watch("rehearsals");
-  let pieces = form.watch("pieces");
 
   const router = useRouter();
 
@@ -134,7 +137,7 @@ export default function Profile() {
   return (
     <main className="bg-background">
       <div className="container">
-        <div className="grid overflow-hidden rounded-lg pb-10">
+        <div className="grid rounded-lg pb-10">
           <h1 className="my-10 text-center text-2xl font-bold">Nowy projekt</h1>
           <Form {...form}>
             <form
@@ -226,7 +229,7 @@ export default function Profile() {
                   )}
                 ></FormField>
 
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="description"
                   render={({ field }) => (
@@ -234,6 +237,25 @@ export default function Profile() {
                       <FormLabel>Opis projektu w aplikacji</FormLabel>
                       <FormControl>
                         <Textarea {...field} className="h-40" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                ></FormField> */}
+
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Opis projektu w aplikacji</FormLabel>
+                      <FormControl>
+                        <ReactQuill
+                          className=""
+                          theme="snow"
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

@@ -19,6 +19,10 @@ import { Calendar } from "../ui/calendar";
 import { Loader2Icon } from "lucide-react";
 import { useToast } from "../ui/use-toast";
 import { Textarea } from "../ui/textarea";
+import "react-quill/dist/quill.snow.css";
+import dynamic from "next/dynamic";
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface UpdaterProps {
   id: string;
@@ -175,7 +179,12 @@ export default function InfoUpdater(props: UpdaterProps) {
                 <FormItem>
                   <FormLabel>Opis projektu w aplikacji</FormLabel>
                   <FormControl>
-                    <Textarea {...field} className="h-40" />
+                    <ReactQuill
+                      theme="snow"
+                      className=""
+                      onChange={field.onChange}
+                      value={field.value}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -129,9 +129,11 @@ export default async function ProjectPage({
                 <span className="ml-2">(brutto)</span>
               </p>
             </div>
-            <div className="flex items-center gap-6">
+            <div className="grid grid-cols-[auto_1fr] gap-6">
               <ScrollTextIcon height={36} />
-              <p>{data.description}</p>
+              <div
+                dangerouslySetInnerHTML={{ __html: data.description ?? "" }}
+              ></div>
             </div>
           </section>
           {announcements ? (
@@ -190,9 +192,9 @@ export default async function ProjectPage({
                           <p className="mt-2 italic">
                             {rehearsal.location ?? " "}
                           </p>
-                          <pre className="mt-2 opacity-70">
+                          <p className="mt-2 opacity-70">
                             {rehearsal.description ?? " "}
-                          </pre>
+                          </p>
                         </div>
                       </div>
                     );
@@ -258,9 +260,8 @@ export default async function ProjectPage({
                   Object.keys(data.musicians_structure as Object),
                 ).map((section) => {
                   return (
-                    <div className=" p-1" key={section}>
+                    <div className="my-1 p-1" key={section}>
                       <h3 className="font-bold capitalize">{section}</h3>
-                      <Separator className="my-2" />
                       <div>
                         {(
                           data.musicians_structure as {
