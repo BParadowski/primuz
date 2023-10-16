@@ -32,7 +32,10 @@ export function SortableMusician(props: {
     <div
       ref={setNodeRef}
       style={style}
-      className={cn(" flex rounded-sm p-2", isDragging && "z-30 bg-stone-100")}
+      className={cn(
+        " flex touch-manipulation rounded-sm p-2",
+        isDragging && "z-30 bg-stone-100",
+      )}
     >
       <p {...attributes} {...listeners} className="w-full">
         {props.id}
