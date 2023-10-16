@@ -9,7 +9,7 @@ export default function AdminLayout({
 }) {
   return (
     <div className="grid grid-rows-[auto_1fr]">
-      <div className="relative bg-primary text-primary-foreground">
+      <div className="relative mt-[--header-height] bg-primary text-primary-foreground md:mt-0">
         <div className="container">
           <ul className="flex flex-wrap items-center justify-center gap-6 py-3">
             <li>
@@ -22,7 +22,7 @@ export default function AdminLayout({
                     size={36}
                     className="stroke-primary-foreground transition-colors group-hover:stroke-primary"
                   />
-                  <p>Projekty</p>
+                  <p className="hidden md:block">Projekty</p>
                 </Link>
               </Button>
             </li>
@@ -36,7 +36,7 @@ export default function AdminLayout({
                     size={36}
                     className="stroke-primary-foreground transition-colors group-hover:stroke-primary"
                   />
-                  <p> Nowy Projekt</p>
+                  <p className="hidden md:block"> Nowy Projekt</p>
                 </Link>
               </Button>
             </li>
@@ -47,7 +47,7 @@ export default function AdminLayout({
                     size={36}
                     className="stroke-primary-foreground transition-colors group-hover:stroke-primary"
                   />
-                  <p>Nuty</p>
+                  <p className="hidden md:block">Nuty</p>
                 </Link>
               </Button>
             </li>
