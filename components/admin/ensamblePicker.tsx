@@ -144,7 +144,12 @@ export default function EnsamblePicker(props: {
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
-    useSensor(TouchSensor),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200,
+        tolerance: 5,
+      },
+    }),
   );
 
   function handleDragEnd(event: DragEndEvent) {
