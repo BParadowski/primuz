@@ -43,7 +43,7 @@ export default async function Project({ params }: { params: { id: string } }) {
     .data;
 
   return (
-    <main className="relative p-10">
+    <main className="relative py-10">
       <div className="container">
         <h1 className="pb-8 text-center text-2xl font-bold">{data.name}</h1>
 
