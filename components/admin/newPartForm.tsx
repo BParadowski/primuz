@@ -9,6 +9,7 @@ import * as z from "zod";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -38,9 +39,11 @@ type SchemaType = z.infer<typeof formSchema>;
 export default function NewPartForm({
   pieceData,
   parts,
+  instruments,
 }: {
   pieceData: Database["public"]["Tables"]["pieces"]["Row"];
   parts: Database["public"]["Tables"]["parts"]["Row"][];
+  instruments: Database["public"]["Enums"]["instrument"][];
 }) {
   const supabase = createClientComponentClient<Database>();
   const router = useRouter();
@@ -48,7 +51,8 @@ export default function NewPartForm({
     useState<Database["public"]["Enums"]["instrument"]>("skrzypce");
 
   const partName = `${chosenInstrument}${
-    parts.filter((part) => part.instrument === chosenInstrument).length > 0
+    parts.filter((part) => part.instrument === chosenInstrument).length > 0 ||
+    chosenInstrument === "skrzypce"
       ? ` ${toRoman(
           parts.filter((part) => part.instrument === chosenInstrument).length +
             1,
@@ -66,38 +70,40 @@ export default function NewPartForm({
   });
 
   async function saveMusic(partName: string, file: File) {
-    if (file) {
-      const newPieceFileName = replacePolishLetters(
-        `${pieceName}-${chosenInstrument}${
-          parts.filter((part) => part.instrument === chosenInstrument).length >
-          0
-            ? ` ${toRoman(
-                parts.filter((part) => part.instrument === chosenInstrument)
-                  .length + 1,
-              )}`
-            : ""
-        }.pdf`,
-      ).replace(/\s/g, "-");
+    let newPartFileName = replacePolishLetters(
+      `${pieceName}-${partName}`,
+    ).replace(/\s/g, "-");
 
-      const newPieceFolder = replacePolishLetters(pieceName).replace(
-        /\s/g,
-        "-",
-      );
+    console.log(newPartFileName);
 
-      const { data, error } = await supabase.storage
-        .from("sheet_music")
-        .upload(`${newPieceFolder}/${newPieceFileName}`, file);
+    // If there is another part named liked that append number to the end (files can't share a name)
+    while (parts.find((part) => part.file_name === newPartFileName + ".pdf")) {
+      console.log("SHakavu");
+      newPartFileName += `(${
+        parts.filter((part) => part.instrument === chosenInstrument).length + 1
+      })`;
+    }
+    // add extension
 
-      // if storage didn't throw an error, put part info into the database
+    newPartFileName += ".pdf";
 
-      if (!error) {
-        await supabase.from("parts").insert({
-          piece_id: pieceData.id,
-          instrument: chosenInstrument,
-          name: partName,
-          file_name: newPieceFileName,
-        });
-      }
+    console.log(newPartFileName);
+
+    const newPartFolder = replacePolishLetters(pieceName).replace(/\s/g, "-");
+
+    const { data, error } = await supabase.storage
+      .from("sheet_music")
+      .upload(`${newPartFolder}/${newPartFileName}`, file);
+
+    // if storage didn't throw an error, put part info into the database
+
+    if (!error) {
+      await supabase.from("parts").insert({
+        piece_id: pieceData.id,
+        instrument: chosenInstrument,
+        name: partName,
+        file_name: newPartFileName,
+      });
     }
   }
 
@@ -121,10 +127,11 @@ export default function NewPartForm({
       >
         <SelectTrigger>{chosenInstrument}</SelectTrigger>
         <SelectContent>
-          <SelectItem value="skrzypce">skrzypce</SelectItem>
-          <SelectItem value="altówka">altówka</SelectItem>
-          <SelectItem value="wiolonczela">wiolonczela</SelectItem>
-          <SelectItem value="kontrabas">kontrabas</SelectItem>
+          {instruments.map((instrument) => (
+            <SelectItem key={instrument} value={instrument}>
+              {instrument}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
 
@@ -174,12 +181,13 @@ export default function NewPartForm({
                     {...fieldProps}
                     type="file"
                     placeholder="Prześlij nuty"
-                    accept="image/*, application/pdf"
+                    accept="application/pdf"
                     onChange={(event) =>
                       onChange(event.target.files && event.target.files[0])
                     }
                   />
                 </FormControl>
+                <FormDescription>W formacie PDF</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

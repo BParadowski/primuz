@@ -23,7 +23,13 @@ export default async function PiecePage({
     .eq("piece_id", params.id)
     .then(({ data }) => data);
 
-  const [pieceData, parts] = await Promise.all([pieceDataQuery, partsQuery]);
+  const instrumentsQuery = supabase.rpc("get_instruments");
+
+  const [pieceData, parts, { data: instruments }] = await Promise.all([
+    pieceDataQuery,
+    partsQuery,
+    instrumentsQuery,
+  ]);
 
   if (!pieceData || !parts)
     return (
@@ -39,9 +45,17 @@ export default async function PiecePage({
       <div className="container">
         {" "}
         <h1 className="py-6 text-center text-xl font-bold">{pieceData.name}</h1>
-        <NewPartForm pieceData={pieceData} parts={parts} />
+        <NewPartForm
+          pieceData={pieceData}
+          parts={parts}
+          instruments={
+            instruments as Database["public"]["Enums"]["instrument"][]
+          }
+        />
         {parts.map((part) => (
-          <p key={part.id}>{part.name}</p>
+          <p key={part.id}>
+            {part.name} {part.file_name}
+          </p>
         ))}
       </div>
     </main>
