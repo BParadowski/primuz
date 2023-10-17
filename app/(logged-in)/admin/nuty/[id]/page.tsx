@@ -1,3 +1,4 @@
+import DeletePartPopup from "@/components/admin/deletePartPopup";
 import NewPartForm from "@/components/admin/newPartForm";
 import { Database } from "@/lib/supabase";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -53,9 +54,12 @@ export default async function PiecePage({
           }
         />
         {parts.map((part) => (
-          <p key={part.id}>
-            {part.name} {part.file_name}
-          </p>
+          <div key={part.id} className="flex gap-6">
+            <p>
+              {part.name} {part.file_name}
+            </p>
+            <DeletePartPopup id={part.id} partPath={part.file_name} />
+          </div>
         ))}
       </div>
     </main>

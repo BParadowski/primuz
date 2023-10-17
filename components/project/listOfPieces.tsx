@@ -71,8 +71,7 @@ export async function ListOfPieces(props: {
                     {piecesObject[title].map((partData) => (
                       <DownloadButton
                         key={partData.file}
-                        fileName={partData.file}
-                        pieceName={title}
+                        filePath={partData.file}
                         linkName={partData.part}
                       />
                     ))}

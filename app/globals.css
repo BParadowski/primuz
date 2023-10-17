@@ -79,9 +79,9 @@
   }
 }
 
-/* class for styling links in project description */
+/* Styling for quill text editor output */
 
-.links-styled a {
+.quill-html a {
   color: #3b82f6;
   text-decoration: underline;
 }

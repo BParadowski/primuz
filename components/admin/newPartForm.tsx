@@ -91,9 +91,11 @@ export default function NewPartForm({
 
     const newPartFolder = replacePolishLetters(pieceName).replace(/\s/g, "-");
 
+    const newPartPath = `${newPartFolder}/${newPartFileName}`
+
     const { data, error } = await supabase.storage
       .from("sheet_music")
-      .upload(`${newPartFolder}/${newPartFileName}`, file);
+      .upload(newPartPath, file);
 
     // if storage didn't throw an error, put part info into the database
 
@@ -102,7 +104,7 @@ export default function NewPartForm({
         piece_id: pieceData.id,
         instrument: chosenInstrument,
         name: partName,
-        file_name: newPartFileName,
+        file_name: newPartPath,
       });
     }
   }

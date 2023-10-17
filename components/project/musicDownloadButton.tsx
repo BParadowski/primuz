@@ -5,8 +5,7 @@ import { replacePolishLetters } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 interface DownloadProps {
-  pieceName: string;
-  fileName: string;
+  filePath: string;
   linkName: string;
 }
 
@@ -27,14 +26,9 @@ export function DownloadButton(props: DownloadProps) {
 
   const { data } = supabase.storage
     .from("sheet_music")
-    .getPublicUrl(
-      `${replacePolishLetters(props.pieceName.replace(/\s/g, "-"))}/${
-        props.fileName
-      }`,
-      {
-        download: true,
-      },
-    );
+    .getPublicUrl(props.filePath, {
+      download: true,
+    });
 
   return (
     <Button asChild>
