@@ -45,92 +45,113 @@ export default async function Project({ params }: { params: { id: string } }) {
   return (
     <main className="relative py-10">
       <div className="container">
-        <h1 className="pb-8 text-center text-2xl font-bold">{data.name}</h1>
+        <div className="grid gap-6">
+          <h1 className="pb-8 text-center text-2xl font-bold">{data.name}</h1>
 
-        <EnsamblePicker projectId={params.id} projectName={data.name} />
-        <h2 className="mt-6 py-4 text-center text-lg font-bold">Ogłoszenia</h2>
-        <Announcer projectId={params.id} projectMusicians={data.musicians} />
+          <div>
+            <EnsamblePicker projectId={params.id} projectName={data.name} />
+          </div>
 
-        <h2 className="mt-6 py-4 text-center text-lg font-bold">Repertuar</h2>
-        <RepertoireUpdater
-          initialRepertoire={piecesArray}
-          projectId={params.id}
-        />
-        <h2 className="mt-6 py-4 text-center text-lg font-bold">Próby</h2>
-        <AddRehearsalDialog projectId={params.id} />
-        <div className="mt-6 grid gap-y-4">
-          {rehearsalsData && rehearsalsData.length > 0 ? (
-            rehearsalsData.map((rehearsal) => {
-              return (
-                <div
-                  key={rehearsal.id}
-                  className="rounded-sm border border-solid border-border bg-background px-4 py-4 shadow-sm"
-                >
-                  <h2 className="text-lg font-bold">
-                    {formatInTimeZone(
-                      new Date(rehearsal.start_datetime),
-                      "Europe/Warsaw",
-                      "d MMMM (EEEE)",
-                      {
-                        locale: pl,
-                      },
-                    )}
-                  </h2>
-                  <div>
-                    {formatInTimeZone(
-                      new Date(rehearsal.start_datetime),
-                      "Europe/Warsaw",
-                      "p",
-                      {
-                        locale: pl,
-                      },
-                    ) +
-                      "-" +
-                      formatInTimeZone(
-                        new Date(rehearsal.end_datetime),
+          <div>
+            <h2 className="py-4 text-center text-lg font-bold">Ogłoszenia</h2>
+            <Announcer
+              projectId={params.id}
+              projectMusicians={data.musicians}
+            />
+          </div>
+
+          <div>
+            <h2 className="py-4 text-center text-lg font-bold">Repertuar</h2>
+            <RepertoireUpdater
+              initialRepertoire={piecesArray}
+              projectId={params.id}
+            />
+          </div>
+
+          <div>
+            <h2 className="py-4 text-center text-lg font-bold">Próby</h2>
+            <AddRehearsalDialog projectId={params.id} />
+          </div>
+
+          <div className="grid gap-y-4">
+            {rehearsalsData && rehearsalsData.length > 0 ? (
+              rehearsalsData.map((rehearsal) => {
+                return (
+                  <div
+                    key={rehearsal.id}
+                    className="rounded-sm border border-solid border-border bg-background px-4 py-4 shadow-sm"
+                  >
+                    <h2 className="text-lg font-bold">
+                      {formatInTimeZone(
+                        new Date(rehearsal.start_datetime),
+                        "Europe/Warsaw",
+                        "d MMMM (EEEE)",
+                        {
+                          locale: pl,
+                        },
+                      )}
+                    </h2>
+                    <div>
+                      {formatInTimeZone(
+                        new Date(rehearsal.start_datetime),
                         "Europe/Warsaw",
                         "p",
                         {
                           locale: pl,
                         },
-                      )}
+                      ) +
+                        "-" +
+                        formatInTimeZone(
+                          new Date(rehearsal.end_datetime),
+                          "Europe/Warsaw",
+                          "p",
+                          {
+                            locale: pl,
+                          },
+                        )}
 
-                    <p className="mt-2 italic">{rehearsal.location ?? " "}</p>
-                    <pre className="mt-2 opacity-70">
-                      {rehearsal.description ?? " "}
-                    </pre>
+                      <p className="mt-2 italic">{rehearsal.location ?? " "}</p>
+                      <pre className="mt-2 opacity-70">
+                        {rehearsal.description ?? " "}
+                      </pre>
+                    </div>
+                    <div className="mt-4 flex items-center gap-4">
+                      <EditRehearsalDialog
+                        rehearsal={rehearsal}
+                        projectId={params.id}
+                      />
+                      <DeleteRehearsalPopup
+                        projectId={params.id}
+                        id={rehearsal.id}
+                        calendarId={rehearsal.google_calendar_id}
+                      />
+                    </div>
                   </div>
-                  <div className="mt-4 flex items-center gap-4">
-                    <EditRehearsalDialog
-                      rehearsal={rehearsal}
-                      projectId={params.id}
-                    />
-                    <DeleteRehearsalPopup
-                      projectId={params.id}
-                      id={rehearsal.id}
-                      calendarId={rehearsal.google_calendar_id}
-                    />
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <p className="text-center">--brak prób--</p>
-          )}
+                );
+              })
+            ) : (
+              <p className="text-center">--brak prób--</p>
+            )}
+          </div>
+
+          <div>
+            <h2 className="py-4 text-center text-lg font-bold">
+              Edytuj informacje
+            </h2>
+            <InfoUpdater
+              id={data.id}
+              name={data.name}
+              location={data.location ?? undefined}
+              calendarId={data.google_calendar_id}
+              date={data.date}
+              calendarDescription={
+                data.google_calendar_description ?? undefined
+              }
+              pay={data.pay ?? undefined}
+              description={data.description ?? undefined}
+            />
+          </div>
         </div>
-        <h2 className="mt-6 py-4 text-center text-lg font-bold">
-          Edytuj informacje
-        </h2>
-        <InfoUpdater
-          id={data.id}
-          name={data.name}
-          location={data.location ?? undefined}
-          calendarId={data.google_calendar_id}
-          date={data.date}
-          calendarDescription={data.google_calendar_description ?? undefined}
-          pay={data.pay ?? undefined}
-          description={data.description ?? undefined}
-        />
       </div>
     </main>
   );

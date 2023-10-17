@@ -229,20 +229,6 @@ export default function Profile() {
                   )}
                 ></FormField>
 
-                {/* <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Opis projektu w aplikacji</FormLabel>
-                      <FormControl>
-                        <Textarea {...field} className="h-40" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                ></FormField> */}
-
                 <FormField
                   control={form.control}
                   name="description"

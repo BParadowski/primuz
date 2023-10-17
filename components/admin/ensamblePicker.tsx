@@ -194,7 +194,7 @@ export default function EnsamblePicker(props: {
   }
 
   return (
-    <div className="grid gap-x-5 xl:grid-cols-2">
+    <div className="grid gap-x-5 gap-y-5 xl:grid-cols-2">
       <div>
         <h2 className="text-center text-lg font-bold"> Dostępność</h2>
 
@@ -257,7 +257,7 @@ export default function EnsamblePicker(props: {
           </div>
         )}
       </div>
-      <div>
+      <div className="grid">
         <h2 className="text-center text-lg font-bold"> Skład</h2>
         <DndContext
           sensors={sensors}
@@ -287,13 +287,14 @@ export default function EnsamblePicker(props: {
           })}
         </DndContext>
         {isSubmitting ? (
-          <Button type="button" size="lg">
+          <Button type="button" size="lg" className="place-self-center">
             <Loader2Icon className="animate-spin" />
           </Button>
         ) : (
           <Button
             type="button"
             size="lg"
+            className="place-self-center"
             onClick={async () => {
               setIsSubmitting(true);
               await fetch("/api/project", {

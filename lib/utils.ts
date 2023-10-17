@@ -47,3 +47,29 @@ const instrumentChierarchy: { [K in string]: number } = {
 export const sortByInstrument = (arr: string[]) => {
   return arr.sort((a, b) => instrumentChierarchy[a] - instrumentChierarchy[b]);
 };
+
+export const toRoman = (num: number, result = ""): string => {
+  const map: Record<string, number> = {
+    M: 1000,
+    CM: 900,
+    D: 500,
+    CD: 400,
+    C: 100,
+    XC: 90,
+    L: 50,
+    XL: 40,
+    X: 10,
+    IX: 9,
+    V: 5,
+    IV: 4,
+    I: 1,
+  };
+  for (const key in map) {
+    if (num >= map[key]) {
+      if (num !== 0) {
+        return toRoman(num - map[key], result + key);
+      }
+    }
+  }
+  return result;
+};

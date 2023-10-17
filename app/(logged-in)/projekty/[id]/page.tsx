@@ -15,7 +15,6 @@ import map from "@/lib/google-maps.png";
 import AvailabilityPicker from "@/components/project/availabilityPicker";
 import AvailabilityIcon from "@/components/project/availabilityIcon";
 import { ListOfPieces } from "@/components/project/listOfPieces";
-import { Separator } from "@/components/ui/separator";
 import { sortByInstrument } from "@/lib/utils";
 import { formatInTimeZone } from "date-fns-tz";
 import ClientDate from "@/components/project/clientDatePara";
@@ -95,7 +94,7 @@ export default async function ProjectPage({
     <main className="mt-[--header-height] grid md:mt-0">
       <div className="container mt-4 grid">
         {/* Layout div */}
-        <div className="grid gap-y-12 px-3 py-4 md:gap-y-16 lg:gap-y-20">
+        <div className="grid gap-y-10 px-3 py-4 md:gap-y-14 lg:gap-y-16">
           <section className="flex flex-col justify-items-center gap-3">
             <h1 className="text-center text-2xl font-bold">{data.name}</h1>
             <div className="flex items-center gap-6">
