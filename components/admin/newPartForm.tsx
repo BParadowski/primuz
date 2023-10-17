@@ -128,7 +128,15 @@ export default function NewPartForm({
         }}
       >
         <SelectTrigger>{chosenInstrument}</SelectTrigger>
-        <SelectContent className="touch-none">
+        <SelectContent
+          // Prevents touching things underneath the instrument popup
+          ref={(ref) => {
+            if (!ref) return;
+            ref.ontouchstart = (e) => {
+              e.preventDefault();
+            };
+          }}
+        >
           {instruments.map((instrument) => (
             <SelectItem key={instrument} value={instrument}>
               {instrument}
