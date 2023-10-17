@@ -237,7 +237,7 @@ export default function Profile() {
                       <FormLabel>Opis projektu w aplikacji</FormLabel>
                       <FormControl>
                         <ReactQuill
-                          className=""
+                          className="h-40"
                           theme="snow"
                           value={field.value}
                           onChange={field.onChange}
@@ -247,6 +247,8 @@ export default function Profile() {
                     </FormItem>
                   )}
                 ></FormField>
+                {/* Magic div to fix Quill spacing problems */}
+                <div className="mt-20 sm:mt-12" />
               </div>
 
               <div className="mt-8 grid gap-y-8 rounded-md border border-border bg-background p-6 shadow-md">

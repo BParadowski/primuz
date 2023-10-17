@@ -1,7 +1,9 @@
 import DeletePartPopup from "@/components/admin/deletePartPopup";
 import NewPartForm from "@/components/admin/newPartForm";
+import { Button } from "@/components/ui/button";
 import { Database } from "@/lib/supabase";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { EyeIcon } from "lucide-react";
 import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
@@ -53,14 +55,27 @@ export default async function PiecePage({
             instruments as Database["public"]["Enums"]["instrument"][]
           }
         />
-        {parts.map((part) => (
-          <div key={part.id} className="flex gap-6">
-            <p>
-              {part.name} {part.file_name}
-            </p>
-            <DeletePartPopup id={part.id} partPath={part.file_name} />
-          </div>
-        ))}
+        <div className="my-10 grid gap-y-3">
+          {parts.map((part) => (
+            <div key={part.id} className="flex items-center gap-6">
+              <p className="capitalize">{part.name}</p>
+              <Button asChild>
+                <a
+                  href={
+                    supabase.storage
+                      .from("sheet_music")
+                      .getPublicUrl(part.file_name).data.publicUrl
+                  }
+                  target="__blank"
+                >
+                  {" "}
+                  <EyeIcon />
+                </a>
+              </Button>
+              <DeletePartPopup id={part.id} partPath={part.file_name} />
+            </div>
+          ))}
+        </div>
       </div>
     </main>
   );

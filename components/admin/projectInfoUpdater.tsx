@@ -181,7 +181,7 @@ export default function InfoUpdater(props: UpdaterProps) {
                   <FormControl>
                     <ReactQuill
                       theme="snow"
-                      className=""
+                      className="h-40"
                       onChange={field.onChange}
                       value={field.value}
                     />
@@ -191,20 +191,28 @@ export default function InfoUpdater(props: UpdaterProps) {
               )}
             ></FormField>
           </div>
-          {form.formState.isSubmitting ? (
-            <Button type="button" size="lg" className="my-6 place-self-center">
-              <Loader2Icon className="animate-spin" />
-            </Button>
-          ) : (
-            <Button
-              type="submit"
-              variant="default"
-              size="lg"
-              className="my-6 place-self-center"
-            >
-              Zapisz zmiany
-            </Button>
-          )}
+
+          {/* Styling of this element are magic numbers to deal with quill editor */}
+          <div className="mt-20 grid sm:mt-12">
+            {form.formState.isSubmitting ? (
+              <Button
+                type="button"
+                size="lg"
+                className="my-6 place-self-center"
+              >
+                <Loader2Icon className="animate-spin" />
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                variant="default"
+                size="lg"
+                className="my-6 place-self-center"
+              >
+                Zapisz zmiany
+              </Button>
+            )}
+          </div>
         </form>
       </Form>
     </div>

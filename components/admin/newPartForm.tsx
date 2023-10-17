@@ -91,7 +91,7 @@ export default function NewPartForm({
 
     const newPartFolder = replacePolishLetters(pieceName).replace(/\s/g, "-");
 
-    const newPartPath = `${newPartFolder}/${newPartFileName}`
+    const newPartPath = `${newPartFolder}/${newPartFileName}`;
 
     const { data, error } = await supabase.storage
       .from("sheet_music")
@@ -139,7 +139,7 @@ export default function NewPartForm({
 
       <Form {...form}>
         <form
-          className="mt-6 grid gap-y-6"
+          className="mt-6 grid gap-y-4"
           onSubmit={form.handleSubmit(async (data) => {
             await saveMusic(data.partName, data.file);
             router.refresh();
@@ -167,6 +167,9 @@ export default function NewPartForm({
                 <FormControl>
                   <Input placeholder="skrzypce II góra..." {...field} />
                 </FormControl>
+                <FormDescription>
+                  Nazwa linku w liście utworów i partii.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
