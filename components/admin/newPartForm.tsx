@@ -128,7 +128,7 @@ export default function NewPartForm({
         }}
       >
         <SelectTrigger>{chosenInstrument}</SelectTrigger>
-        <SelectContent>
+        <SelectContent className="touch-none">
           {instruments.map((instrument) => (
             <SelectItem key={instrument} value={instrument}>
               {instrument}
