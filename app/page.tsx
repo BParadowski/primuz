@@ -35,47 +35,52 @@ export default function Home({
           <Button
             variant="outline"
             type="button"
-            className="standalone:hidden place-self-center"
+            className="place-self-center standalone:hidden"
           >
             Jak zainstalować?
           </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-4">
+            <div className="flex items-center gap-4 text-lg font-bold">
               <Image alt="" src={androidLogo} className="w-8" />
-              Android
-            </DialogTitle>
+              <p>Android</p>
+            </div>
             <DialogDescription asChild>
-              <ol>
-                <li className="flex items-center gap-1">
-                  1. W prawym górnym rogu paska adresu kliknij Menu{" "}
-                  <MoreVerticalIcon />.
+              <ol className="flex flex-col gap-2 px-2 pt-2 text-start">
+                <li>
+                  <p>
+                    W prawym górnym rogu paska adresu kliknij na ikonę Menu
+                    <MoreVerticalIcon className="inline" />.
+                  </p>
                 </li>
                 <li>
-                  2. Znajdź i kliknij{" "}
-                  <span className="font-bold">Dodaj do ekranu głównego</span>.
+                  <p>
+                    {" "}
+                    Wybierz{" "}
+                    <span className="font-bold">Dodaj do ekranu głównego</span>.
+                  </p>
                 </li>
               </ol>
             </DialogDescription>
-            <DialogTitle className="flex items-center gap-4 ">
+            <div className="flex items-center gap-4 pt-3 text-lg font-bold">
               <Image alt="" src={appleLogo} className="w-8" />
-              iOS
-            </DialogTitle>
+              <p> iOS</p>
+            </div>
             <DialogDescription asChild>
-              <ol>
-                <li className="flex items-center gap-1">
-                  1. W prawym górnym rogu paska adresu kliknij Udostępnij{" "}
-                  <Image
-                    alt=""
-                    src={appleShare}
-                    className="w-8 fill-stone-500"
-                  />
-                  .
+              <ol className="flex flex-col gap-2 px-2 pt-2 text-start">
+                <li>
+                  <p>
+                    W prawym górnym rogu paska adresu kliknij Udostępnij{" "}
+                    <Image alt="" src={appleShare} className="inline w-8" />.
+                  </p>
                 </li>
                 <li>
-                  2. Znajdź i kliknij{" "}
-                  <span className="font-bold">Dodaj do ekranu głównego</span>.
+                  <p>
+                    {" "}
+                    Wybierz{" "}
+                    <span className="font-bold">Dodaj do ekranu głównego</span>.
+                  </p>
                 </li>
               </ol>
             </DialogDescription>
