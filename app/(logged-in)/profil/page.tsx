@@ -10,6 +10,8 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { Database } from "@/lib/supabase";
+import UserDataForm from "@/components/project/userForm";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -20,39 +22,46 @@ export default async function Profile() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  if (!user) {
+    redirect("/");
+  }
+
   const { data: userData } = await supabase
     .from("users")
     .select("user_id, first_name, last_name, instrument")
-    .eq("user_id", user?.id ?? "")
+    .eq("user_id", user.id)
     .limit(1)
     .single();
+
+  const instruments = await supabase
+    .rpc("get_instruments")
+    .then(({ data }) => data);
+
+  if (!userData)
+    return (
+      <main>
+        <div className="container">
+          <p> Podczas ładowania strony wystąpił błąd</p>
+        </div>
+      </main>
+    );
 
   const { user_id, first_name, last_name, instrument } = userData || {};
 
   return (
     <main className="grid place-content-center">
-      <h1>Twoje dane</h1>
-      <form className="flex flex-col gap-3" method="post" action="/api/users">
-        <Input
-          defaultValue={user?.id}
-          name="userId"
-          className="hidden"
-          readOnly
+      <div className="container">
+        <h1>Twoje dane</h1>
+        <UserDataForm
+          userId={userData.user_id}
+          firstName={userData.first_name ?? ""}
+          lastName={userData.last_name ?? ""}
+          instrument={userData.instrument}
+          allInstruments={
+            instruments as Database["public"]["Enums"]["instrument"][]
+          }
         />
-        <Input name="firstName" type="text" defaultValue={first_name ?? ""} />
-        <Input name="lastName" type="text" defaultValue={last_name ?? ""} />
-        <Select defaultValue={instrument ?? ""} name="instrument">
-          <SelectTrigger>Instrument</SelectTrigger>
-          <SelectContent>
-            <SelectItem value="skrzypce">skrzypce</SelectItem>
-            <SelectItem value="altówka">altówka</SelectItem>
-            <SelectItem value="wiolonczela">wiolonczela</SelectItem>
-            <SelectItem value="kontrabas">kontrabas</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Button>Zapisz</Button>
-      </form>
+      </div>
     </main>
   );
 }

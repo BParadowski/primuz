@@ -78,10 +78,9 @@ export default function NewPartForm({
 
     // If there is another part named liked that append number to the end (files can't share a name)
     while (parts.find((part) => part.file_name === newPartFileName + ".pdf")) {
-      console.log("SHakavu");
-      newPartFileName += `(${
+      newPartFileName += `nr${
         parts.filter((part) => part.instrument === chosenInstrument).length + 1
-      })`;
+      }`;
     }
     // add extension
 
