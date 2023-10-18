@@ -1,14 +1,5 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-
 import { Database } from "@/lib/supabase";
 import UserDataForm from "@/components/project/userForm";
 import { redirect } from "next/navigation";
@@ -46,12 +37,9 @@ export default async function Profile() {
       </main>
     );
 
-  const { user_id, first_name, last_name, instrument } = userData || {};
-
   return (
     <main className="grid place-content-center">
       <div className="container">
-        <h1>Twoje dane</h1>
         <UserDataForm
           userId={userData.user_id}
           firstName={userData.first_name ?? ""}

@@ -152,13 +152,13 @@ export default async function ProjectPage({
           ) : null}
           <section>
             <h2 className="py-6 text-center font-bold">Próby</h2>
-            <div className="grid gap-y-4">
+            <div className="grid gap-y-2">
               {rehearsalsData && rehearsalsData.length > 0
                 ? rehearsalsData.map((rehearsal) => {
                     return (
                       <div
                         key={rehearsal.id}
-                        className="rounded-sm border border-solid border-border px-4 py-4"
+                        className="rounded-sm border border-solid border-border px-4 py-2"
                       >
                         <h2 className="text-lg font-bold">
                           {formatInTimeZone(

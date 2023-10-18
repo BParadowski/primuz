@@ -56,7 +56,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={cn(jost.className, "tracking-wide text-foreground")}>
+      <body
+        className={cn(
+          jost.className,
+          "grid min-h-screen tracking-wide text-foreground",
+        )}
+      >
         {children}
         <Toaster />
       </body>
