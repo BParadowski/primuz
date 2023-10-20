@@ -298,7 +298,7 @@ export default function Profile() {
                               })}
 
                             <p className="mt-2 italic">{rehearsal.location}</p>
-                            <pre className="mt-2">{rehearsal.description}</pre>
+                            <p className="mt-2">{rehearsal.description}</p>
                           </CardDescription>
                           <div className="flex items-center">
                             <NewRehearsalDialog

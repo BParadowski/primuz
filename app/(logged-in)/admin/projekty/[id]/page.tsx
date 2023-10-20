@@ -45,7 +45,7 @@ export default async function Project({ params }: { params: { id: string } }) {
   return (
     <main className="relative py-10">
       <div className="container">
-        <div className="grid gap-6">
+        <div className="grid gap-8 lg:gap-12">
           <h1 className="pb-8 text-center text-2xl font-bold">{data.name}</h1>
 
           <div>
@@ -111,9 +111,9 @@ export default async function Project({ params }: { params: { id: string } }) {
                         )}
 
                       <p className="mt-2 italic">{rehearsal.location ?? " "}</p>
-                      <pre className="mt-2 opacity-70">
+                      <p className="mt-2 opacity-70">
                         {rehearsal.description ?? " "}
-                      </pre>
+                      </p>
                     </div>
                     <div className="mt-4 flex items-center gap-4">
                       <EditRehearsalDialog
