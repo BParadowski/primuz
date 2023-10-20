@@ -6,7 +6,6 @@ import {
   MapPinIcon,
   CalendarIcon,
   CircleDollarSignIcon,
-  ScrollTextIcon,
   AlertTriangleIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -99,7 +98,7 @@ export default async function ProjectPage({
           <section className="flex flex-col justify-items-center gap-3">
             <h1 className="text-center text-2xl font-bold">{data.name}</h1>
             <div className="flex items-center gap-6">
-              <MapPinIcon height={36} />
+              <MapPinIcon height={36} className="min-w-[1.5rem]" />
               <p>{data.location}</p>
               <Button variant="outline" asChild>
                 <a
@@ -130,13 +129,13 @@ export default async function ProjectPage({
               </p>
             </div>
             {announcements ? (
-              <div className="mt-4 flex flex-col gap-2">
+              <div className="flex flex-col gap-2 py-4">
                 {announcements.map((announcement) => (
                   <div
                     className="flex border border-solid border-accent bg-stone-50 px-3 py-2 shadow-sm"
                     key={announcement.id}
                   >
-                    <AlertTriangleIcon />
+                    <AlertTriangleIcon className="min-w-[1rem]" />
                     <p className="ml-2">{announcement.description}</p>
                     <ClientDate date={new Date(announcement.created_at)} />
                   </div>
@@ -154,53 +153,55 @@ export default async function ProjectPage({
           <section>
             <h2 className="py-6 text-center font-bold">Próby</h2>
             <div className="grid gap-y-2">
-              {rehearsalsData && rehearsalsData.length > 0
-                ? rehearsalsData.map((rehearsal) => {
-                    return (
-                      <div
-                        key={rehearsal.id}
-                        className="rounded-sm border border-solid border-border px-4 py-2"
-                      >
-                        <h2 className="text-lg font-bold">
-                          {formatInTimeZone(
-                            new Date(rehearsal.start_datetime),
-                            "Europe/Warsaw",
-                            "d MMMM (EEEE)",
-                            {
-                              locale: pl,
-                            },
-                          )}
-                        </h2>
-                        <div>
-                          {formatInTimeZone(
-                            new Date(rehearsal.start_datetime),
+              {rehearsalsData && rehearsalsData.length > 0 ? (
+                rehearsalsData.map((rehearsal) => {
+                  return (
+                    <div
+                      key={rehearsal.id}
+                      className="rounded-sm border border-solid border-border px-4 py-2"
+                    >
+                      <h2 className="text-lg font-bold">
+                        {formatInTimeZone(
+                          new Date(rehearsal.start_datetime),
+                          "Europe/Warsaw",
+                          "d MMMM (EEEE)",
+                          {
+                            locale: pl,
+                          },
+                        )}
+                      </h2>
+                      <div>
+                        {formatInTimeZone(
+                          new Date(rehearsal.start_datetime),
+                          "Europe/Warsaw",
+                          "p",
+                          {
+                            locale: pl,
+                          },
+                        ) +
+                          "-" +
+                          formatInTimeZone(
+                            new Date(rehearsal.end_datetime),
                             "Europe/Warsaw",
                             "p",
                             {
                               locale: pl,
                             },
-                          ) +
-                            "-" +
-                            formatInTimeZone(
-                              new Date(rehearsal.end_datetime),
-                              "Europe/Warsaw",
-                              "p",
-                              {
-                                locale: pl,
-                              },
-                            )}
+                          )}
 
-                          <p className="mt-2 italic">
-                            {rehearsal.location ?? " "}
-                          </p>
-                          <p className="mt-2 opacity-70">
-                            {rehearsal.description ?? " "}
-                          </p>
-                        </div>
+                        <p className="mt-2 italic">
+                          {rehearsal.location ?? " "}
+                        </p>
+                        <p className="mt-2 opacity-70">
+                          {rehearsal.description ?? " "}
+                        </p>
                       </div>
-                    );
-                  })
-                : "--brak prób--"}
+                    </div>
+                  );
+                })
+              ) : (
+                <p className="text-center">--brak prób--</p>
+              )}
             </div>
           </section>
           <section>
