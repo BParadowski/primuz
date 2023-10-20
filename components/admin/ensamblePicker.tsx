@@ -297,6 +297,13 @@ export default function EnsamblePicker(props: {
             className="place-self-center"
             onClick={async () => {
               setIsSubmitting(true);
+              const { data: initialMusiciansData } = await supabase
+                .from("projects")
+                .select("musicians")
+                .eq("id", props.projectId)
+                .single();
+              const initialMusicians = initialMusiciansData?.musicians;
+
               await fetch("/api/project", {
                 method: "PATCH",
                 body: JSON.stringify({
@@ -312,15 +319,50 @@ export default function EnsamblePicker(props: {
               });
               router.refresh();
 
-              await fetch("/api/notifications", {
-                method: "POST",
-                body: JSON.stringify({
-                  targets: "everyone",
-                  message: `Skład do projektu ${props.projectName} został opublikowany.`,
-                  internalName: `${props.projectName} chosen musicians message`,
-                  projectId: props.projectId,
-                }),
-              });
+              if (!initialMusicians) {
+                await fetch("/api/notifications", {
+                  method: "POST",
+                  body: JSON.stringify({
+                    targets: "everyone",
+                    message: `Skład do projektu ${props.projectName} został opublikowany.`,
+                    internalName: `${props.projectName} chosen musicians message`,
+                    projectId: props.projectId,
+                  }),
+                });
+              } else {
+                const addedMusicians = projectMusicians.current.filter(
+                  (musician) => !initialMusicians.includes(musician),
+                );
+                console.log(addedMusicians);
+                const removedMusicians = initialMusicians.filter(
+                  (musician) => !projectMusicians.current.includes(musician),
+                );
+                console.log(removedMusicians);
+
+                if (addedMusicians.length > 0) {
+                  await fetch("/api/notifications", {
+                    method: "POST",
+                    body: JSON.stringify({
+                      targets: addedMusicians,
+                      message: `Dodano Cię do składu projektu ${props.projectName}.`,
+                      internalName: `${props.projectName} musician added message`,
+                      projectId: props.projectId,
+                    }),
+                  });
+                }
+
+                if (removedMusicians.length > 0) {
+                  await fetch("/api/notifications", {
+                    method: "POST",
+                    body: JSON.stringify({
+                      targets: removedMusicians,
+                      message: `Usunięto Cię ze składu projektu ${props.projectName}.`,
+                      internalName: `${props.projectName} musician removed message`,
+                      projectId: props.projectId,
+                    }),
+                  });
+                }
+              }
               setIsSubmitting(false);
             }}
           >
