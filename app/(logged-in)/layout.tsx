@@ -11,6 +11,7 @@ import OneSignal from "react-onesignal";
 import { useRouter } from "next/navigation";
 import { RotateCwIcon } from "lucide-react";
 import MobileNav from "@/components/mobileNav";
+import primuzTextLogo from "@/lib/images/primuz-logo-text.svg";
 
 export default function InnerLayout({
   children,
@@ -46,13 +47,21 @@ export default function InnerLayout({
     <div className="grid min-h-screen grid-rows-[1fr_auto] md:grid-rows-[auto_1fr_auto]">
       <header className="fixed left-0 right-0 z-50 bg-primary md:relative">
         <div className="container flex items-center gap-4 py-4 text-primary-foreground">
-          <Link href="/projekty">
+          <Link href="/projekty" className="flex items-center gap-2">
             <Image
               alt="Sygnet orkiestry Primuz"
               src={sygnet}
               className="w-12"
               priority
             />
+            <div>
+              <Image
+                alt="Primuz Chamber Orchestra"
+                priority
+                src={primuzTextLogo}
+                className="-mt-[182%] w-20"
+              ></Image>
+            </div>
           </Link>
 
           <nav className="ml-auto hidden md:flex">
