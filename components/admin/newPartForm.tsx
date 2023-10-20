@@ -3,7 +3,7 @@
 import { Database } from "@/lib/supabase";
 import { replacePolishLetters, toRoman } from "@/lib/utils";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
@@ -49,6 +49,7 @@ export default function NewPartForm({
   const router = useRouter();
   const [chosenInstrument, setChosenInstrument] =
     useState<Database["public"]["Enums"]["instrument"]>("skrzypce");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const partName = `${chosenInstrument}${
     parts.filter((part) => part.instrument === chosenInstrument).length > 0 ||
@@ -150,6 +151,10 @@ export default function NewPartForm({
           onSubmit={form.handleSubmit(async (data) => {
             await saveMusic(data.partName, data.file);
             router.refresh();
+
+            if (fileInputRef && fileInputRef.current) {
+              fileInputRef.current.value = "";
+            }
             form.reset({
               partName: `${chosenInstrument}${
                 parts.filter((part) => part.instrument === chosenInstrument)
@@ -191,6 +196,7 @@ export default function NewPartForm({
                 <FormControl>
                   <Input
                     {...fieldProps}
+                    ref={fileInputRef}
                     type="file"
                     placeholder="Prześlij nuty"
                     accept="application/pdf"

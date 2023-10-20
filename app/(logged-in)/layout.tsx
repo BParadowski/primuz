@@ -77,7 +77,11 @@ export default function InnerLayout({
                 </li>
               )}
               <li>
-                {" "}
+                <Button variant="whiteLink" asChild>
+                  <Link href="/projekty">Projekty</Link>
+                </Button>
+              </li>
+              <li>
                 <Button variant="whiteLink" asChild>
                   <Link href="/profil">Ustawienia</Link>
                 </Button>

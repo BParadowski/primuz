@@ -143,6 +143,7 @@ export default function Profile() {
             <form
               onSubmit={form.handleSubmit(async (data) => {
                 const response = await submitProject(data);
+                router.refresh();
                 router.push(`/admin/projekty/${data.id}`);
               })}
               className="grid"
@@ -172,6 +173,9 @@ export default function Profile() {
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
+                        <FormDescription>
+                          Możliwie dokładne (jak do nawigacji).
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}

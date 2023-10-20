@@ -114,6 +114,9 @@ export default function InfoUpdater(props: UpdaterProps) {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+                  <FormDescription>
+                    Możliwie dokładne (jak do nawigacji).
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
