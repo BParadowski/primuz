@@ -30,7 +30,7 @@ export function PiecePicker(props: PickerProps) {
 
   useEffect(() => {
     async function getPieces() {
-      const { data } = await supabase.from("pieces").select();
+      const { data } = await supabase.from("pieces").select().order("name");
       setList(data);
     }
     getPieces();

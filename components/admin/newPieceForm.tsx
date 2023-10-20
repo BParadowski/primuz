@@ -43,7 +43,6 @@ export default function NewPieceForm() {
               .from("pieces")
               .insert({
                 name: formData.name,
-                parts: {},
                 composer: formData.composer,
               })
               .select("id")

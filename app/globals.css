@@ -85,3 +85,17 @@
   color: #3b82f6;
   text-decoration: underline;
 }
+
+.quill-html h1 {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.quill-html h2 {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.quill-html h3 {
+  font-weight: bold;
+}

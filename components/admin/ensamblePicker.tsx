@@ -369,7 +369,7 @@ export default function EnsamblePicker(props: {
             Zapisz skład
           </Button>
         )}
-        <p className="mt-4 text-muted-foreground">
+        <p className="mt-4 text-center text-muted-foreground">
           Przy pierwszym wyborze składu cała orkiestra otrzymuje powiadomienie o
           publikacji. Przy kolejnych edycjach tylko osoby dodane/usunięte.
         </p>

@@ -58,6 +58,7 @@ export default async function ProjectPage({
     .from("announcements")
     .select()
     .eq("project_id", params.id)
+    .order("created_at", { ascending: false })
     .then(({ data }) => (data && data.length > 0 ? data : null));
 
   //Need new db types to get rid of this error
@@ -128,28 +129,28 @@ export default async function ProjectPage({
                 <span className="ml-2">(brutto)</span>
               </p>
             </div>
+            {announcements ? (
+              <div className="mt-4 flex flex-col gap-2">
+                {announcements.map((announcement) => (
+                  <div
+                    className="flex border border-solid border-accent bg-stone-50 px-3 py-2 shadow-sm"
+                    key={announcement.id}
+                  >
+                    <AlertTriangleIcon />
+                    <p className="ml-2">{announcement.description}</p>
+                    <ClientDate date={new Date(announcement.created_at)} />
+                  </div>
+                ))}
+              </div>
+            ) : null}
             <div className="grid grid-cols-[auto_1fr] gap-6">
-              <ScrollTextIcon height={36} />
               <div
                 className="quill-html"
                 dangerouslySetInnerHTML={{ __html: data.description ?? "" }}
               ></div>
             </div>
           </section>
-          {announcements ? (
-            <section className="flex flex-col gap-2">
-              {announcements.map((announcement) => (
-                <div
-                  className="flex border border-solid border-accent bg-stone-50 px-3 py-2 shadow-sm"
-                  key={announcement.id}
-                >
-                  <AlertTriangleIcon />
-                  <p className="ml-2">{announcement.description}</p>
-                  <ClientDate date={new Date(announcement.created_at)} />
-                </div>
-              ))}
-            </section>
-          ) : null}
+
           <section>
             <h2 className="py-6 text-center font-bold">Próby</h2>
             <div className="grid gap-y-2">

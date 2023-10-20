@@ -13,8 +13,9 @@ import { Button } from "../ui/button";
 import { Loader2Icon } from "lucide-react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useToast } from "../ui/use-toast";
+import { Database } from "@/lib/supabase";
 
-type TargetOptions = "everyone" | "musicians" | "nobody";
+type TargetOptions = "everyone" | "musicians" | "nobody" | "undeclared";
 
 export default function Announcer(props: {
   projectId: string;
@@ -25,11 +26,11 @@ export default function Announcer(props: {
     props.projectMusicians ? "musicians" : "everyone",
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const supabase = createClientComponentClient();
+  const supabase = createClientComponentClient<Database>();
   const { toast } = useToast();
 
   return (
-    <div className="grid">
+    <div className="grid gap-2">
       <Textarea value={text} onChange={(e) => setText(e.target.value)} />
 
       <h2 className="my-2">Wyślij powiadomienie do:</h2>
@@ -47,6 +48,10 @@ export default function Announcer(props: {
           <SelectItem value={"musicians" as TargetOptions}>
             Składu projektu
           </SelectItem>
+          <SelectItem value={"undeclared" as TargetOptions}>
+            Niezaznaczonych (brak info)
+          </SelectItem>
+
           <SelectItem value={"nobody" as TargetOptions}>Nikogo</SelectItem>
         </SelectContent>
       </Select>
@@ -66,11 +71,25 @@ export default function Announcer(props: {
               .from("announcements")
               .insert({ description: text, project_id: props.projectId });
 
-            let notificationTargets;
+            let notificationTargets: string[] | "everyone" = [];
+
             if (targets === "everyone") notificationTargets = "everyone";
             else if (targets === "musicians")
-              notificationTargets = props.projectMusicians;
+              notificationTargets = props.projectMusicians ?? [];
             else if (targets === "nobody") notificationTargets = [];
+            else if (targets === "undeclared") {
+              notificationTargets = await supabase
+                .from("availability")
+                .select("user_id")
+                .eq("project_id", props.projectId)
+                .eq("status", "undeclared")
+                .then(
+                  ({ data }) =>
+                    data?.map((userIdObject) => userIdObject.user_id) ?? [],
+                );
+            }
+
+            console.log(notificationTargets);
 
             await fetch("/api/notifications", {
               method: "POST",
@@ -84,6 +103,7 @@ export default function Announcer(props: {
             toast({
               description: "Ogłoszenie zostało dodane.",
             });
+            setText("");
             setIsSubmitting(false);
           }}
         >
