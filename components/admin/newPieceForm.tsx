@@ -42,8 +42,8 @@ export default function NewPieceForm() {
             const { data } = await supabase
               .from("pieces")
               .insert({
-                name: formData.name,
-                composer: formData.composer,
+                name: formData.name.trim(),
+                composer: formData.composer.trim(),
               })
               .select("id")
               .single();

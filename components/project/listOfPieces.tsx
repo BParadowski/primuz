@@ -25,6 +25,7 @@ export async function ListOfPieces(props: {
     [K in string]: {
       part: string;
       file: string;
+      pieceName: string;
     }[];
   };
 
@@ -40,11 +41,13 @@ export async function ListOfPieces(props: {
     }
 
     if (!acc[c.piece_name]) {
-      acc[c.piece_name] = [{ part: c.part_name, file: c.file_name }];
+      acc[c.piece_name] = [
+        { part: c.part_name, file: c.file_name, pieceName: c.piece_name },
+      ];
     } else if (acc[c.piece_name]) {
       acc[c.piece_name] = [
         ...acc[c.piece_name],
-        { part: c.part_name, file: c.file_name },
+        { part: c.part_name, file: c.file_name, pieceName: c.piece_name },
       ];
     }
 
@@ -70,6 +73,7 @@ export async function ListOfPieces(props: {
                   <div className="flex flex-wrap justify-end gap-x-2 gap-y-2">
                     {piecesObject[title].map((partData) => (
                       <DownloadButton
+                        pieceName={partData.pieceName}
                         key={partData.file}
                         filePath={partData.file}
                         linkName={partData.part}

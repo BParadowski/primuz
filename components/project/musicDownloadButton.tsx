@@ -1,12 +1,12 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/lib/supabase";
 import { cookies } from "next/headers";
-import { replacePolishLetters } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 interface DownloadProps {
   filePath: string;
   linkName: string;
+  pieceName: string;
 }
 
 export function DownloadButton(props: DownloadProps) {
@@ -27,7 +27,7 @@ export function DownloadButton(props: DownloadProps) {
   const { data } = supabase.storage
     .from("sheet_music")
     .getPublicUrl(props.filePath, {
-      download: true,
+      download: `${props.pieceName} - ${props.linkName}.pdf`,
     });
 
   return (
