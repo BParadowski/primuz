@@ -10,6 +10,9 @@ import { NewProjectFormData } from "@/app/(logged-in)/admin/nowy-projekt/page";
 
 export async function POST(request: Request) {
   const supabase = createRouteHandlerClient<Database>({ cookies });
+  const isAdmin = (await supabase.rpc("is_admin")).data;
+  if (!isAdmin) return NextResponse.json({ success: false, status: 401 });
+
   const formData: NewProjectFormData = await request.json();
 
   // formData.date is not of type Date but string since JSON does not have a date type

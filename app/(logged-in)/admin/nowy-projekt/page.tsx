@@ -33,6 +33,7 @@ import { useRouter } from "next/navigation";
 import { PiecePicker } from "@/components/admin/piecePicker";
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
+import { useToast } from "@/components/ui/use-toast";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -79,7 +80,7 @@ export default function Profile() {
   });
 
   let rehearsals = form.watch("rehearsals");
-
+  const { toast } = useToast();
   const router = useRouter();
 
   function newRehearsal(data: RehearsalData) {
@@ -130,6 +131,13 @@ export default function Profile() {
           projectId: formData.id,
         }),
       });
+      router.refresh();
+      router.push(`/admin/projekty/${formData.id}`);
+    } else {
+      toast({
+        description: "W trakcie tworzenia projektu wystąpił błąd...",
+        variant: "destructive",
+      });
     }
     return;
   }
@@ -142,9 +150,7 @@ export default function Profile() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(async (data) => {
-                const response = await submitProject(data);
-                router.refresh();
-                router.push(`/admin/projekty/${data.id}`);
+                await submitProject(data);
               })}
               className="grid"
             >
