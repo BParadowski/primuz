@@ -26,9 +26,7 @@ export function DownloadButton(props: DownloadProps) {
 
   const { data } = supabase.storage
     .from("sheet_music")
-    .getPublicUrl(props.filePath, {
-      download: `${props.pieceName} - ${props.linkName}.pdf`,
-    });
+    .getPublicUrl(props.filePath);
 
   return (
     <Button asChild>
