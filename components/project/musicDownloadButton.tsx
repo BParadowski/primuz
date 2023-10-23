@@ -1,6 +1,7 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+"use client";
+
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/lib/supabase";
-import { cookies } from "next/headers";
 import { Button } from "../ui/button";
 
 interface DownloadProps {
@@ -10,7 +11,10 @@ interface DownloadProps {
 }
 
 export function DownloadButton(props: DownloadProps) {
-  const supabase = createServerComponentClient<Database>({ cookies });
+  const supabase = createClientComponentClient<Database>();
+
+  const isIos =
+    /Macintosh/.test(navigator.userAgent) && "ontouchend" in document;
 
   // async function downloadMusic() {
   //   const { data } = supabase.storage
@@ -26,11 +30,17 @@ export function DownloadButton(props: DownloadProps) {
 
   const { data } = supabase.storage
     .from("sheet_music")
-    .getPublicUrl(props.filePath);
+    .getPublicUrl(props.filePath, {
+      download: `${props.pieceName} - ${props.linkName}.pdf`,
+    });
 
   return (
     <Button asChild>
-      <a href={data.publicUrl} className="capitalize" target="_blank">
+      <a
+        href={data.publicUrl}
+        className="capitalize"
+        target={isIos ? "_blank" : undefined}
+      >
         {props.linkName}
       </a>
     </Button>
