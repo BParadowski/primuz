@@ -9,7 +9,7 @@ import {
 import { Database } from "@/lib/supabase";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { DownloadButton } from "./musicDownloadButton";
+import DownloadButton from "./musicDownloadButton";
 
 export async function ListOfPieces(props: {
   projectId: string;

@@ -3,6 +3,7 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/lib/supabase";
 import { Button } from "../ui/button";
+import dynamic from "next/dynamic";
 
 interface DownloadProps {
   filePath: string;
@@ -10,7 +11,7 @@ interface DownloadProps {
   pieceName: string;
 }
 
-export function DownloadButton(props: DownloadProps) {
+function DownloadButton(props: DownloadProps) {
   const supabase = createClientComponentClient<Database>();
 
   const isIos =
@@ -46,3 +47,5 @@ export function DownloadButton(props: DownloadProps) {
     </Button>
   );
 }
+
+export default dynamic(() => Promise.resolve(DownloadButton), { ssr: false });
