@@ -93,12 +93,12 @@ export function PiecePicker(props: PickerProps) {
       )}
       <ol className="mt-6 flex flex-col gap-2">
         {chosenPieces &&
-          chosenPieces.map((piece) => (
+          chosenPieces.map((piece, index) => (
             <li
               key={piece.name}
               className="flex items-center rounded-sm border border-solid border-muted p-2"
             >
-              {piece.name}
+              {index + 1}. {piece.name}
               <button
                 onClick={() => {
                   props.onPieceRemove(piece.id);
