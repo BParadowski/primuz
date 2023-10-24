@@ -71,7 +71,9 @@ export default function AvailabilityPicker({
         </li>
         <AvailabilityStatusDescription status={status} />
       </ul>
-      <Label htmlFor="availability-message">Komentarz do dostępności:</Label>
+      <Label htmlFor="availability-message">
+        Komentarz do dostępności (widoczny dla zarządu):
+      </Label>
       <Input
         className="my-2 max-w-full"
         id="availability-message"

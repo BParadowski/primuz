@@ -57,7 +57,7 @@ export default function Home({
                   <p>
                     {" "}
                     Wybierz{" "}
-                    <span className="font-bold">Dodaj do ekranu głównego</span>.
+                    <span className="font-bold">Zainstaluj Aplikację</span>.
                   </p>
                 </li>
               </ol>

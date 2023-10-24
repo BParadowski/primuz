@@ -51,6 +51,7 @@ export default async function ProjectPage({
     .from("sorted_musicians_availability")
     .select()
     .eq("project_id", params.id)
+    .order("first_name")
     .then(({ data }) => data);
 
   const announcementsQuery = supabase
@@ -227,14 +228,16 @@ export default async function ProjectPage({
                 else
                   return (
                     <div key={instrument}>
-                      <h3 className="font-bold capitalize">{instrument}</h3>
-                      <div className="flex flex-col gap-2">
+                      <h3 className="pb-2 font-bold capitalize">
+                        {instrument}
+                      </h3>
+                      <div className="flex flex-col gap-2 pl-1">
                         {availabilityData
                           .filter((data) => data.instrument === instrument)
                           .map((avData) => {
                             return (
                               <div key={avData.user_id}>
-                                <div className="flex gap-4">
+                                <div className="flex gap-4 ">
                                   <p>{`${avData.first_name} ${avData.last_name}`}</p>
                                   <div className="ml-auto">
                                     <AvailabilityIcon
@@ -243,9 +246,6 @@ export default async function ProjectPage({
                                     />
                                   </div>
                                 </div>
-                                <p className="text-sm text-foreground">
-                                  {avData.message}
-                                </p>
                               </div>
                             );
                           })}
