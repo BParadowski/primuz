@@ -261,6 +261,14 @@ export default async function ProjectPage({
                 sortByInstrument(
                   Object.keys(data.musicians_structure as Object),
                 ).map((section) => {
+                  if (
+                    (
+                      data.musicians_structure as {
+                        [K in string]: string[];
+                      }
+                    )[section].length === 0
+                  )
+                    return null;
                   return (
                     <div className="my-1 p-1" key={section}>
                       <h3 className="font-bold capitalize">{section}</h3>
