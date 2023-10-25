@@ -75,6 +75,9 @@ export default function UserDataForm(props: {
             },
           )}
         >
+          <p className="text-sm text-muted-foreground">
+            (W przyszłości pojawi się tu więcej, bardziej użytecznych opcji)
+          </p>
           <FormField
             control={form.control}
             name="first_name"
