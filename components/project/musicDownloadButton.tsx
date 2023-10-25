@@ -14,7 +14,7 @@ interface DownloadProps {
 function DownloadButton(props: DownloadProps) {
   const supabase = createClientComponentClient<Database>();
 
-  const isIos =
+  const isIpad =
     /Macintosh/.test(navigator.userAgent) && "ontouchend" in document;
 
   // async function downloadMusic() {
@@ -32,16 +32,14 @@ function DownloadButton(props: DownloadProps) {
   const { data } = supabase.storage
     .from("sheet_music")
     .getPublicUrl(props.filePath, {
-      download: `${props.pieceName} - ${props.linkName}.pdf`,
+      download: isIpad
+        ? `${props.pieceName} - ${props.linkName}.pdf`
+        : undefined,
     });
 
   return (
     <Button asChild>
-      <a
-        href={data.publicUrl}
-        className="capitalize"
-        target={isIos ? "_blank" : undefined}
-      >
+      <a href={data.publicUrl} className="capitalize" target="_blank">
         {props.linkName}
       </a>
     </Button>
