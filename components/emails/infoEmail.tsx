@@ -27,6 +27,7 @@ interface VercelInviteUserEmailProps {
   inviteLink?: string;
   inviteFromIp?: string;
   inviteFromLocation?: string;
+  text?: string;
 }
 
 const baseUrl = process.env.VERCEL_URL
@@ -43,37 +44,42 @@ export const InfoEmail = ({
   inviteLink = "https://vercel.com/teams/invite/foo",
   inviteFromIp = "204.13.186.218",
   inviteFromLocation = "São Paulo, Brazil",
+  text,
 }: VercelInviteUserEmailProps) => {
   const previewText = `Join ${invitedByUsername} on Vercel`;
 
   return (
-    <Html>
-      <Head />
-      <Preview>{previewText}</Preview>
-      <Tailwind>
+    <Tailwind>
+      <Html>
+        <Head />
+        <Preview>{previewText}</Preview>
+
         <Body className="mx-auto my-auto bg-stone-50 font-sans">
-          <Container className=" mx-auto my-[40px] w-[465px] rounded bg-white p-4 shadow-md">
+          <Container className="mx-auto my-[40px] w-[465px] rounded bg-white p-4">
             <Section className="mt-3">
-              <Img
-                src={`${baseUrl}/lib/images/primuz-logo-white-sygnet.png`}
-                width={100}
-                alt="Vercel"
-                className="mx-auto my-0"
-              />
+              <Row>
+                <Img
+                  src={`${baseUrl}/email/primuz-sygnet.png`}
+                  width={100}
+                  alt="Light thing"
+                  className="mx-auto my-0"
+                />
+              </Row>
+              <Row>
+                <Img
+                  src={`${baseUrl}/email/primuz-text.png`}
+                  width={100}
+                  alt="Dark thing"
+                  className="mx-auto my-0"
+                />
+              </Row>
             </Section>
+
             <Text className="text-[14px] leading-4 text-black">
               Dzień dobry,
             </Text>
             <Text className="text-[14px] leading-[24px] text-black">
-              <strong>bukinoshita</strong> (
-              <Link
-                href={`mailto:${invitedByEmail}`}
-                className="text-blue-600 no-underline"
-              >
-                {invitedByEmail}
-              </Link>
-              ) has invited you to the <strong>{teamName}</strong> team on{" "}
-              <strong>Vercel</strong>.
+              {text ?? ""}
             </Text>
             <Section>
               <Row>
@@ -119,22 +125,10 @@ export const InfoEmail = ({
                 {inviteLink}
               </Link>
             </Text>
-            <Hr className="mx-0 my-[26px] w-full border border-solid border-[#eaeaea]" />
-            <Text className="text-[12px] leading-[24px] text-[#666666]">
-              This invitation was intended for{" "}
-              <span className="text-black">{username} </span>.This invite was
-              sent from <span className="text-black">{inviteFromIp}</span>{" "}
-              located in{" "}
-              <span className="text-black">{inviteFromLocation}</span>
-              {`. If you
-              were not expecting this invitation, you can ignore this email. If
-              you are concerned about your account's safety, please reply to
-              this email to get in touch with us.`}
-            </Text>
           </Container>
         </Body>
-      </Tailwind>
-    </Html>
+      </Html>
+    </Tailwind>
   );
 };
 

@@ -2,11 +2,14 @@ import { NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { newCalendarEvent, updateCalendarEvent } from "@/lib/calendar";
 import { Database } from "@/lib/supabase";
 // npm i encoding
 
 import { NewProjectFormData } from "@/app/(logged-in)/admin/nowy-projekt/page";
+
+// create new project
 
 export async function POST(request: Request) {
   const supabase = createRouteHandlerClient<Database>({ cookies });
@@ -26,10 +29,10 @@ export async function POST(request: Request) {
     description: formData.calendarDescription,
     location: formData.location,
     start: {
-      date: format(formData.date, "yyyy-MM-dd"),
+      date: formatInTimeZone(formData.date, "Europe/Warsaw", "yyyy-MM-dd"),
     },
     end: {
-      date: format(formData.date, "yyyy-MM-dd"),
+      date: formatInTimeZone(formData.date, "Europe/Warsaw", "yyyy-MM-dd"),
     },
     colorId: "9",
   };
@@ -96,6 +99,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false });
   }
 }
+
+// Update the project
 
 export async function PATCH(request: Request) {
   const supabase = createRouteHandlerClient<Database>({ cookies });
