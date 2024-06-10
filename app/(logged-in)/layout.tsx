@@ -141,7 +141,7 @@ export default function InnerLayout({
       {children}
       <footer className="bg-primary">
         <div className="container py-4 text-primary-foreground">
-          Bartosz Paradowski 2023©.
+          Bartosz Paradowski 2024©.
         </div>
       </footer>
     </div>
