@@ -5,6 +5,8 @@ import { format } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { newCalendarEvent, updateCalendarEvent } from "@/lib/calendar";
 import { Database } from "@/lib/supabase";
+import { calendar_v3 } from "googleapis";
+
 // npm i encoding
 
 import { NewProjectFormData } from "@/app/(logged-in)/admin/nowy-projekt/page";
@@ -30,12 +32,14 @@ export async function POST(request: Request) {
     location: formData.location,
     start: {
       date: formatInTimeZone(formData.date, "Europe/Warsaw", "yyyy-MM-dd"),
+      timeZone: "Europe/Warsaw",
     },
     end: {
       date: formatInTimeZone(formData.date, "Europe/Warsaw", "yyyy-MM-dd"),
+      timeZone: "Europe/Warsaw",
     },
     colorId: "9",
-  };
+  } satisfies calendar_v3.Schema$Event;
 
   // First await project insertion so that db doesn't throw foreign key error on rehearsal insertions.
   const dbInsertion = await supabase.from("projects").insert({
