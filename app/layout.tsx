@@ -1,6 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Jost } from "next/font/google";
 import { cn } from "@/lib/utils";
 
@@ -11,6 +11,10 @@ const APP_DEFAULT_TITLE = "Primuz";
 const APP_TITLE_TEMPLATE = "%s - Primuz";
 const APP_DESCRIPTION = "Aplikacja wewnętrzna orkiestry kameralnej Primuz";
 
+export const viewport: Viewport = {
+  themeColor: "#FFFFFF",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://primuz.vercel.app"),
   applicationName: APP_NAME,
@@ -20,7 +24,6 @@ export const metadata: Metadata = {
   },
   description: APP_DESCRIPTION,
   manifest: "/manifest.json",
-  themeColor: "#FFFFFF",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
