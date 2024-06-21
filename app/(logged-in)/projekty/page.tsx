@@ -17,7 +17,7 @@ export default async function Projects() {
             Projekty
           </h1>
           {data?.map((projectData) => (
-            <ProjectCard projectData={projectData} />
+            <ProjectCard projectData={projectData} key={projectData.id} />
           ))}
         </div>
       </div>
