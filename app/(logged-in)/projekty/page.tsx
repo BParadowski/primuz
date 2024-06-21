@@ -1,11 +1,7 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { Database } from "@/lib/supabase";
-import { pl } from "date-fns/locale";
-import Link from "next/link";
-import AvailabilityIcon from "@/components/project/availabilityIcon";
-import AvailabilityStatusDescription from "@/components/project/availabilityStatusDescription";
-import formatInTimeZone from "date-fns-tz/formatInTimeZone";
+import ProjectCard from "@/components/projects-page/ProjectCard";
 
 export const dynamic = "force-dynamic";
 
@@ -20,39 +16,9 @@ export default async function Projects() {
           <h1 className="py-2 text-center text-2xl font-bold sm:py-4">
             Projekty
           </h1>
-          {data?.map((projectData) => {
-            return (
-              <Link href={`/projekty/${projectData.id}`} key={projectData.id}>
-                <div className="rounded-md border border-solid border-border px-6 py-4 hover:bg-stone-50">
-                  <h2 className="text-md font-bold sm:text-xl">
-                    {projectData.name}
-                  </h2>
-                  <p>
-                    {formatInTimeZone(
-                      new Date(projectData.date),
-                      "Europe/Warsaw",
-                      "PPP (EEEE)",
-                      {
-                        locale: pl,
-                      },
-                    )}
-                  </p>
-                  <p>{projectData.location}</p>
-                  <div className="mt-4 flex flex-wrap items-center gap-4">
-                    <AvailabilityIcon status={projectData.status} selected />
-                    <AvailabilityStatusDescription
-                      status={projectData.status}
-                    />
-                    {projectData.message ? (
-                      <p className="italic text-muted-foreground">
-                        ({projectData.message})
-                      </p>
-                    ) : null}
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
+          {data?.map((projectData) => (
+            <ProjectCard projectData={projectData} />
+          ))}
         </div>
       </div>
     </main>
