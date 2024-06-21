@@ -38,10 +38,8 @@ export default async function ProjectPage({
     .from("rehearsals")
     .select()
     .eq("project_id", params.id)
-    .then(
-      ({ data }) =>
-        data?.sort((a, b) => (a.start_datetime > b.start_datetime ? 1 : -1)),
-    );
+    .order("start_datetime")
+    .then(({ data }) => data);
 
   const userQuery = supabase.auth
     .getSession()
