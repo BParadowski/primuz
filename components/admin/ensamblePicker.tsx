@@ -62,10 +62,6 @@ export default function EnsamblePicker(props: {
 
   useEffect(() => {
     async function getAvailability() {
-      // const { data } = await supabase
-      //   .from("sorted_musicians_availability")
-      //   .select()
-      //   .eq("project_id", props.projectId);
       const { data } = await supabase
         .from("availability")
         .select(

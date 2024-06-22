@@ -16,10 +16,35 @@ export async function ListOfPieces(props: {
   instrument: string;
 }) {
   const supabase = createServerComponentClient<Database>({ cookies });
-  const { data: pieces } = await supabase
-    .from("project_repertoire")
-    .select()
+  let { data: pieceIds } = await supabase
+    .from("projects_pieces")
+    .select("piece_id")
     .eq("project_id", props.projectId);
+
+  if (!pieceIds) {
+    pieceIds = [];
+  }
+
+  const { data } = await supabase
+    .from("parts")
+    .select(
+      "part_name:name, file_name, instrument,piece_id, pieces!inner(name) ",
+    )
+    .in(
+      "piece_id",
+      pieceIds.map((idObject) => idObject.piece_id),
+    );
+
+  const pieces = data?.map((pieceData) => {
+    const {
+      part_name,
+      file_name,
+      instrument,
+      piece_id,
+      pieces: { name },
+    } = pieceData;
+    return { part_name, file_name, instrument, piece_id, piece_name: name };
+  });
 
   type PieceObject = {
     [K in string]: {

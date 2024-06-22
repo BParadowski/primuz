@@ -29,7 +29,6 @@ export default async function Projects() {
             Projekty
           </h1>
           {data?.map((projectData) => {
-            console.log(projectData);
             const { status, message, projects: project } = projectData;
 
             return (
