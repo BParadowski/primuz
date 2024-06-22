@@ -46,10 +46,12 @@ export default async function ProjectPage({
     .then(({ data: { session } }) => session?.user);
 
   const availabilityQuery = supabase
-    .from("sorted_musicians_availability")
-    .select()
+    .from("availability")
+    .select(
+      "status, message, project_id, user_id, users!inner(instrument, first_name, last_name)",
+    )
     .eq("project_id", params.id)
-    .order("first_name")
+    .order("users(first_name)")
     .then(({ data }) => data);
 
   const announcementsQuery = supabase
@@ -67,7 +69,7 @@ export default async function ProjectPage({
 
   const [
     user,
-    availabilityData,
+    availabilityDataRaw,
     instruments,
     rehearsalsData,
     data,
@@ -80,6 +82,27 @@ export default async function ProjectPage({
     dataQuery,
     announcementsQuery,
   ]);
+
+  const availabilityData = availabilityDataRaw?.map(
+    (availabilityAndUserData) => {
+      const {
+        message,
+        status,
+        project_id,
+        user_id,
+        users: { instrument, first_name, last_name },
+      } = availabilityAndUserData;
+      return {
+        message,
+        status,
+        project_id,
+        user_id,
+        instrument,
+        first_name,
+        last_name,
+      };
+    },
+  );
 
   // mainly for type narrowing, should never happen
   if (!data || !availabilityData || !user)
