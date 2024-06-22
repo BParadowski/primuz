@@ -62,7 +62,7 @@ const formSchema = z.object({
 export type NewProjectFormData = z.infer<typeof formSchema>;
 export type RehearsalData = NewProjectFormData["rehearsals"][0];
 
-export default function Profile() {
+export default function ProjectPage() {
   const form = useForm<NewProjectFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
