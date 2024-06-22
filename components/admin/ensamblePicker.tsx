@@ -62,11 +62,38 @@ export default function EnsamblePicker(props: {
 
   useEffect(() => {
     async function getAvailability() {
+      // const { data } = await supabase
+      //   .from("sorted_musicians_availability")
+      //   .select()
+      //   .eq("project_id", props.projectId);
       const { data } = await supabase
-        .from("sorted_musicians_availability")
-        .select()
-        .eq("project_id", props.projectId);
-      setAvailabilityData(data);
+        .from("availability")
+        .select(
+          "status, message, project_id, user_id, users!inner(instrument, first_name, last_name)",
+        )
+        .eq("project_id", props.projectId)
+        .order("users(first_name)");
+
+      const flattenedData = data?.map((availabilityAndUserData) => {
+        const {
+          message,
+          status,
+          project_id,
+          user_id,
+          users: { instrument, first_name, last_name },
+        } = availabilityAndUserData;
+        return {
+          message,
+          status,
+          project_id,
+          user_id,
+          instrument,
+          first_name,
+          last_name,
+        };
+      });
+
+      setAvailabilityData(flattenedData);
     }
     async function getInstruments() {
       //@ts-expect-error
