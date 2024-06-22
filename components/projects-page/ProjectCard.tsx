@@ -3,14 +3,14 @@ import Link from "next/link";
 import AvailabilityIcon from "../project/availabilityIcon";
 import AvailabilityStatusDescription from "../project/availabilityStatusDescription";
 import pl from "date-fns/locale/pl";
-import { Database } from "@/lib/supabase";
+import { Tables } from "@/lib/supabase";
 
 type ProjectNecessaryData = Pick<
-  Database["public"]["Tables"]["projects"]["Row"],
+  Tables<"projects">,
   "id" | "location" | "date" | "name"
 >;
 type AvailabilityNecessaryData = Pick<
-  Database["public"]["Tables"]["availability"]["Row"],
+  Tables<"availability">,
   "status" | "message"
 >;
 
