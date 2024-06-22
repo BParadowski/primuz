@@ -8,17 +8,17 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
 export default function ServiceEmail() {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 pt-4">
       <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Card>
-              <CardContent>
-                <span>primuz-calendar@primuz.iam.gserviceaccount.com</span>{" "}
+        <Card>
+          <CardContent className="flex items-center gap-2 p-6 py-4">
+            <span>primuz-calendar@primuz.iam.gserviceaccount.com</span>{" "}
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -34,14 +34,14 @@ export default function ServiceEmail() {
                   }}
                 >
                   <CopyIcon />
+
                   <span className="sr-only">Copy to clipboard</span>
                 </Button>
-              </CardContent>
-            </Card>
-          </TooltipTrigger>
-          <TooltipContent>Skopiuj do schowka</TooltipContent>
-        </Tooltip>
-        <div />
+              </TooltipTrigger>
+              <TooltipContent>Skopiuj do schowka</TooltipContent>
+            </Tooltip>
+          </CardContent>
+        </Card>
       </TooltipProvider>
     </div>
   );
