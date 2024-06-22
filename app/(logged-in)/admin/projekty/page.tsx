@@ -9,7 +9,10 @@ export const dynamic = "force-dynamic";
 
 export default async function Projects() {
   const supabase = createServerComponentClient<Database>({ cookies });
-  const { data } = await supabase.from("projects").select("id, name, date");
+  const { data } = await supabase
+    .from("projects")
+    .select("id, name, date")
+    .order("date");
   const currentTime = new Date().getTime();
 
   return (
