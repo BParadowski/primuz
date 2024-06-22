@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       announcements: {
@@ -32,12 +32,14 @@ export interface Database {
           {
             foreignKeyName: "announcements_project_id_fkey";
             columns: ["project_id"];
+            isOneToOne: false;
             referencedRelation: "projects";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "announcements_project_id_fkey";
             columns: ["project_id"];
+            isOneToOne: false;
             referencedRelation: "projects_summary";
             referencedColumns: ["id"];
           },
@@ -66,28 +68,47 @@ export interface Database {
           {
             foreignKeyName: "availability_project_id_fkey";
             columns: ["project_id"];
+            isOneToOne: false;
             referencedRelation: "projects";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "availability_project_id_fkey";
             columns: ["project_id"];
+            isOneToOne: false;
             referencedRelation: "projects_summary";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "availability_user_id_fkey";
             columns: ["user_id"];
-            referencedRelation: "users";
+            isOneToOne: false;
+            referencedRelation: "sorted_musicians_availability";
             referencedColumns: ["user_id"];
           },
           {
             foreignKeyName: "availability_user_id_fkey";
             columns: ["user_id"];
-            referencedRelation: "sorted_musicians_availability";
+            isOneToOne: false;
+            referencedRelation: "users";
             referencedColumns: ["user_id"];
           },
         ];
+      };
+      config: {
+        Row: {
+          id: string;
+          value: string;
+        };
+        Insert: {
+          id: string;
+          value: string;
+        };
+        Update: {
+          id?: string;
+          value?: string;
+        };
+        Relationships: [];
       };
       parts: {
         Row: {
@@ -115,6 +136,7 @@ export interface Database {
           {
             foreignKeyName: "parts_piece_id_fkey";
             columns: ["piece_id"];
+            isOneToOne: false;
             referencedRelation: "pieces";
             referencedColumns: ["id"];
           },
@@ -144,12 +166,12 @@ export interface Database {
           date: string;
           description: string | null;
           google_calendar_description: string | null;
-          google_calendar_id: string ;
+          google_calendar_id: string;
           id: string;
           location: string | null;
           musicians: string[] | null;
           musicians_structure: Json | null;
-          name: string ;
+          name: string;
           pay: string | null;
         };
         Insert: {
@@ -157,12 +179,12 @@ export interface Database {
           date: string;
           description?: string | null;
           google_calendar_description?: string | null;
-          google_calendar_id?: string | null;
+          google_calendar_id: string;
           id?: string;
           location?: string | null;
           musicians?: string[] | null;
           musicians_structure?: Json | null;
-          name?: string | null;
+          name?: string;
           pay?: string | null;
         };
         Update: {
@@ -170,12 +192,12 @@ export interface Database {
           date?: string;
           description?: string | null;
           google_calendar_description?: string | null;
-          google_calendar_id?: string | null;
+          google_calendar_id?: string;
           id?: string;
           location?: string | null;
           musicians?: string[] | null;
           musicians_structure?: Json | null;
-          name?: string | null;
+          name?: string;
           pay?: string | null;
         };
         Relationships: [];
@@ -197,18 +219,21 @@ export interface Database {
           {
             foreignKeyName: "projects_pieces_piece_id_fkey";
             columns: ["piece_id"];
+            isOneToOne: false;
             referencedRelation: "pieces";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "projects_pieces_project_id_fkey";
             columns: ["project_id"];
+            isOneToOne: false;
             referencedRelation: "projects";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "projects_pieces_project_id_fkey";
             columns: ["project_id"];
+            isOneToOne: false;
             referencedRelation: "projects_summary";
             referencedColumns: ["id"];
           },
@@ -228,33 +253,35 @@ export interface Database {
         Insert: {
           created_at?: string;
           description?: string | null;
-          end_datetime?: string | null;
-          google_calendar_id?: string | null;
+          end_datetime: string;
+          google_calendar_id: string;
           id?: string;
           location?: string | null;
           project_id: string;
-          start_datetime?: string | null;
+          start_datetime: string;
         };
         Update: {
           created_at?: string;
           description?: string | null;
-          end_datetime?: string | null;
-          google_calendar_id?: string | null;
+          end_datetime?: string;
+          google_calendar_id?: string;
           id?: string;
           location?: string | null;
           project_id?: string;
-          start_datetime?: string | null;
+          start_datetime?: string;
         };
         Relationships: [
           {
             foreignKeyName: "rehearsals_project_id_fkey";
             columns: ["project_id"];
+            isOneToOne: false;
             referencedRelation: "projects";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "rehearsals_project_id_fkey";
             columns: ["project_id"];
+            isOneToOne: false;
             referencedRelation: "projects_summary";
             referencedColumns: ["id"];
           },
@@ -289,6 +316,7 @@ export interface Database {
           {
             foreignKeyName: "users_user_id_fkey";
             columns: ["user_id"];
+            isOneToOne: true;
             referencedRelation: "users";
             referencedColumns: ["id"];
           },
@@ -298,22 +326,24 @@ export interface Database {
     Views: {
       project_repertoire: {
         Row: {
-          file_name: string;
-          instrument: Database["public"]["Enums"]["instrument"];
-          part_name: string;
-          piece_name: string;
-          project_id: string;
+          file_name: string | null;
+          instrument: Database["public"]["Enums"]["instrument"] | null;
+          part_name: string | null;
+          piece_name: string | null;
+          project_id: string | null;
         };
         Relationships: [
           {
             foreignKeyName: "projects_pieces_project_id_fkey";
             columns: ["project_id"];
+            isOneToOne: false;
             referencedRelation: "projects";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "projects_pieces_project_id_fkey";
             columns: ["project_id"];
+            isOneToOne: false;
             referencedRelation: "projects_summary";
             referencedColumns: ["id"];
           },
@@ -321,41 +351,44 @@ export interface Database {
       };
       projects_summary: {
         Row: {
-          date: string;
+          date: string | null;
           id: string | null;
           location: string | null;
           message: string | null;
-          name: string;
-          status: Database["public"]["Enums"]["availability_status"];
+          name: string | null;
+          status: Database["public"]["Enums"]["availability_status"] | null;
         };
         Relationships: [];
       };
       sorted_musicians_availability: {
         Row: {
           first_name: string | null;
-          instrument: Database["public"]["Enums"]["instrument"];
+          instrument: Database["public"]["Enums"]["instrument"] | null;
           last_name: string | null;
           message: string | null;
-          project_id: string;
-          status: Database["public"]["Enums"]["availability_status"];
-          user_id: string;
+          project_id: string | null;
+          status: Database["public"]["Enums"]["availability_status"] | null;
+          user_id: string | null;
         };
         Relationships: [
           {
             foreignKeyName: "availability_project_id_fkey";
             columns: ["project_id"];
+            isOneToOne: false;
             referencedRelation: "projects";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "availability_project_id_fkey";
             columns: ["project_id"];
+            isOneToOne: false;
             referencedRelation: "projects_summary";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "users_user_id_fkey";
             columns: ["user_id"];
+            isOneToOne: true;
             referencedRelation: "users";
             referencedColumns: ["id"];
           },
@@ -365,7 +398,7 @@ export interface Database {
     Functions: {
       get_instruments: {
         Args: Record<PropertyKey, never>;
-        Returns: unknown;
+        Returns: string[];
       };
       is_admin: {
         Args: Record<PropertyKey, never>;
@@ -380,4 +413,86 @@ export interface Database {
       [_ in never]: never;
     };
   };
-}
+};
+
+type PublicSchema = Database[Extract<keyof Database, "public">];
+
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R;
+    }
+    ? R
+    : never
+  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
+      PublicSchema["Views"])
+  ? (PublicSchema["Tables"] &
+      PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R;
+    }
+    ? R
+    : never
+  : never;
+
+export type TablesInsert<
+  PublicTableNameOrOptions extends
+    | keyof PublicSchema["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I;
+    }
+    ? I
+    : never
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+  ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I;
+    }
+    ? I
+    : never
+  : never;
+
+export type TablesUpdate<
+  PublicTableNameOrOptions extends
+    | keyof PublicSchema["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U;
+    }
+    ? U
+    : never
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+  ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U;
+    }
+    ? U
+    : never
+  : never;
+
+export type Enums<
+  PublicEnumNameOrOptions extends
+    | keyof PublicSchema["Enums"]
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
+  ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+  : never;

@@ -5,8 +5,17 @@ import AvailabilityStatusDescription from "../project/availabilityStatusDescript
 import pl from "date-fns/locale/pl";
 import { Database } from "@/lib/supabase";
 
+type ProjectNecessaryData = Pick<
+  Database["public"]["Tables"]["projects"]["Row"],
+  "id" | "location" | "date" | "name"
+>;
+type AvailabilityNecessaryData = Pick<
+  Database["public"]["Tables"]["availability"]["Row"],
+  "status" | "message"
+>;
+
 interface ProjectCardProps {
-  projectData: Database["public"]["Views"]["projects_summary"]["Row"];
+  projectData: ProjectNecessaryData & AvailabilityNecessaryData;
 }
 
 export default function ProjectCard({ projectData }: ProjectCardProps) {

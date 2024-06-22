@@ -42,8 +42,15 @@ export default function EnsamblePicker(props: {
 
   // Availability display
   const [availabilityData, setAvailabilityData] = useState<
-    | Database["public"]["Views"]["sorted_musicians_availability"]["Row"][]
-    | null
+    | {
+        message: string | null;
+        status: "available" | "unavailable" | "maybe" | "undeclared";
+        project_id: string;
+        user_id: string;
+        instrument: "skrzypce" | "altówka" | "wiolonczela" | "kontrabas";
+        first_name: string | null;
+        last_name: string | null;
+      }[]
     | undefined
   >();
   const [instruments, setInstruments] = useState<Instruments[] | null>();
