@@ -26,7 +26,7 @@ export default function InnerLayout({
     async function pushNotifications() {
       const userId = (await supabase.auth.getSession()).data.session?.user.id;
       await runOneSignal();
-      // user must be logged in otherwise middleware would have redirected them
+      // user must be logged in, otherwise middleware would have redirected them
       try {
         await OneSignal.login(userId!);
       } catch (err) {
