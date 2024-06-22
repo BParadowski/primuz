@@ -15,11 +15,16 @@ type AvailabilityNecessaryData = Pick<
 >;
 
 interface ProjectCardProps {
-  projectData: ProjectNecessaryData & AvailabilityNecessaryData;
+  projectData: ProjectNecessaryData;
+  availabilityData: AvailabilityNecessaryData;
 }
 
-export default function ProjectCard({ projectData }: ProjectCardProps) {
-  const { id, name, date, location, status, message } = projectData;
+export default function ProjectCard({
+  projectData,
+  availabilityData,
+}: ProjectCardProps) {
+  const { id, name, date, location } = projectData;
+  const { status, message } = availabilityData;
   return (
     <Link
       href={`/projekty/${id}`}

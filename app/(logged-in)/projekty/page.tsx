@@ -33,7 +33,8 @@ export default async function Projects() {
 
             return (
               <ProjectCard
-                projectData={{ status, message, ...project }}
+                projectData={{ ...project }}
+                availabilityData={{ status, message }}
                 key={project.id}
               />
             );
