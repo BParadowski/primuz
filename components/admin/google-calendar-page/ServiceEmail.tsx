@@ -15,8 +15,10 @@ export default function ServiceEmail() {
     <div className="flex items-center gap-2 pt-4">
       <TooltipProvider>
         <Card>
-          <CardContent className="flex items-center gap-2 p-6 py-4">
-            <span>primuz-calendar@primuz.iam.gserviceaccount.com</span>{" "}
+          <CardContent className="flex items-center gap-2 p-4 py-4 md:p-6">
+            <span className="break-all">
+              primuz-calendar@primuz.iam.gserviceaccount.com
+            </span>{" "}
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -28,7 +30,6 @@ export default function ServiceEmail() {
                     );
                     toast({
                       title: "Skopiowano do schowka",
-                      description: "Email został skopiowany do schowka.",
                       variant: "default",
                     });
                   }}

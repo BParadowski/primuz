@@ -40,7 +40,11 @@ export default function IntegrationForm() {
               <FormItem>
                 <FormLabel>Identyfikator kalendarza</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input
+                    placeholder="shadcn"
+                    {...field}
+                    className="max-w-full"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
