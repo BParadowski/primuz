@@ -2,10 +2,12 @@ import { google, calendar_v3 } from "googleapis";
 import { JWT } from "google-auth-library";
 
 const credentials = JSON.parse(process.env.CALENDAR_CREDENTIALS ?? "");
-const calendarId = process.env.CALENDAR_ID;
 const calendar = google.calendar({ version: "v3" });
 
-export async function newCalendarEvent(event: calendar_v3.Schema$Event) {
+export async function newCalendarEvent(
+  event: calendar_v3.Schema$Event,
+  calendarId: string,
+) {
   const auth = new JWT({
     email: credentials.client_email,
     key: credentials.private_key,
@@ -38,6 +40,7 @@ export async function newCalendarEvent(event: calendar_v3.Schema$Event) {
 export async function updateCalendarEvent(
   eventId: string,
   event: calendar_v3.Schema$Event,
+  calendarId: string,
 ) {
   const auth = new JWT({
     email: credentials.client_email,
@@ -69,7 +72,7 @@ export async function updateCalendarEvent(
   }
 }
 
-export async function deleteCalendarEvent(eventId: string) {
+export async function deleteCalendarEvent(eventId: string, calendarId: string) {
   const auth = new JWT({
     email: credentials.client_email,
     key: credentials.private_key,

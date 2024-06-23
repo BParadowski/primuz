@@ -7,6 +7,7 @@ import {
   updateCalendarEvent,
 } from "@/lib/calendar";
 import { Database } from "@/lib/supabase";
+import { getCalendarId } from "@/lib/apiFunctions";
 
 export async function POST(request: Request) {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -23,19 +24,31 @@ export async function POST(request: Request) {
       .single()
       .then(({ data }) => data && data.name);
 
-    await newCalendarEvent({
-      id: data.google_calendar_id,
-      summary: `Próba do: "${projectName}"`,
-      description: data.description,
-      location: data.location,
-      start: {
-        dateTime: data.start_datetime,
+    try {
+      var calendarId = await getCalendarId(supabase);
+    } catch (err) {
+      return NextResponse.json({
+        success: false,
+        message: err,
+      });
+    }
+
+    await newCalendarEvent(
+      {
+        id: data.google_calendar_id,
+        summary: `Próba do: "${projectName}"`,
+        description: data.description,
+        location: data.location,
+        start: {
+          dateTime: data.start_datetime,
+        },
+        end: {
+          dateTime: data.end_datetime,
+        },
+        colorId: "1",
       },
-      end: {
-        dateTime: data.end_datetime,
-      },
-      colorId: "1",
-    });
+      calendarId,
+    );
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -51,7 +64,18 @@ export async function DELETE(request: Request) {
   try {
     await supabase.from("rehearsals").delete().eq("id", data.id);
 
-    await deleteCalendarEvent(data.calendarId);
+    try {
+      var calendarId = await getCalendarId(supabase);
+    } catch (err) {
+      return NextResponse.json({
+        success: false,
+        message: err,
+      });
+    }
+
+    const eventCalendarId = data.calendarId;
+
+    await deleteCalendarEvent(eventCalendarId, calendarId);
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -100,9 +124,18 @@ export async function PATCH(request: Request) {
       },
     };
 
-    console.dir(event);
+    const eventCalendarId = data.calendarId;
 
-    await updateCalendarEvent(data.calendarId, event);
+    try {
+      var calendarId = await getCalendarId(supabase);
+    } catch (err) {
+      return NextResponse.json({
+        success: false,
+        message: err,
+      });
+    }
+
+    await updateCalendarEvent(eventCalendarId, event, calendarId);
 
     return NextResponse.json({ success: true });
   } catch (error) {
