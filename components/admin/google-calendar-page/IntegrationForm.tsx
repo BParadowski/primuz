@@ -1,6 +1,5 @@
 "use client";
 
-import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -13,21 +12,37 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { SchemaType, formSchema } from "./integrationFormSchema";
+import { toast } from "@/components/ui/use-toast";
 
-const formSchema = z.object({
-  calendarId: z.string().email("Sprawdź poprawność id."),
-});
 export default function IntegrationForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<SchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       calendarId: "",
     },
   });
 
-  const onSubmit = () => {
-    console.log("Bruh");
-  };
+  async function onSubmit(fields: SchemaType) {
+    const res = await fetch("/api/integrate-calendar", {
+      method: "POST",
+      body: JSON.stringify(fields),
+    }).then((res) => res.json());
+
+    if (res.success) {
+      toast({
+        description: "Kalendarz został zintegrowany!",
+        variant: "default",
+      });
+    } else {
+      toast({
+        description: `W trakcie integrowania kalendarza wystąpił błąd... ${
+          res.message ? res.message : ""
+        }`,
+        variant: "destructive",
+      });
+    }
+  }
 
   return (
     <div className="pt-6">
