@@ -16,13 +16,13 @@ export default function Page() {
           </h1>
 
           <p className="py-4 text-foreground">
-            Aby dodać synchronizację między kalendarze google i aplikacją:
+            Aby dodać synchronizację między kalendarzem google i aplikacją:
           </p>
           <div className="flex flex-col gap-10 pt-4">
             <div>
               <p className="text-foreground">
                 1. Udostępnij kalendarz poniższemu kontu i przyznaj mu
-                uprawnienia &quot;może zmieniać wydarzenia oraz zarządzać
+                uprawnienia &quot;może wprowadzać zmiany oraz zarządzać
                 udostępnianiem&quot;
               </p>
               <ServiceEmail />
