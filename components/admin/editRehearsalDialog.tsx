@@ -46,7 +46,9 @@ export default function EditRehearsalDialog({
     if (res.success) toast({ description: "Próba została edytowana." });
     else
       toast({
-        description: "Wystąpił problem przy edytowniu próby.",
+        description: `Wystąpił problem przy edytowniu próby. ${
+          res.message ? res.message : ""
+        }`,
         variant: "destructive",
       });
     router.refresh();

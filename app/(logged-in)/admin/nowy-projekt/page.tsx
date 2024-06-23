@@ -121,6 +121,7 @@ export default function ProjectPage() {
       method: "post",
       body: JSON.stringify(formData),
     }).then((res) => res.json());
+
     if (res.success === true) {
       fetch("/api/notifications", {
         method: "POST",
@@ -135,7 +136,9 @@ export default function ProjectPage() {
       router.push(`/admin/projekty/${formData.id}`);
     } else {
       toast({
-        description: "W trakcie tworzenia projektu wystąpił błąd...",
+        description: `W trakcie tworzenia projektu wystąpił błąd... ${
+          res.message ? res.message : ""
+        }`,
         variant: "destructive",
       });
     }
