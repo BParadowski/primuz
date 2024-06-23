@@ -59,7 +59,7 @@ export default function IntegrationForm() {
                 <FormLabel>Identyfikator kalendarza</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="shadcn"
+                    placeholder="zazwyczaj xyz@gmail.com"
                     {...field}
                     className="max-w-full"
                   />
