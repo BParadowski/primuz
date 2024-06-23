@@ -143,13 +143,17 @@ export default async function ProjectPage({
                 { locale: pl },
               )}
             </div>
-            <div className="flex items-center gap-6">
-              <CircleDollarSignIcon height={36} />
-              <p>
-                {data.pay}
-                <span className="ml-2">(brutto)</span>
-              </p>
-            </div>
+            {data.pay && (
+              <div className="flex items-center gap-6">
+                <CircleDollarSignIcon height={36} />
+                <p>
+                  {data.pay}
+                  {data.pay?.match(/d+/gi) && (
+                    <span className="ml-2">(brutto)</span>
+                  )}
+                </p>
+              </div>
+            )}
             {announcements ? (
               <div className="flex flex-col gap-2 py-4">
                 {announcements.map((announcement) => (
