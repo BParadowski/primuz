@@ -18,25 +18,31 @@ export default function Page() {
           <p className="py-4 text-foreground">
             Aby dodać synchronizację między kalendarze google i aplikacją:
           </p>
-          <p className="text-foreground">
-            1. Udostępnij kalendarz poniższemu kontu i przyznaj mu uprawnienia
-            &quot;może zmieniać wydarzenia oraz zarządzać udostępnianiem&quot;
-          </p>
-          <ServiceEmail />
-          <Image
-            alt=""
-            src={SharingDemo}
-            className="my-4 rounded-xl border shadow-md"
-          />
-          <p className="pt-6 text-foreground">
-            2. Skopiuj do pola poniżej identyfikator kalendarza.
-          </p>
-          <Image
-            alt=""
-            src={IdDemo}
-            className="my-4 rounded-xl border shadow-md"
-          />
-
+          <div className="flex flex-col gap-10 pt-4">
+            <div>
+              <p className="text-foreground">
+                1. Udostępnij kalendarz poniższemu kontu i przyznaj mu
+                uprawnienia &quot;może zmieniać wydarzenia oraz zarządzać
+                udostępnianiem&quot;
+              </p>
+              <ServiceEmail />
+              <Image
+                alt=""
+                src={SharingDemo}
+                className="my-4 rounded-xl border shadow-md"
+              />
+            </div>
+            <div>
+              <p className="pt-6 text-foreground">
+                2. Skopiuj do pola poniżej identyfikator kalendarza.
+              </p>
+              <Image
+                alt=""
+                src={IdDemo}
+                className="my-4 rounded-xl border shadow-md"
+              />
+            </div>
+          </div>
           <IntegrationForm />
         </div>
       </div>

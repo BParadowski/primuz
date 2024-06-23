@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { SchemaType, formSchema } from "./integrationFormSchema";
 import { toast } from "@/components/ui/use-toast";
+import { Loader2 } from "lucide-react";
 
 export default function IntegrationForm() {
   const form = useForm<SchemaType>({
@@ -31,9 +32,11 @@ export default function IntegrationForm() {
 
     if (res.success) {
       toast({
-        description: "Kalendarz został zintegrowany!",
+        title: "Kalendarz został zintegrowany!",
+        description: "Powinny pojawić się w nim wszystkie wydarzenia z apki.",
         variant: "default",
       });
+      form.reset();
     } else {
       toast({
         description: `W trakcie integrowania kalendarza wystąpił błąd... ${
@@ -65,7 +68,14 @@ export default function IntegrationForm() {
               </FormItem>
             )}
           />
-          <Button type="submit">Zintegruj kalendarz</Button>
+          {form.formState.isLoading ? (
+            <Button disabled>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Integrowanie...{" "}
+            </Button>
+          ) : (
+            <Button type="submit">Zintegruj kalendarz</Button>
+          )}
         </form>
       </Form>
     </div>
